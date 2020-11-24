@@ -35,7 +35,7 @@ function compile() {
 
 case $1 in
   rust)
-      compile rust $SCHEMA_PATH $DIST_RUST_PATH/src
+      compile rust $SCHEMA_PATH $DIST_RUST_PATH/src/schemas
       cd $DIST_RUST_PATH
       cargo fmt
     ;;
