@@ -6,7 +6,8 @@ edition = "2018"
 
 [features]
 default = ["std"]
-std = ["molecule/std"]
+std = ["molecule/std", "ckb-types"]
 
 [dependencies]
-molecule = { version = "0.6.1", default-features = false }
+molecule = { version = "=0.6.0", default-features = false }
+ckb-types = { git = "https://github.com/nervosnetwork/ckb", tag = "v0.38.0", optional = true }
