@@ -1,0 +1,20 @@
+array Byte4 [byte; 4];
+
+array Uint32 [byte; 4];
+array Uint64 [byte; 8];
+array Uint128 [byte; 16];
+
+vector Bytes <byte>;
+
+array Hash [byte; 32];
+
+table Script {
+    code_hash:      Hash,
+    hash_type:      byte,
+    args:           Bytes,
+}
+
+struct OutPoint {
+    tx_hash:        Hash,
+    index:          Uint32,
+}

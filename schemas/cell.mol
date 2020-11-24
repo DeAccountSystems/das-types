@@ -1,0 +1,13 @@
+import basic;
+
+vector Keepers <Script>;
+
+table StateCellData {
+    version: Uint32,
+    account_tree_root: Hash,
+    balance_tree_root: Hash,
+    // lock script of working keeper who aggregate the votes
+    aggregator: Script,
+    // 9 working keepers + 18 standby keepers at this period
+    keepers: Keepers,
+}
