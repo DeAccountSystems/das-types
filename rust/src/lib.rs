@@ -3,8 +3,6 @@
 pub mod convert;
 pub mod schemas;
 
-pub use schemas::*;
-
 #[cfg(test)]
 #[path = "../tests/mod.rs"]
 mod tests;

@@ -212,6 +212,7 @@ name = "das-types"
 version = "0.1.0"
 dependencies = [
  "ckb-types",
+ "hex",
  "molecule",
 ]
 
@@ -278,6 +279,12 @@ checksum = "1679e6ea370dee694f91f1dc469bf94cf8f52051d147aec3e1f9497c6fc22461"
 dependencies = [
  "winapi",
 ]
+
+[[package]]
+name = "hex"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "644f9158b2f133fd50f5fb3242878846d9eb792e445c893805ff0e3824006e35"
 
 [[package]]
 name = "lazy_static"
