@@ -1,13 +1,101 @@
 import basic;
 
+// StateCellData
+
 vector Keepers <Script>;
 
 table StateCellData {
-    version: Uint32,
     account_tree_root: Hash,
     balance_tree_root: Hash,
     // lock script of working keeper who aggregate the votes
     aggregator: Script,
     // 9 working keepers + 18 standby keepers at this period
     keepers: Keepers,
+}
+
+// KeeperVoteCellData
+
+table KeeperVoteResult {
+    keeper_id: Script,
+    votes: Uint128,
+}
+
+vector KeeperVoteResults <VoteResult>;
+
+table KeeperVoteCellData {
+    vote_results: KeeperVoteResults,
+}
+
+// VoteCellData
+struct VoteResult {
+    tx_id: Hash,
+    index: Uint32,
+    result: Uint8,
+}
+
+vector VoteResults <VoteResult>;
+
+table VoteCellData {
+    vote_results: VoteResults,
+}
+
+// AccountCellData
+
+table Record {
+    record_type: Uint32,
+    record_value: Bytes,
+    record_ttl: Uint32,
+}
+
+vector Records <Record>;
+
+struct Prices {
+    one_price: Uint128,
+    bidding_price: Uint128,
+}
+
+option PricesOpt (Prices);
+
+table AccountCellData {
+    account: Bytes,
+    manager: Script,
+    records: Records,
+    // 出售 AccountCell 时才有的字段
+    prices: PricesOpt,
+}
+
+// RegisterCellData
+
+table RegisterCellData {
+    account: Bytes,
+    pubkey_hash: HashOpt,
+    lock_script: ScriptOpt,
+}
+
+// CreateCellData
+
+table CreateCellData {
+    account: Bytes,
+    pubkey_hash: HashOpt,
+    lock_script: ScriptOpt,
+}
+
+// ApplyBiddingCellData
+
+table ApplyBiddingCellData {
+    account: Bytes,
+}
+
+// FreeBiddingAccountCellData
+
+table FreeBiddingAccountCellData {
+    account: Bytes,
+    offer_end_at: Uint64,
+    claim_end_at: Uint64,
+}
+
+// LimitBiddingAccountCellData
+
+table LimitBiddingAccountCellData {
+    account: Bytes,
 }

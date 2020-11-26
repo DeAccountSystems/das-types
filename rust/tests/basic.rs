@@ -1,8 +1,8 @@
+use core::convert::TryFrom;
 use das_types::convert;
 use das_types::schemas::basic::*;
-use molecule::prelude::Entity;
 use hex;
-use core::convert::TryFrom;
+use molecule::prelude::Entity;
 
 #[test]
 fn should_support_u8() {
