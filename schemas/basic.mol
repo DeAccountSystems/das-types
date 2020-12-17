@@ -6,6 +6,8 @@ array Uint128 [byte; 16];
 
 vector Bytes <byte>;
 
+array Timestamp [byte; 8];
+
 array Hash [byte; 32];
 
 option HashOpt (Hash);

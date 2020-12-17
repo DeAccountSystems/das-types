@@ -1,68 +1,67 @@
 import basic;
 
+// ActionCellData
+
+table ActionCellData {
+    action: Bytes,
+    params: Bytes,
+}
+
 // StateCellData
 
-vector Keepers <Script>;
-
 table StateCellData {
-    account_tree_root: Hash,
-    balance_tree_root: Hash,
+    reserved_account_root: Hash,
     // lock script of working keeper who aggregate the votes
-    aggregator: Script,
-    // 9 working keepers + 18 standby keepers at this period
-    keepers: Keepers,
+    price_configs: PriceConfigList,
+    // available char sets for account
+    char_sets: CharSet,
+    // the minimum ttl of record
+    min_ttl: Uint32,
+    // the closing limit of primary market auction(seconds)
+    closing_limit_of_primary_market_auction: Uint32,
+    // the closing limit of secondary market auction(seconds)
+    closing_limit_of_secondary_market_auction: Uint32,
 }
 
-// KeeperVoteCellData
+vector PriceConfigList <PriceConfig>;
 
-table KeeperVoteResult {
-    keeper_id: Script,
-    votes: Uint128,
+table PriceConfig {
+  length: Uint8,
+  new: Uint128,
+  renew: Uint128,
 }
 
-vector KeeperVoteResults <VoteResult>;
-
-table KeeperVoteCellData {
-    vote_results: KeeperVoteResults,
+table CharSet {
+    emoji: Hash,
+    en: Hash,
+    zh: Hash,
 }
 
-// VoteCellData
-struct VoteResult {
-    tx_id: Hash,
-    index: Uint32,
-    result: Uint8,
-}
+// RefCellData
 
-vector VoteResults <VoteResult>;
-
-table VoteCellData {
-    vote_results: VoteResults,
+table RefCellData {
+    account_id: Hash,
 }
 
 // AccountCellData
 
+table AccountCellData {
+    owner_cell: OutPoint,
+    manager_cell: OutPoint,
+    account: Bytes,
+    registered_at: Timestamp,
+    expired_at: Timestamp,
+    records: Records,
+}
+
 table Record {
-    record_type: Uint32,
+    record_type: Bytes,
+    record_label: Bytes,
     record_value: Bytes,
     record_ttl: Uint32,
 }
 
 vector Records <Record>;
-
-struct Prices {
-    one_price: Uint128,
-    bidding_price: Uint128,
-}
-
-option PricesOpt (Prices);
-
-table AccountCellData {
-    account: Bytes,
-    manager: Script,
-    records: Records,
-    // 出售 AccountCell 时才有的字段
-    prices: PricesOpt,
-}
 
 // RegisterCellData
 
@@ -72,30 +71,28 @@ table RegisterCellData {
     lock_script: ScriptOpt,
 }
 
-// CreateCellData
+// OnSaleCell
 
-table CreateCellData {
+table OnSaleCellData {
+    owner_cell: OutPoint,
+    manager_cell: OutPoint,
     account: Bytes,
-    pubkey_hash: HashOpt,
-    lock_script: ScriptOpt,
+    registered_at: Timestamp,
+    expired_at: Timestamp,
+    // this is the price of AccountCell
+    price: Uint128,
 }
 
-// ApplyBiddingCellData
+// BiddingCell
 
-table ApplyBiddingCellData {
+table BiddingCellData {
+    owner_cell: OutPoint,
+    manager_cell: OutPoint,
     account: Bytes,
-}
-
-// FreeBiddingAccountCellData
-
-table FreeBiddingAccountCellData {
-    account: Bytes,
-    offer_end_at: Uint64,
-    claim_end_at: Uint64,
-}
-
-// LimitBiddingAccountCellData
-
-table LimitBiddingAccountCellData {
-    account: Bytes,
+    registered_at: Timestamp,
+    expired_at: Timestamp,
+    market_type: Uint8, // market type, 0x01 for primary，0x02 for secondary
+    starting_price: Uint128, // starting bidding price
+    current_price: Uint128, // current bidding price
+    current_user: ScriptOpt, // latest bidder's lock script
 }

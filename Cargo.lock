@@ -51,6 +51,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "buddy-alloc"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8ff9f338986406db85e2b5deb40a9255b796ca03a194c7457403d215173f3fd5"
+
+[[package]]
 name = "bytes"
 version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -169,6 +175,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "ckb-standalone-types"
+version = "0.0.1-pre.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af2cdbdf65ee5b1da71504f5a03d6984bce77d0b4b46daff63f4ba4a3b0eef08"
+dependencies = [
+ "cfg-if 0.1.10",
+ "molecule",
+]
+
+[[package]]
+name = "ckb-std"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "35e14bf64c694f078d6d33bad7e2b9a87d129d8b4e4c9a6cfc4364e2c6eddbd9"
+dependencies = [
+ "buddy-alloc",
+ "cc",
+ "ckb-standalone-types",
+]
+
+[[package]]
 name = "ckb-types"
 version = "0.38.0"
 source = "git+https://github.com/nervosnetwork/ckb?tag=v0.38.0#8f05eb7a5fc6cf4605c3490003ec9c200631541d"
@@ -211,6 +238,7 @@ dependencies = [
 name = "das-types"
 version = "0.1.0"
 dependencies = [
+ "ckb-std",
  "ckb-types",
  "hex",
  "molecule",
