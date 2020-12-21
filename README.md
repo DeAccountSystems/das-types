@@ -13,10 +13,10 @@ The only thing need here is installing [Molecule][1] and language plugin，for m
 
 Simply run `sh compile.sh <language>`. Currently the following language is supported:
 
-- Rust
-- Go
+- Rust;
+- Go;
 
-> If your language is not yet supported here, feel free to submit a PR. 😅
+> Language name should be lower case in CLI. If your language is not yet supported here, feel free to submit a PR. 😅
 
 
 

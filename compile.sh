@@ -48,4 +48,4 @@ case $1 in
     ;;
 esac
 
-echo "Done"
+echo "Done ✔"

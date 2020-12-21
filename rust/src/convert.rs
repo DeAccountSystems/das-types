@@ -54,12 +54,25 @@ impl_uint_convert!(u32, Uint32, Uint32Reader, 4);
 impl_uint_convert!(u64, Uint64, Uint64Reader, 8);
 impl_uint_convert!(u128, Uint128, Uint128Reader, 16);
 
+impl_uint_convert!(u64, Timestamp, TimestampReader, 8);
+
+/// Convert &[u8] to schemas::basic::Bytes
+///
+/// The difference with from_slice is that it does not require a dynvec header.
+impl From<&[u8]> for Bytes {
+    fn from(v: &[u8]) -> Self {
+        Bytes::new_builder()
+            .set(v.to_owned().into_iter().map(Byte::new).collect())
+            .build()
+    }
+}
+
 /// Convert Vec<u8> to schemas::basic::Bytes
+///
+/// The difference with from_slice is that it does not require a dynvec header.
 impl From<Vec<u8>> for Bytes {
     fn from(v: Vec<u8>) -> Self {
-        Bytes::new_builder()
-            .set(v.into_iter().map(Byte::new).collect())
-            .build()
+        Bytes::from(v.as_slice())
     }
 }
 
@@ -71,7 +84,7 @@ impl From<Bytes> for Vec<u8> {
         v.as_slice()
             .get(4..)
             .map(|v| Vec::from(v))
-            .unwrap_or(Vec::from(""))
+            .unwrap_or(Vec::new())
     }
 }
 
@@ -89,10 +102,12 @@ impl TryFrom<Bytes> for String {
     }
 }
 
-/// Convert Vec<u8> to schemas::basic::Hash
-impl TryFrom<Vec<u8>> for Hash {
+/// Convert &[u8] to schemas::basic::Hash
+///
+/// The difference with from_slice is that it does not require a dynvec header.
+impl TryFrom<&[u8]> for Hash {
     type Error = VerificationError;
-    fn try_from(v: Vec<u8>) -> Result<Self, VerificationError> {
+    fn try_from(v: &[u8]) -> Result<Self, VerificationError> {
         if v.len() != 32 {
             return Err(VerificationError::TotalSizeNotMatch(
                 "Byte32".to_owned(),
@@ -101,9 +116,16 @@ impl TryFrom<Vec<u8>> for Hash {
             ));
         }
         let mut inner = [Byte::new(0); 32];
-        let v = v.into_iter().map(Byte::new).collect::<Vec<_>>();
+        let v = v.to_owned().into_iter().map(Byte::new).collect::<Vec<_>>();
         inner.copy_from_slice(&v);
         Ok(Self::new_builder().set(inner).build())
+    }
+}
+
+impl TryFrom<Vec<u8>> for Hash {
+    type Error = VerificationError;
+    fn try_from(v: Vec<u8>) -> Result<Self, VerificationError> {
+        Hash::try_from(v.as_slice())
     }
 }
 

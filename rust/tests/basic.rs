@@ -1,8 +1,6 @@
 use core::convert::TryFrom;
-use das_types::convert;
 use das_types::schemas::basic::*;
 use hex;
-use molecule::prelude::Entity;
 
 #[test]
 fn should_support_u8() {
@@ -60,12 +58,22 @@ fn should_support_u128() {
 }
 
 #[test]
+fn should_support_timestamp() {
+    let num: u64 = u64::MAX;
+    let data = Timestamp::from(num);
+    let reader = data.as_reader();
+    // println!("{:?}", data);
+
+    assert_eq!(num, u64::from(reader));
+    assert_eq!(num, u64::from(data));
+}
+
+#[test]
 fn should_support_bytes() {
     // Convert from Bytes between Vec<u8>
-    let text_in_vec = Vec::from(text);
-    let data = Bytes::from(text_in_vec.clone());
-
-    assert_eq!(Vec::from(data), text_in_vec);
+    let text_in_vec = Vec::from("hello world");
+    let result = Bytes::from(text_in_vec.clone());
+    assert_eq!(Vec::from(result), text_in_vec);
 
     // Convert from Bytes to String
     let text = "hello world";
@@ -79,7 +87,7 @@ fn should_support_hash() {
     // Convert from Hash between Vec
     let text = "a0ec1714a64139b5f0e46d1d1de4f2e7b32735ffedaab34285c49f2e5269abda";
     let mut buf = [0u8; 32];
-    hex::decode_to_slice(text, &mut buf);
+    hex::decode_to_slice(text, &mut buf).ok();
     let data = Hash::try_from(buf.to_vec()).unwrap();
 
     assert_eq!(Vec::from(data), buf.to_vec());
