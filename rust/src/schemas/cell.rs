@@ -1053,8 +1053,8 @@ impl ::core::fmt::Display for PriceConfig {
 impl ::core::default::Default for PriceConfig {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            49, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
         ];
         PriceConfig::new_unchecked(v.into())
     }
@@ -1083,20 +1083,20 @@ impl PriceConfig {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         Uint8::new_unchecked(self.0.slice(start..end))
     }
-    pub fn new(&self) -> Uint128 {
+    pub fn new(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
-        Uint128::new_unchecked(self.0.slice(start..end))
+        Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn renew(&self) -> Uint128 {
+    pub fn renew(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[16..]) as usize;
-            Uint128::new_unchecked(self.0.slice(start..end))
+            Uint64::new_unchecked(self.0.slice(start..end))
         } else {
-            Uint128::new_unchecked(self.0.slice(start..))
+            Uint64::new_unchecked(self.0.slice(start..))
         }
     }
     pub fn as_reader<'r>(&'r self) -> PriceConfigReader<'r> {
@@ -1184,20 +1184,20 @@ impl<'r> PriceConfigReader<'r> {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn new(&self) -> Uint128Reader<'r> {
+    pub fn new(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
-        Uint128Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn renew(&self) -> Uint128Reader<'r> {
+    pub fn renew(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[16..]) as usize;
-            Uint128Reader::new_unchecked(&self.as_slice()[start..end])
+            Uint64Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
-            Uint128Reader::new_unchecked(&self.as_slice()[start..])
+            Uint64Reader::new_unchecked(&self.as_slice()[start..])
         }
     }
 }
@@ -1253,16 +1253,16 @@ impl<'r> molecule::prelude::Reader<'r> for PriceConfigReader<'r> {
             return ve!(Self, OffsetsNotMatch);
         }
         Uint8Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
-        Uint128Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
-        Uint128Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct PriceConfigBuilder {
     pub(crate) length: Uint8,
-    pub(crate) new: Uint128,
-    pub(crate) renew: Uint128,
+    pub(crate) new: Uint64,
+    pub(crate) renew: Uint64,
 }
 impl PriceConfigBuilder {
     pub const FIELD_COUNT: usize = 3;
@@ -1270,11 +1270,11 @@ impl PriceConfigBuilder {
         self.length = v;
         self
     }
-    pub fn new(mut self, v: Uint128) -> Self {
+    pub fn new(mut self, v: Uint64) -> Self {
         self.new = v;
         self
     }
-    pub fn renew(mut self, v: Uint128) -> Self {
+    pub fn renew(mut self, v: Uint64) -> Self {
         self.renew = v;
         self
     }
@@ -3197,11 +3197,11 @@ impl ::core::fmt::Display for OnSaleCellData {
 impl ::core::default::Default for OnSaleCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            136, 0, 0, 0, 28, 0, 0, 0, 64, 0, 0, 0, 100, 0, 0, 0, 104, 0, 0, 0, 112, 0, 0, 0, 120,
+            128, 0, 0, 0, 28, 0, 0, 0, 64, 0, 0, 0, 100, 0, 0, 0, 104, 0, 0, 0, 112, 0, 0, 0, 120,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         OnSaleCellData::new_unchecked(v.into())
     }
@@ -3254,14 +3254,14 @@ impl OnSaleCellData {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         Timestamp::new_unchecked(self.0.slice(start..end))
     }
-    pub fn price(&self) -> Uint128 {
+    pub fn price(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[28..]) as usize;
-            Uint128::new_unchecked(self.0.slice(start..end))
+            Uint64::new_unchecked(self.0.slice(start..end))
         } else {
-            Uint128::new_unchecked(self.0.slice(start..))
+            Uint64::new_unchecked(self.0.slice(start..))
         }
     }
     pub fn as_reader<'r>(&'r self) -> OnSaleCellDataReader<'r> {
@@ -3379,14 +3379,14 @@ impl<'r> OnSaleCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         TimestampReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn price(&self) -> Uint128Reader<'r> {
+    pub fn price(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[28..]) as usize;
-            Uint128Reader::new_unchecked(&self.as_slice()[start..end])
+            Uint64Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
-            Uint128Reader::new_unchecked(&self.as_slice()[start..])
+            Uint64Reader::new_unchecked(&self.as_slice()[start..])
         }
     }
 }
@@ -3446,7 +3446,7 @@ impl<'r> molecule::prelude::Reader<'r> for OnSaleCellDataReader<'r> {
         BytesReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         TimestampReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
         TimestampReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
-        Uint128Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Ok(())
     }
 }
@@ -3457,7 +3457,7 @@ pub struct OnSaleCellDataBuilder {
     pub(crate) account: Bytes,
     pub(crate) registered_at: Timestamp,
     pub(crate) expired_at: Timestamp,
-    pub(crate) price: Uint128,
+    pub(crate) price: Uint64,
 }
 impl OnSaleCellDataBuilder {
     pub const FIELD_COUNT: usize = 6;
@@ -3481,7 +3481,7 @@ impl OnSaleCellDataBuilder {
         self.expired_at = v;
         self
     }
-    pub fn price(mut self, v: Uint128) -> Self {
+    pub fn price(mut self, v: Uint64) -> Self {
         self.price = v;
         self
     }
@@ -3570,12 +3570,12 @@ impl ::core::fmt::Display for BiddingCellData {
 impl ::core::default::Default for BiddingCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            165, 0, 0, 0, 40, 0, 0, 0, 76, 0, 0, 0, 112, 0, 0, 0, 116, 0, 0, 0, 124, 0, 0, 0, 132,
-            0, 0, 0, 133, 0, 0, 0, 149, 0, 0, 0, 165, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            149, 0, 0, 0, 40, 0, 0, 0, 76, 0, 0, 0, 112, 0, 0, 0, 116, 0, 0, 0, 124, 0, 0, 0, 132,
+            0, 0, 0, 133, 0, 0, 0, 141, 0, 0, 0, 149, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         BiddingCellData::new_unchecked(v.into())
     }
@@ -3634,17 +3634,17 @@ impl BiddingCellData {
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Uint8::new_unchecked(self.0.slice(start..end))
     }
-    pub fn starting_price(&self) -> Uint128 {
+    pub fn starting_price(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
-        Uint128::new_unchecked(self.0.slice(start..end))
+        Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn current_price(&self) -> Uint128 {
+    pub fn current_price(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
         let end = molecule::unpack_number(&slice[36..]) as usize;
-        Uint128::new_unchecked(self.0.slice(start..end))
+        Uint64::new_unchecked(self.0.slice(start..end))
     }
     pub fn current_user(&self) -> ScriptOpt {
         let slice = self.as_slice();
@@ -3783,17 +3783,17 @@ impl<'r> BiddingCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn starting_price(&self) -> Uint128Reader<'r> {
+    pub fn starting_price(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
-        Uint128Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn current_price(&self) -> Uint128Reader<'r> {
+    pub fn current_price(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
         let end = molecule::unpack_number(&slice[36..]) as usize;
-        Uint128Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn current_user(&self) -> ScriptOptReader<'r> {
         let slice = self.as_slice();
@@ -3863,8 +3863,8 @@ impl<'r> molecule::prelude::Reader<'r> for BiddingCellDataReader<'r> {
         TimestampReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
         TimestampReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Uint8Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
-        Uint128Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
-        Uint128Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
         ScriptOptReader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
         Ok(())
     }
@@ -3877,8 +3877,8 @@ pub struct BiddingCellDataBuilder {
     pub(crate) registered_at: Timestamp,
     pub(crate) expired_at: Timestamp,
     pub(crate) market_type: Uint8,
-    pub(crate) starting_price: Uint128,
-    pub(crate) current_price: Uint128,
+    pub(crate) starting_price: Uint64,
+    pub(crate) current_price: Uint64,
     pub(crate) current_user: ScriptOpt,
 }
 impl BiddingCellDataBuilder {
@@ -3907,11 +3907,11 @@ impl BiddingCellDataBuilder {
         self.market_type = v;
         self
     }
-    pub fn starting_price(mut self, v: Uint128) -> Self {
+    pub fn starting_price(mut self, v: Uint64) -> Self {
         self.starting_price = v;
         self
     }
-    pub fn current_price(mut self, v: Uint128) -> Self {
+    pub fn current_price(mut self, v: Uint64) -> Self {
         self.current_price = v;
         self
     }

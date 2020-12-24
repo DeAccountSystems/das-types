@@ -27,8 +27,8 @@ vector PriceConfigList <PriceConfig>;
 
 table PriceConfig {
   length: Uint8,
-  new: Uint128,
-  renew: Uint128,
+  new: Uint64,
+  renew: Uint64,
 }
 
 table CharSet {
@@ -80,7 +80,7 @@ table OnSaleCellData {
     registered_at: Timestamp,
     expired_at: Timestamp,
     // this is the price of AccountCell
-    price: Uint128,
+    price: Uint64,
 }
 
 // BiddingCell
@@ -92,7 +92,7 @@ table BiddingCellData {
     registered_at: Timestamp,
     expired_at: Timestamp,
     market_type: Uint8, // market type, 0x01 for primary，0x02 for secondary
-    starting_price: Uint128, // starting bidding price
-    current_price: Uint128, // current bidding price
+    starting_price: Uint64, // starting bidding price
+    current_price: Uint64, // current bidding price
     current_user: ScriptOpt, // latest bidder's lock script
 }

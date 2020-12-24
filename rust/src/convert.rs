@@ -52,7 +52,6 @@ impl_uint_convert!(u8, Uint8, Uint8Reader, 1);
 impl_uint_convert!(u16, Uint16, Uint16Reader, 2);
 impl_uint_convert!(u32, Uint32, Uint32Reader, 4);
 impl_uint_convert!(u64, Uint64, Uint64Reader, 8);
-impl_uint_convert!(u128, Uint128, Uint128Reader, 16);
 
 impl_uint_convert!(u64, Timestamp, TimestampReader, 8);
 
