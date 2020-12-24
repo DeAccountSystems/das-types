@@ -47,17 +47,6 @@ fn should_support_u64() {
 }
 
 #[test]
-fn should_support_u128() {
-    let num: u128 = u128::MAX;
-    let data = Uint128::from(num);
-    let reader = data.as_reader();
-    // println!("{:?}", data);
-
-    assert_eq!(num, u128::from(reader));
-    assert_eq!(num, u128::from(data));
-}
-
-#[test]
 fn should_support_timestamp() {
     let num: u64 = u64::MAX;
     let data = Timestamp::from(num);

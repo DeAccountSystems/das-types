@@ -2,7 +2,3 @@
 
 pub mod convert;
 pub mod schemas;
-
-#[cfg(test)]
-#[path = "../tests/mod.rs"]
-mod tests;
