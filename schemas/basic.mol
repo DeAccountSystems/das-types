@@ -23,3 +23,16 @@ struct OutPoint {
     tx_hash: Hash,
     index:   Uint32,
 }
+
+table Data {
+    old: DataEntityOpt,
+    new: DataEntityOpt,
+}
+
+table DataEntity {
+    index: Uint32,
+    version: Uint32,
+    entity: Bytes,
+}
+
+option DataEntityOpt (DataEntity);
