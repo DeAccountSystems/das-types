@@ -2674,7 +2674,8 @@ impl ::core::fmt::Debug for Data {
 impl ::core::fmt::Display for Data {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "old", self.old())?;
+        write!(f, "{}: {}", "dep", self.dep())?;
+        write!(f, ", {}: {}", "old", self.old())?;
         write!(f, ", {}: {}", "new", self.new())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -2685,12 +2686,12 @@ impl ::core::fmt::Display for Data {
 }
 impl ::core::default::Default for Data {
     fn default() -> Self {
-        let v: Vec<u8> = vec![12, 0, 0, 0, 12, 0, 0, 0, 12, 0, 0, 0];
+        let v: Vec<u8> = vec![16, 0, 0, 0, 16, 0, 0, 0, 16, 0, 0, 0, 16, 0, 0, 0];
         Data::new_unchecked(v.into())
     }
 }
 impl Data {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -2707,17 +2708,23 @@ impl Data {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn old(&self) -> DataEntityOpt {
+    pub fn dep(&self) -> DataEntityOpt {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
         DataEntityOpt::new_unchecked(self.0.slice(start..end))
     }
-    pub fn new(&self) -> DataEntityOpt {
+    pub fn old(&self) -> DataEntityOpt {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        DataEntityOpt::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn new(&self) -> DataEntityOpt {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[12..]) as usize;
+            let end = molecule::unpack_number(&slice[16..]) as usize;
             DataEntityOpt::new_unchecked(self.0.slice(start..end))
         } else {
             DataEntityOpt::new_unchecked(self.0.slice(start..))
@@ -2749,7 +2756,10 @@ impl molecule::prelude::Entity for Data {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder().old(self.old()).new(self.new())
+        Self::new_builder()
+            .dep(self.dep())
+            .old(self.old())
+            .new(self.new())
     }
 }
 #[derive(Clone, Copy)]
@@ -2771,7 +2781,8 @@ impl<'r> ::core::fmt::Debug for DataReader<'r> {
 impl<'r> ::core::fmt::Display for DataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "old", self.old())?;
+        write!(f, "{}: {}", "dep", self.dep())?;
+        write!(f, ", {}: {}", "old", self.old())?;
         write!(f, ", {}: {}", "new", self.new())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -2781,7 +2792,7 @@ impl<'r> ::core::fmt::Display for DataReader<'r> {
     }
 }
 impl<'r> DataReader<'r> {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -2798,17 +2809,23 @@ impl<'r> DataReader<'r> {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn old(&self) -> DataEntityOptReader<'r> {
+    pub fn dep(&self) -> DataEntityOptReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
         DataEntityOptReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn new(&self) -> DataEntityOptReader<'r> {
+    pub fn old(&self) -> DataEntityOptReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        DataEntityOptReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn new(&self) -> DataEntityOptReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[12..]) as usize;
+            let end = molecule::unpack_number(&slice[16..]) as usize;
             DataEntityOptReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             DataEntityOptReader::new_unchecked(&self.as_slice()[start..])
@@ -2868,16 +2885,22 @@ impl<'r> molecule::prelude::Reader<'r> for DataReader<'r> {
         }
         DataEntityOptReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         DataEntityOptReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        DataEntityOptReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct DataBuilder {
+    pub(crate) dep: DataEntityOpt,
     pub(crate) old: DataEntityOpt,
     pub(crate) new: DataEntityOpt,
 }
 impl DataBuilder {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
+    pub fn dep(mut self, v: DataEntityOpt) -> Self {
+        self.dep = v;
+        self
+    }
     pub fn old(mut self, v: DataEntityOpt) -> Self {
         self.old = v;
         self
@@ -2892,12 +2915,15 @@ impl molecule::prelude::Builder for DataBuilder {
     const NAME: &'static str = "DataBuilder";
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
+            + self.dep.as_slice().len()
             + self.old.as_slice().len()
             + self.new.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
+        offsets.push(total_size);
+        total_size += self.dep.as_slice().len();
         offsets.push(total_size);
         total_size += self.old.as_slice().len();
         offsets.push(total_size);
@@ -2906,6 +2932,7 @@ impl molecule::prelude::Builder for DataBuilder {
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
+        writer.write_all(self.dep.as_slice())?;
         writer.write_all(self.old.as_slice())?;
         writer.write_all(self.new.as_slice())?;
         Ok(())
