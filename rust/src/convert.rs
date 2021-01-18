@@ -3,11 +3,12 @@ use alloc::borrow::ToOwned;
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
 
-use crate::schemas::basic::*;
+use super::schemas::packed::*;
 use core::convert::TryFrom;
+#[cfg(feature = "std")]
 use core::str;
+#[cfg(feature = "std")]
 use core::str::Utf8Error;
-
 use molecule::{
     error::VerificationError,
     prelude::{Builder, Byte, Entity},

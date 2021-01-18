@@ -1,5 +1,5 @@
 use core::convert::TryFrom;
-use das_types::schemas::basic::*;
+use das_types::packed::*;
 use hex;
 
 #[test]
@@ -58,6 +58,7 @@ fn should_support_timestamp() {
 }
 
 #[test]
+#[cfg(feature = "std")]
 fn should_support_bytes() {
     // Convert from Bytes between Vec<u8>
     let text_in_vec = Vec::from("hello world");
