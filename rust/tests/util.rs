@@ -170,6 +170,7 @@ fn test_wrap_data_witness() {
             .entity()
             .as_reader()
             .raw_data()
+            .to_vec()
             .into(),
     );
     assert!(

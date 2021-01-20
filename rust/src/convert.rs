@@ -81,10 +81,7 @@ impl From<Vec<u8>> for Bytes {
 /// The main thing here is to remove the Header from the Molecule data.
 impl From<Bytes> for Vec<u8> {
     fn from(v: Bytes) -> Self {
-        v.as_slice()
-            .get(4..)
-            .map(|v| Vec::from(v))
-            .unwrap_or(Vec::new())
+        v.as_reader().raw_data().to_vec()
     }
 }
 
@@ -95,10 +92,8 @@ impl From<Bytes> for Vec<u8> {
 impl TryFrom<Bytes> for String {
     type Error = Utf8Error;
     fn try_from(v: Bytes) -> Result<Self, Utf8Error> {
-        v.as_slice()
-            .get(4..)
-            .map(|v| str::from_utf8(v).map(|v| String::from(v)))
-            .unwrap_or(Ok(String::from("")))
+        let bytes = v.as_reader().raw_data();
+        str::from_utf8(bytes).map(|v| String::from(v))
     }
 }
 
