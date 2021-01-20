@@ -1,18 +1,13 @@
-#[cfg(not(feature = "std"))]
-use alloc::borrow::ToOwned;
-#[cfg(not(feature = "std"))]
-use alloc::vec::Vec;
-
 use super::schemas::packed::*;
+use ckb_std::ckb_types::packed as ckb_packed;
 use core::convert::TryFrom;
-#[cfg(feature = "std")]
-use core::str;
-#[cfg(feature = "std")]
-use core::str::Utf8Error;
 use molecule::{
     error::VerificationError,
     prelude::{Builder, Byte, Entity},
 };
+use std::prelude::v1::*;
+#[cfg(feature = "std")]
+use std::{str, str::Utf8Error};
 
 /// Implement convert between primitive type and molecule types
 macro_rules! impl_uint_convert {
@@ -76,6 +71,12 @@ impl From<Vec<u8>> for Bytes {
     }
 }
 
+impl From<ckb_packed::Bytes> for Bytes {
+    fn from(v: ckb_packed::Bytes) -> Self {
+        Bytes::from_slice(v.as_slice()).unwrap()
+    }
+}
+
 /// Convert schemas::basic::Bytes to Vec<u8>
 ///
 /// The main thing here is to remove the Header from the Molecule data.
@@ -121,6 +122,12 @@ impl TryFrom<Vec<u8>> for Hash {
     type Error = VerificationError;
     fn try_from(v: Vec<u8>) -> Result<Self, VerificationError> {
         Hash::try_from(v.as_slice())
+    }
+}
+
+impl From<ckb_packed::Byte32> for Hash {
+    fn from(v: ckb_packed::Byte32) -> Self {
+        Hash::from_slice(v.as_slice()).unwrap()
     }
 }
 

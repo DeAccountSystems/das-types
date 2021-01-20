@@ -1,5 +1,7 @@
+use ckb_std::ckb_types::packed as ckb_packed;
 use core::convert::TryFrom;
 use das_types::packed::*;
+use das_types::util::is_entity_eq;
 use hex;
 
 #[test]
@@ -62,14 +64,20 @@ fn should_support_timestamp() {
 fn should_support_bytes() {
     // Convert from Bytes between Vec<u8>
     let text_in_vec = Vec::from("hello world");
-    let result = Bytes::from(text_in_vec.clone());
-    assert_eq!(Vec::from(result), text_in_vec);
+    let data = Bytes::from(text_in_vec.clone());
+
+    assert_eq!(Vec::from(data), text_in_vec);
 
     // Convert from Bytes to String
     let text = "hello world";
     let data = Bytes::from(text.as_bytes().to_vec());
 
     assert_eq!(String::try_from(data), Ok(String::from(text)));
+
+    let ckb_bytes = ckb_packed::Bytes::default();
+    let data = Bytes::default();
+
+    assert!(is_entity_eq(&Bytes::from(ckb_bytes), &data))
 }
 
 #[test]
@@ -81,4 +89,9 @@ fn should_support_hash() {
     let data = Hash::try_from(buf.to_vec()).unwrap();
 
     assert_eq!(Vec::from(data), buf.to_vec());
+
+    let ckb_byte32 = ckb_packed::Byte32::default();
+    let data = Hash::default();
+
+    assert!(is_entity_eq(&Hash::from(ckb_byte32), &data))
 }

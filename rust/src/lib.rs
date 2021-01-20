@@ -1,13 +1,13 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![no_std]
 
-#[cfg(not(feature = "std"))]
 extern crate alloc;
-
-pub use molecule::prelude;
+extern crate no_std_compat as std;
 
 pub mod constants;
 pub mod convert;
 pub mod util;
 
 mod schemas;
+
+pub use molecule::prelude;
 pub use schemas::packed;
