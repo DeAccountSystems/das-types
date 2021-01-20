@@ -8,3 +8,6 @@ pub enum DataType {
     ProposalCellData,
     PreAccountCellData,
 }
+
+// [100, 97, 115] equals "das".as_bytes()
+pub const WITNESS_HEADER: [u8; 3] = [100, 97, 115];
