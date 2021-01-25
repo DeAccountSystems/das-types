@@ -94,7 +94,9 @@ fn test_wrap_witness() {
 
 #[test]
 fn test_wrap_action_witness() {
-    let witness = util::wrap_action_witness(DataType::ActionData, "config", None);
+    let params = Bytes::from(&[1, 0, 1][..]);
+    let witness = util::wrap_action_witness("config", Some(params));
+    // eprintln!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
     assert_eq!(
@@ -118,7 +120,7 @@ fn test_wrap_action_witness() {
     ));
     assert!(util::is_reader_eq(
         action_data.as_reader().params(),
-        Bytes::default().as_reader()
+        Bytes::from(&[1, 0, 1][..]).as_reader()
     ));
 }
 
@@ -139,6 +141,7 @@ fn test_wrap_data_witness() {
         .closing_limit_of_primary_market_auction(Uint32::from(86400))
         .closing_limit_of_secondary_market_auction(Uint32::from(86400))
         .build();
+    // eprintln!("config_cell_data = {:#?}", config_cell_data);
 
     let witness = util::wrap_data_witness(
         DataType::ConfigCellData,
@@ -146,6 +149,7 @@ fn test_wrap_data_witness() {
         None,
         None,
     );
+    // eprintln!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
     assert_eq!(

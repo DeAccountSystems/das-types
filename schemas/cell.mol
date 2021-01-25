@@ -36,6 +36,8 @@ table ConfigCellData {
     closing_limit_of_primary_market_auction: Uint32,
     // the closing limit of secondary market auction(seconds)
     closing_limit_of_secondary_market_auction: Uint32,
+    // table of code_hashes of all kinds of cells
+    code_hash_table: CodeHashTable,
 }
 
 vector PriceConfigList <PriceConfig>;
@@ -50,6 +52,18 @@ table CharSet {
     emoji: Hash,
     en: Hash,
     zh: Hash,
+}
+
+table CodeHashTable {
+    apply_register_cell: Hash,
+    pre_account_cell: Hash,
+    proposal_cell: Hash,
+    ref_cell: Hash,
+    account_cell: Hash,
+    on_sale_cell: Hash,
+    bidding_cell: Hash,
+    primary_market_cell: Hash,
+    quote_cell: Hash,
 }
 
 // ProposalCellData
@@ -109,8 +123,6 @@ table PreAccountCellData {
     refund_lock: Script,
     // If the PreAccountCell is registered successfully, this field specifies to whom the account should be given.
     owner_lock: Script,
-    // The OutPoint of the ApplyRegisterCell.
-    apply_outpoint: OutPoint,
     created_at: Timestamp,
 }
 

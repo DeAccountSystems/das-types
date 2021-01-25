@@ -1,5 +1,5 @@
 use super::schemas::packed::*;
-use ckb_std::ckb_types::packed as ckb_packed;
+use ckb_std::ckb_types::{bytes, packed as ckb_packed};
 use core::convert::TryFrom;
 use molecule::{
     error::VerificationError,
@@ -14,15 +14,7 @@ macro_rules! impl_uint_convert {
     ($uint_type:ty, $mol_type:ty, $mol_reader_typer:ident, $length: expr) => {
         impl From<$uint_type> for $mol_type {
             fn from(v: $uint_type) -> Self {
-                let mut inner = [Byte::new(0); $length];
-                let v = v
-                    .to_le_bytes()
-                    .to_vec()
-                    .into_iter()
-                    .map(Byte::new)
-                    .collect::<Vec<_>>();
-                inner.copy_from_slice(&v);
-                Self::new_builder().set(inner).build()
+                Self::new_unchecked(bytes::Bytes::from(v.to_le_bytes().to_vec()))
             }
         }
 

@@ -36,14 +36,14 @@ pub fn wrap_witness(data_type: DataType, entity: impl Entity) -> Bytes {
         .build()
 }
 
-pub fn wrap_action_witness(data_type: DataType, action: &str, params_opt: Option<Bytes>) -> Bytes {
+pub fn wrap_action_witness(action: &str, params_opt: Option<Bytes>) -> Bytes {
     let mut builder = ActionData::new_builder().action(Bytes::from(action.as_bytes()));
 
     if let Some(params) = params_opt {
         builder = builder.params(params);
     }
 
-    wrap_witness(data_type, builder.build())
+    wrap_witness(DataType::ActionData, builder.build())
 }
 
 pub fn wrap_data_witness<T: Entity>(
