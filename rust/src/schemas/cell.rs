@@ -359,16 +359,12 @@ impl ::core::fmt::Display for ConfigCellData {
 impl ::core::default::Default for ConfigCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            30, 2, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 65, 0, 0, 0, 66, 0, 0, 0, 70, 0, 0, 0, 74, 0, 0,
-            0, 78, 0, 0, 0, 82, 0, 0, 0, 86, 0, 0, 0, 90, 0, 0, 0, 202, 0, 0, 0, 206, 0, 0, 0, 210,
-            0, 0, 0, 214, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 4, 0, 0, 0, 112, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 80, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 1, 0, 0, 40, 0, 0, 0, 72,
-            0, 0, 0, 104, 0, 0, 0, 136, 0, 0, 0, 168, 0, 0, 0, 200, 0, 0, 0, 232, 0, 0, 0, 8, 1, 0,
-            0, 40, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            178, 1, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 65, 0, 0, 0, 66, 0, 0, 0, 70, 0, 0, 0, 74, 0,
+            0, 0, 78, 0, 0, 0, 82, 0, 0, 0, 86, 0, 0, 0, 90, 0, 0, 0, 94, 0, 0, 0, 98, 0, 0, 0,
+            102, 0, 0, 0, 106, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 1, 0,
+            0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0, 0, 136, 0, 0, 0, 168, 0, 0, 0, 200, 0, 0, 0,
+            232, 0, 0, 0, 8, 1, 0, 0, 40, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -378,7 +374,7 @@ impl ::core::default::Default for ConfigCellData {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellData::new_unchecked(v.into())
     }
@@ -455,11 +451,11 @@ impl ConfigCellData {
         let end = molecule::unpack_number(&slice[40..]) as usize;
         PriceConfigList::new_unchecked(self.0.slice(start..end))
     }
-    pub fn char_sets(&self) -> CharSet {
+    pub fn char_sets(&self) -> CharSetList {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
-        CharSet::new_unchecked(self.0.slice(start..end))
+        CharSetList::new_unchecked(self.0.slice(start..end))
     }
     pub fn min_ttl(&self) -> Uint32 {
         let slice = self.as_slice();
@@ -696,11 +692,11 @@ impl<'r> ConfigCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[40..]) as usize;
         PriceConfigListReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn char_sets(&self) -> CharSetReader<'r> {
+    pub fn char_sets(&self) -> CharSetListReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
-        CharSetReader::new_unchecked(&self.as_slice()[start..end])
+        CharSetListReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn min_ttl(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
@@ -789,7 +785,7 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellDataReader<'r> {
         Uint32Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         Uint32Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
         PriceConfigListReader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
-        CharSetReader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
+        CharSetListReader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
         Uint32Reader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
         Uint32Reader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
         Uint32Reader::verify(&slice[offsets[12]..offsets[13]], compatible)?;
@@ -808,7 +804,7 @@ pub struct ConfigCellDataBuilder {
     pub(crate) apply_max_waiting_time: Uint32,
     pub(crate) account_max_length: Uint32,
     pub(crate) price_configs: PriceConfigList,
-    pub(crate) char_sets: CharSet,
+    pub(crate) char_sets: CharSetList,
     pub(crate) min_ttl: Uint32,
     pub(crate) closing_limit_of_primary_market_auction: Uint32,
     pub(crate) closing_limit_of_secondary_market_auction: Uint32,
@@ -852,7 +848,7 @@ impl ConfigCellDataBuilder {
         self.price_configs = v;
         self
     }
-    pub fn char_sets(mut self, v: CharSet) -> Self {
+    pub fn char_sets(mut self, v: CharSetList) -> Self {
         self.char_sets = v;
         self
     }
@@ -1588,6 +1584,340 @@ impl molecule::prelude::Builder for PriceConfigBuilder {
     }
 }
 #[derive(Clone)]
+pub struct CharSetList(molecule::bytes::Bytes);
+impl ::core::fmt::LowerHex for CharSetList {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl ::core::fmt::Debug for CharSetList {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl ::core::fmt::Display for CharSetList {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} [", Self::NAME)?;
+        for i in 0..self.len() {
+            if i == 0 {
+                write!(f, "{}", self.get_unchecked(i))?;
+            } else {
+                write!(f, ", {}", self.get_unchecked(i))?;
+            }
+        }
+        write!(f, "]")
+    }
+}
+impl ::core::default::Default for CharSetList {
+    fn default() -> Self {
+        let v: Vec<u8> = vec![4, 0, 0, 0];
+        CharSetList::new_unchecked(v.into())
+    }
+}
+impl CharSetList {
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn item_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn len(&self) -> usize {
+        self.item_count()
+    }
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+    pub fn get(&self, idx: usize) -> Option<CharSet> {
+        if idx >= self.len() {
+            None
+        } else {
+            Some(self.get_unchecked(idx))
+        }
+    }
+    pub fn get_unchecked(&self, idx: usize) -> CharSet {
+        let slice = self.as_slice();
+        let start_idx = molecule::NUMBER_SIZE * (1 + idx);
+        let start = molecule::unpack_number(&slice[start_idx..]) as usize;
+        if idx == self.len() - 1 {
+            CharSet::new_unchecked(self.0.slice(start..))
+        } else {
+            let end_idx = start_idx + molecule::NUMBER_SIZE;
+            let end = molecule::unpack_number(&slice[end_idx..]) as usize;
+            CharSet::new_unchecked(self.0.slice(start..end))
+        }
+    }
+    pub fn as_reader<'r>(&'r self) -> CharSetListReader<'r> {
+        CharSetListReader::new_unchecked(self.as_slice())
+    }
+}
+impl molecule::prelude::Entity for CharSetList {
+    type Builder = CharSetListBuilder;
+    const NAME: &'static str = "CharSetList";
+    fn new_unchecked(data: molecule::bytes::Bytes) -> Self {
+        CharSetList(data)
+    }
+    fn as_bytes(&self) -> molecule::bytes::Bytes {
+        self.0.clone()
+    }
+    fn as_slice(&self) -> &[u8] {
+        &self.0[..]
+    }
+    fn from_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        CharSetListReader::from_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn from_compatible_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        CharSetListReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn new_builder() -> Self::Builder {
+        ::core::default::Default::default()
+    }
+    fn as_builder(self) -> Self::Builder {
+        Self::new_builder().extend(self.into_iter())
+    }
+}
+#[derive(Clone, Copy)]
+pub struct CharSetListReader<'r>(&'r [u8]);
+impl<'r> ::core::fmt::LowerHex for CharSetListReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl<'r> ::core::fmt::Debug for CharSetListReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl<'r> ::core::fmt::Display for CharSetListReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} [", Self::NAME)?;
+        for i in 0..self.len() {
+            if i == 0 {
+                write!(f, "{}", self.get_unchecked(i))?;
+            } else {
+                write!(f, ", {}", self.get_unchecked(i))?;
+            }
+        }
+        write!(f, "]")
+    }
+}
+impl<'r> CharSetListReader<'r> {
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn item_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn len(&self) -> usize {
+        self.item_count()
+    }
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+    pub fn get(&self, idx: usize) -> Option<CharSetReader<'r>> {
+        if idx >= self.len() {
+            None
+        } else {
+            Some(self.get_unchecked(idx))
+        }
+    }
+    pub fn get_unchecked(&self, idx: usize) -> CharSetReader<'r> {
+        let slice = self.as_slice();
+        let start_idx = molecule::NUMBER_SIZE * (1 + idx);
+        let start = molecule::unpack_number(&slice[start_idx..]) as usize;
+        if idx == self.len() - 1 {
+            CharSetReader::new_unchecked(&self.as_slice()[start..])
+        } else {
+            let end_idx = start_idx + molecule::NUMBER_SIZE;
+            let end = molecule::unpack_number(&slice[end_idx..]) as usize;
+            CharSetReader::new_unchecked(&self.as_slice()[start..end])
+        }
+    }
+}
+impl<'r> molecule::prelude::Reader<'r> for CharSetListReader<'r> {
+    type Entity = CharSetList;
+    const NAME: &'static str = "CharSetListReader";
+    fn to_entity(&self) -> Self::Entity {
+        Self::Entity::new_unchecked(self.as_slice().to_owned().into())
+    }
+    fn new_unchecked(slice: &'r [u8]) -> Self {
+        CharSetListReader(slice)
+    }
+    fn as_slice(&self) -> &'r [u8] {
+        self.0
+    }
+    fn verify(slice: &[u8], compatible: bool) -> molecule::error::VerificationResult<()> {
+        use molecule::verification_error as ve;
+        let slice_len = slice.len();
+        if slice_len < molecule::NUMBER_SIZE {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE, slice_len);
+        }
+        let total_size = molecule::unpack_number(slice) as usize;
+        if slice_len != total_size {
+            return ve!(Self, TotalSizeNotMatch, total_size, slice_len);
+        }
+        if slice_len == molecule::NUMBER_SIZE {
+            return Ok(());
+        }
+        if slice_len < molecule::NUMBER_SIZE * 2 {
+            return ve!(
+                Self,
+                TotalSizeNotMatch,
+                molecule::NUMBER_SIZE * 2,
+                slice_len
+            );
+        }
+        let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
+        if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        if slice_len < offset_first {
+            return ve!(Self, HeaderIsBroken, offset_first, slice_len);
+        }
+        let mut offsets: Vec<usize> = slice[molecule::NUMBER_SIZE..offset_first]
+            .chunks_exact(molecule::NUMBER_SIZE)
+            .map(|x| molecule::unpack_number(x) as usize)
+            .collect();
+        offsets.push(total_size);
+        if offsets.windows(2).any(|i| i[0] > i[1]) {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        for pair in offsets.windows(2) {
+            let start = pair[0];
+            let end = pair[1];
+            CharSetReader::verify(&slice[start..end], compatible)?;
+        }
+        Ok(())
+    }
+}
+#[derive(Debug, Default)]
+pub struct CharSetListBuilder(pub(crate) Vec<CharSet>);
+impl CharSetListBuilder {
+    pub fn set(mut self, v: Vec<CharSet>) -> Self {
+        self.0 = v;
+        self
+    }
+    pub fn push(mut self, v: CharSet) -> Self {
+        self.0.push(v);
+        self
+    }
+    pub fn extend<T: ::core::iter::IntoIterator<Item = CharSet>>(mut self, iter: T) -> Self {
+        for elem in iter {
+            self.0.push(elem);
+        }
+        self
+    }
+}
+impl molecule::prelude::Builder for CharSetListBuilder {
+    type Entity = CharSetList;
+    const NAME: &'static str = "CharSetListBuilder";
+    fn expected_length(&self) -> usize {
+        molecule::NUMBER_SIZE * (self.0.len() + 1)
+            + self
+                .0
+                .iter()
+                .map(|inner| inner.as_slice().len())
+                .sum::<usize>()
+    }
+    fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
+        let item_count = self.0.len();
+        if item_count == 0 {
+            writer.write_all(&molecule::pack_number(
+                molecule::NUMBER_SIZE as molecule::Number,
+            ))?;
+        } else {
+            let (total_size, offsets) = self.0.iter().fold(
+                (
+                    molecule::NUMBER_SIZE * (item_count + 1),
+                    Vec::with_capacity(item_count),
+                ),
+                |(start, mut offsets), inner| {
+                    offsets.push(start);
+                    (start + inner.as_slice().len(), offsets)
+                },
+            );
+            writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
+            for offset in offsets.into_iter() {
+                writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
+            }
+            for inner in self.0.iter() {
+                writer.write_all(inner.as_slice())?;
+            }
+        }
+        Ok(())
+    }
+    fn build(&self) -> Self::Entity {
+        let mut inner = Vec::with_capacity(self.expected_length());
+        self.write(&mut inner)
+            .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
+        CharSetList::new_unchecked(inner.into())
+    }
+}
+pub struct CharSetListIterator(CharSetList, usize, usize);
+impl ::core::iter::Iterator for CharSetListIterator {
+    type Item = CharSet;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.1 >= self.2 {
+            None
+        } else {
+            let ret = self.0.get_unchecked(self.1);
+            self.1 += 1;
+            Some(ret)
+        }
+    }
+}
+impl ::core::iter::ExactSizeIterator for CharSetListIterator {
+    fn len(&self) -> usize {
+        self.2 - self.1
+    }
+}
+impl ::core::iter::IntoIterator for CharSetList {
+    type Item = CharSet;
+    type IntoIter = CharSetListIterator;
+    fn into_iter(self) -> Self::IntoIter {
+        let len = self.len();
+        CharSetListIterator(self, 0, len)
+    }
+}
+impl<'r> CharSetListReader<'r> {
+    pub fn iter<'t>(&'t self) -> CharSetListReaderIterator<'t, 'r> {
+        CharSetListReaderIterator(&self, 0, self.len())
+    }
+}
+pub struct CharSetListReaderIterator<'t, 'r>(&'t CharSetListReader<'r>, usize, usize);
+impl<'t: 'r, 'r> ::core::iter::Iterator for CharSetListReaderIterator<'t, 'r> {
+    type Item = CharSetReader<'t>;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.1 >= self.2 {
+            None
+        } else {
+            let ret = self.0.get_unchecked(self.1);
+            self.1 += 1;
+            Some(ret)
+        }
+    }
+}
+impl<'t: 'r, 'r> ::core::iter::ExactSizeIterator for CharSetListReaderIterator<'t, 'r> {
+    fn len(&self) -> usize {
+        self.2 - self.1
+    }
+}
+#[derive(Clone)]
 pub struct CharSet(molecule::bytes::Bytes);
 impl ::core::fmt::LowerHex for CharSet {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
@@ -1606,9 +1936,9 @@ impl ::core::fmt::Debug for CharSet {
 impl ::core::fmt::Display for CharSet {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "emoji", self.emoji())?;
-        write!(f, ", {}: {}", "en", self.en())?;
-        write!(f, ", {}: {}", "zh", self.zh())?;
+        write!(f, "{}: {}", "name", self.name())?;
+        write!(f, ", {}: {}", "global", self.global())?;
+        write!(f, ", {}: {}", "chars", self.chars())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1619,10 +1949,7 @@ impl ::core::fmt::Display for CharSet {
 impl ::core::default::Default for CharSet {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            112, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            25, 0, 0, 0, 16, 0, 0, 0, 20, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
         ];
         CharSet::new_unchecked(v.into())
     }
@@ -1645,26 +1972,26 @@ impl CharSet {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn emoji(&self) -> Hash {
+    pub fn name(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
-        Hash::new_unchecked(self.0.slice(start..end))
+        Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn en(&self) -> Hash {
+    pub fn global(&self) -> Uint8 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
-        Hash::new_unchecked(self.0.slice(start..end))
+        Uint8::new_unchecked(self.0.slice(start..end))
     }
-    pub fn zh(&self) -> Hash {
+    pub fn chars(&self) -> Chars {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[16..]) as usize;
-            Hash::new_unchecked(self.0.slice(start..end))
+            Chars::new_unchecked(self.0.slice(start..end))
         } else {
-            Hash::new_unchecked(self.0.slice(start..))
+            Chars::new_unchecked(self.0.slice(start..))
         }
     }
     pub fn as_reader<'r>(&'r self) -> CharSetReader<'r> {
@@ -1694,9 +2021,9 @@ impl molecule::prelude::Entity for CharSet {
     }
     fn as_builder(self) -> Self::Builder {
         Self::new_builder()
-            .emoji(self.emoji())
-            .en(self.en())
-            .zh(self.zh())
+            .name(self.name())
+            .global(self.global())
+            .chars(self.chars())
     }
 }
 #[derive(Clone, Copy)]
@@ -1718,9 +2045,9 @@ impl<'r> ::core::fmt::Debug for CharSetReader<'r> {
 impl<'r> ::core::fmt::Display for CharSetReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "emoji", self.emoji())?;
-        write!(f, ", {}: {}", "en", self.en())?;
-        write!(f, ", {}: {}", "zh", self.zh())?;
+        write!(f, "{}: {}", "name", self.name())?;
+        write!(f, ", {}: {}", "global", self.global())?;
+        write!(f, ", {}: {}", "chars", self.chars())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1746,26 +2073,26 @@ impl<'r> CharSetReader<'r> {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn emoji(&self) -> HashReader<'r> {
+    pub fn name(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
-        HashReader::new_unchecked(&self.as_slice()[start..end])
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn en(&self) -> HashReader<'r> {
+    pub fn global(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
-        HashReader::new_unchecked(&self.as_slice()[start..end])
+        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn zh(&self) -> HashReader<'r> {
+    pub fn chars(&self) -> CharsReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[16..]) as usize;
-            HashReader::new_unchecked(&self.as_slice()[start..end])
+            CharsReader::new_unchecked(&self.as_slice()[start..end])
         } else {
-            HashReader::new_unchecked(&self.as_slice()[start..])
+            CharsReader::new_unchecked(&self.as_slice()[start..])
         }
     }
 }
@@ -1818,30 +2145,30 @@ impl<'r> molecule::prelude::Reader<'r> for CharSetReader<'r> {
         if offsets.windows(2).any(|i| i[0] > i[1]) {
             return ve!(Self, OffsetsNotMatch);
         }
-        HashReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
-        HashReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
-        HashReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        Uint8Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        CharsReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct CharSetBuilder {
-    pub(crate) emoji: Hash,
-    pub(crate) en: Hash,
-    pub(crate) zh: Hash,
+    pub(crate) name: Uint32,
+    pub(crate) global: Uint8,
+    pub(crate) chars: Chars,
 }
 impl CharSetBuilder {
     pub const FIELD_COUNT: usize = 3;
-    pub fn emoji(mut self, v: Hash) -> Self {
-        self.emoji = v;
+    pub fn name(mut self, v: Uint32) -> Self {
+        self.name = v;
         self
     }
-    pub fn en(mut self, v: Hash) -> Self {
-        self.en = v;
+    pub fn global(mut self, v: Uint8) -> Self {
+        self.global = v;
         self
     }
-    pub fn zh(mut self, v: Hash) -> Self {
-        self.zh = v;
+    pub fn chars(mut self, v: Chars) -> Self {
+        self.chars = v;
         self
     }
 }
@@ -1850,26 +2177,26 @@ impl molecule::prelude::Builder for CharSetBuilder {
     const NAME: &'static str = "CharSetBuilder";
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
-            + self.emoji.as_slice().len()
-            + self.en.as_slice().len()
-            + self.zh.as_slice().len()
+            + self.name.as_slice().len()
+            + self.global.as_slice().len()
+            + self.chars.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
         offsets.push(total_size);
-        total_size += self.emoji.as_slice().len();
+        total_size += self.name.as_slice().len();
         offsets.push(total_size);
-        total_size += self.en.as_slice().len();
+        total_size += self.global.as_slice().len();
         offsets.push(total_size);
-        total_size += self.zh.as_slice().len();
+        total_size += self.chars.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
-        writer.write_all(self.emoji.as_slice())?;
-        writer.write_all(self.en.as_slice())?;
-        writer.write_all(self.zh.as_slice())?;
+        writer.write_all(self.name.as_slice())?;
+        writer.write_all(self.global.as_slice())?;
+        writer.write_all(self.chars.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -1877,6 +2204,340 @@ impl molecule::prelude::Builder for CharSetBuilder {
         self.write(&mut inner)
             .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
         CharSet::new_unchecked(inner.into())
+    }
+}
+#[derive(Clone)]
+pub struct Chars(molecule::bytes::Bytes);
+impl ::core::fmt::LowerHex for Chars {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl ::core::fmt::Debug for Chars {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl ::core::fmt::Display for Chars {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} [", Self::NAME)?;
+        for i in 0..self.len() {
+            if i == 0 {
+                write!(f, "{}", self.get_unchecked(i))?;
+            } else {
+                write!(f, ", {}", self.get_unchecked(i))?;
+            }
+        }
+        write!(f, "]")
+    }
+}
+impl ::core::default::Default for Chars {
+    fn default() -> Self {
+        let v: Vec<u8> = vec![4, 0, 0, 0];
+        Chars::new_unchecked(v.into())
+    }
+}
+impl Chars {
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn item_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn len(&self) -> usize {
+        self.item_count()
+    }
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+    pub fn get(&self, idx: usize) -> Option<Bytes> {
+        if idx >= self.len() {
+            None
+        } else {
+            Some(self.get_unchecked(idx))
+        }
+    }
+    pub fn get_unchecked(&self, idx: usize) -> Bytes {
+        let slice = self.as_slice();
+        let start_idx = molecule::NUMBER_SIZE * (1 + idx);
+        let start = molecule::unpack_number(&slice[start_idx..]) as usize;
+        if idx == self.len() - 1 {
+            Bytes::new_unchecked(self.0.slice(start..))
+        } else {
+            let end_idx = start_idx + molecule::NUMBER_SIZE;
+            let end = molecule::unpack_number(&slice[end_idx..]) as usize;
+            Bytes::new_unchecked(self.0.slice(start..end))
+        }
+    }
+    pub fn as_reader<'r>(&'r self) -> CharsReader<'r> {
+        CharsReader::new_unchecked(self.as_slice())
+    }
+}
+impl molecule::prelude::Entity for Chars {
+    type Builder = CharsBuilder;
+    const NAME: &'static str = "Chars";
+    fn new_unchecked(data: molecule::bytes::Bytes) -> Self {
+        Chars(data)
+    }
+    fn as_bytes(&self) -> molecule::bytes::Bytes {
+        self.0.clone()
+    }
+    fn as_slice(&self) -> &[u8] {
+        &self.0[..]
+    }
+    fn from_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        CharsReader::from_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn from_compatible_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        CharsReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn new_builder() -> Self::Builder {
+        ::core::default::Default::default()
+    }
+    fn as_builder(self) -> Self::Builder {
+        Self::new_builder().extend(self.into_iter())
+    }
+}
+#[derive(Clone, Copy)]
+pub struct CharsReader<'r>(&'r [u8]);
+impl<'r> ::core::fmt::LowerHex for CharsReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl<'r> ::core::fmt::Debug for CharsReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl<'r> ::core::fmt::Display for CharsReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} [", Self::NAME)?;
+        for i in 0..self.len() {
+            if i == 0 {
+                write!(f, "{}", self.get_unchecked(i))?;
+            } else {
+                write!(f, ", {}", self.get_unchecked(i))?;
+            }
+        }
+        write!(f, "]")
+    }
+}
+impl<'r> CharsReader<'r> {
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn item_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn len(&self) -> usize {
+        self.item_count()
+    }
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+    pub fn get(&self, idx: usize) -> Option<BytesReader<'r>> {
+        if idx >= self.len() {
+            None
+        } else {
+            Some(self.get_unchecked(idx))
+        }
+    }
+    pub fn get_unchecked(&self, idx: usize) -> BytesReader<'r> {
+        let slice = self.as_slice();
+        let start_idx = molecule::NUMBER_SIZE * (1 + idx);
+        let start = molecule::unpack_number(&slice[start_idx..]) as usize;
+        if idx == self.len() - 1 {
+            BytesReader::new_unchecked(&self.as_slice()[start..])
+        } else {
+            let end_idx = start_idx + molecule::NUMBER_SIZE;
+            let end = molecule::unpack_number(&slice[end_idx..]) as usize;
+            BytesReader::new_unchecked(&self.as_slice()[start..end])
+        }
+    }
+}
+impl<'r> molecule::prelude::Reader<'r> for CharsReader<'r> {
+    type Entity = Chars;
+    const NAME: &'static str = "CharsReader";
+    fn to_entity(&self) -> Self::Entity {
+        Self::Entity::new_unchecked(self.as_slice().to_owned().into())
+    }
+    fn new_unchecked(slice: &'r [u8]) -> Self {
+        CharsReader(slice)
+    }
+    fn as_slice(&self) -> &'r [u8] {
+        self.0
+    }
+    fn verify(slice: &[u8], compatible: bool) -> molecule::error::VerificationResult<()> {
+        use molecule::verification_error as ve;
+        let slice_len = slice.len();
+        if slice_len < molecule::NUMBER_SIZE {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE, slice_len);
+        }
+        let total_size = molecule::unpack_number(slice) as usize;
+        if slice_len != total_size {
+            return ve!(Self, TotalSizeNotMatch, total_size, slice_len);
+        }
+        if slice_len == molecule::NUMBER_SIZE {
+            return Ok(());
+        }
+        if slice_len < molecule::NUMBER_SIZE * 2 {
+            return ve!(
+                Self,
+                TotalSizeNotMatch,
+                molecule::NUMBER_SIZE * 2,
+                slice_len
+            );
+        }
+        let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
+        if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        if slice_len < offset_first {
+            return ve!(Self, HeaderIsBroken, offset_first, slice_len);
+        }
+        let mut offsets: Vec<usize> = slice[molecule::NUMBER_SIZE..offset_first]
+            .chunks_exact(molecule::NUMBER_SIZE)
+            .map(|x| molecule::unpack_number(x) as usize)
+            .collect();
+        offsets.push(total_size);
+        if offsets.windows(2).any(|i| i[0] > i[1]) {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        for pair in offsets.windows(2) {
+            let start = pair[0];
+            let end = pair[1];
+            BytesReader::verify(&slice[start..end], compatible)?;
+        }
+        Ok(())
+    }
+}
+#[derive(Debug, Default)]
+pub struct CharsBuilder(pub(crate) Vec<Bytes>);
+impl CharsBuilder {
+    pub fn set(mut self, v: Vec<Bytes>) -> Self {
+        self.0 = v;
+        self
+    }
+    pub fn push(mut self, v: Bytes) -> Self {
+        self.0.push(v);
+        self
+    }
+    pub fn extend<T: ::core::iter::IntoIterator<Item = Bytes>>(mut self, iter: T) -> Self {
+        for elem in iter {
+            self.0.push(elem);
+        }
+        self
+    }
+}
+impl molecule::prelude::Builder for CharsBuilder {
+    type Entity = Chars;
+    const NAME: &'static str = "CharsBuilder";
+    fn expected_length(&self) -> usize {
+        molecule::NUMBER_SIZE * (self.0.len() + 1)
+            + self
+                .0
+                .iter()
+                .map(|inner| inner.as_slice().len())
+                .sum::<usize>()
+    }
+    fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
+        let item_count = self.0.len();
+        if item_count == 0 {
+            writer.write_all(&molecule::pack_number(
+                molecule::NUMBER_SIZE as molecule::Number,
+            ))?;
+        } else {
+            let (total_size, offsets) = self.0.iter().fold(
+                (
+                    molecule::NUMBER_SIZE * (item_count + 1),
+                    Vec::with_capacity(item_count),
+                ),
+                |(start, mut offsets), inner| {
+                    offsets.push(start);
+                    (start + inner.as_slice().len(), offsets)
+                },
+            );
+            writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
+            for offset in offsets.into_iter() {
+                writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
+            }
+            for inner in self.0.iter() {
+                writer.write_all(inner.as_slice())?;
+            }
+        }
+        Ok(())
+    }
+    fn build(&self) -> Self::Entity {
+        let mut inner = Vec::with_capacity(self.expected_length());
+        self.write(&mut inner)
+            .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
+        Chars::new_unchecked(inner.into())
+    }
+}
+pub struct CharsIterator(Chars, usize, usize);
+impl ::core::iter::Iterator for CharsIterator {
+    type Item = Bytes;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.1 >= self.2 {
+            None
+        } else {
+            let ret = self.0.get_unchecked(self.1);
+            self.1 += 1;
+            Some(ret)
+        }
+    }
+}
+impl ::core::iter::ExactSizeIterator for CharsIterator {
+    fn len(&self) -> usize {
+        self.2 - self.1
+    }
+}
+impl ::core::iter::IntoIterator for Chars {
+    type Item = Bytes;
+    type IntoIter = CharsIterator;
+    fn into_iter(self) -> Self::IntoIter {
+        let len = self.len();
+        CharsIterator(self, 0, len)
+    }
+}
+impl<'r> CharsReader<'r> {
+    pub fn iter<'t>(&'t self) -> CharsReaderIterator<'t, 'r> {
+        CharsReaderIterator(&self, 0, self.len())
+    }
+}
+pub struct CharsReaderIterator<'t, 'r>(&'t CharsReader<'r>, usize, usize);
+impl<'t: 'r, 'r> ::core::iter::Iterator for CharsReaderIterator<'t, 'r> {
+    type Item = BytesReader<'t>;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.1 >= self.2 {
+            None
+        } else {
+            let ret = self.0.get_unchecked(self.1);
+            self.1 += 1;
+            Some(ret)
+        }
+    }
+}
+impl<'t: 'r, 'r> ::core::iter::ExactSizeIterator for CharsReaderIterator<'t, 'r> {
+    fn len(&self) -> usize {
+        self.2 - self.1
     }
 }
 #[derive(Clone)]

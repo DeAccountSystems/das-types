@@ -29,7 +29,7 @@ table ConfigCellData {
     // lock script of working keeper who aggregate the votes
     price_configs: PriceConfigList,
     // available char sets for account
-    char_sets: CharSet,
+    char_sets: CharSetList,
     // the minimum ttl of record
     min_ttl: Uint32,
     // the closing limit of primary market auction(seconds)
@@ -48,11 +48,15 @@ table PriceConfig {
   renew: Uint64,
 }
 
+vector CharSetList <CharSet>;
+
 table CharSet {
-    emoji: Hash,
-    en: Hash,
-    zh: Hash,
+    name: Uint32,
+    global: Uint8,
+    chars: Chars,
 }
+
+vector Chars <Bytes>;
 
 table CodeHashTable {
     apply_register_cell: Hash,
