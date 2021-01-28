@@ -5903,6 +5903,8 @@ impl ::core::fmt::Display for PreAccountCellData {
         write!(f, "{}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock", self.owner_lock())?;
+        write!(f, ", {}: {}", "price", self.price())?;
+        write!(f, ", {}: {}", "quote", self.quote())?;
         write!(f, ", {}: {}", "created_at", self.created_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -5914,17 +5916,19 @@ impl ::core::fmt::Display for PreAccountCellData {
 impl ::core::default::Default for PreAccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            138, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 77, 0, 0, 0, 130, 0, 0, 0, 0, 0, 0, 0, 53, 0,
-            0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16,
-            0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            183, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 85, 0, 0, 0, 138, 0, 0, 0, 171, 0, 0, 0, 175,
+            0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33,
+            0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         PreAccountCellData::new_unchecked(v.into())
     }
 }
 impl PreAccountCellData {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 6;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -5959,11 +5963,23 @@ impl PreAccountCellData {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Script::new_unchecked(self.0.slice(start..end))
     }
-    pub fn created_at(&self) -> Timestamp {
+    pub fn price(&self) -> PriceConfig {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
+        PriceConfig::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn quote(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn created_at(&self) -> Timestamp {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[24..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[20..]) as usize;
+            let end = molecule::unpack_number(&slice[28..]) as usize;
             Timestamp::new_unchecked(self.0.slice(start..end))
         } else {
             Timestamp::new_unchecked(self.0.slice(start..))
@@ -5999,6 +6015,8 @@ impl molecule::prelude::Entity for PreAccountCellData {
             .account(self.account())
             .refund_lock(self.refund_lock())
             .owner_lock(self.owner_lock())
+            .price(self.price())
+            .quote(self.quote())
             .created_at(self.created_at())
     }
 }
@@ -6024,6 +6042,8 @@ impl<'r> ::core::fmt::Display for PreAccountCellDataReader<'r> {
         write!(f, "{}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock", self.owner_lock())?;
+        write!(f, ", {}: {}", "price", self.price())?;
+        write!(f, ", {}: {}", "quote", self.quote())?;
         write!(f, ", {}: {}", "created_at", self.created_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -6033,7 +6053,7 @@ impl<'r> ::core::fmt::Display for PreAccountCellDataReader<'r> {
     }
 }
 impl<'r> PreAccountCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 6;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -6068,11 +6088,23 @@ impl<'r> PreAccountCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         ScriptReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn created_at(&self) -> TimestampReader<'r> {
+    pub fn price(&self) -> PriceConfigReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
+        PriceConfigReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn quote(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn created_at(&self) -> TimestampReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[24..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[20..]) as usize;
+            let end = molecule::unpack_number(&slice[28..]) as usize;
             TimestampReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             TimestampReader::new_unchecked(&self.as_slice()[start..])
@@ -6131,7 +6163,9 @@ impl<'r> molecule::prelude::Reader<'r> for PreAccountCellDataReader<'r> {
         BytesReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         ScriptReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         ScriptReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        TimestampReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        PriceConfigReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        TimestampReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Ok(())
     }
 }
@@ -6140,10 +6174,12 @@ pub struct PreAccountCellDataBuilder {
     pub(crate) account: Bytes,
     pub(crate) refund_lock: Script,
     pub(crate) owner_lock: Script,
+    pub(crate) price: PriceConfig,
+    pub(crate) quote: Uint32,
     pub(crate) created_at: Timestamp,
 }
 impl PreAccountCellDataBuilder {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 6;
     pub fn account(mut self, v: Bytes) -> Self {
         self.account = v;
         self
@@ -6154,6 +6190,14 @@ impl PreAccountCellDataBuilder {
     }
     pub fn owner_lock(mut self, v: Script) -> Self {
         self.owner_lock = v;
+        self
+    }
+    pub fn price(mut self, v: PriceConfig) -> Self {
+        self.price = v;
+        self
+    }
+    pub fn quote(mut self, v: Uint32) -> Self {
+        self.quote = v;
         self
     }
     pub fn created_at(mut self, v: Timestamp) -> Self {
@@ -6169,6 +6213,8 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
             + self.account.as_slice().len()
             + self.refund_lock.as_slice().len()
             + self.owner_lock.as_slice().len()
+            + self.price.as_slice().len()
+            + self.quote.as_slice().len()
             + self.created_at.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
@@ -6181,6 +6227,10 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
         offsets.push(total_size);
         total_size += self.owner_lock.as_slice().len();
         offsets.push(total_size);
+        total_size += self.price.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.quote.as_slice().len();
+        offsets.push(total_size);
         total_size += self.created_at.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
@@ -6189,6 +6239,8 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
         writer.write_all(self.account.as_slice())?;
         writer.write_all(self.refund_lock.as_slice())?;
         writer.write_all(self.owner_lock.as_slice())?;
+        writer.write_all(self.price.as_slice())?;
+        writer.write_all(self.quote.as_slice())?;
         writer.write_all(self.created_at.as_slice())?;
         Ok(())
     }
@@ -6747,166 +6799,5 @@ impl molecule::prelude::Builder for BiddingCellDataBuilder {
         self.write(&mut inner)
             .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
         BiddingCellData::new_unchecked(inner.into())
-    }
-}
-#[derive(Clone)]
-pub struct QuoteCellData(molecule::bytes::Bytes);
-impl ::core::fmt::LowerHex for QuoteCellData {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        if f.alternate() {
-            write!(f, "0x")?;
-        }
-        write!(f, "{}", hex_string(self.as_slice()))
-    }
-}
-impl ::core::fmt::Debug for QuoteCellData {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        write!(f, "{}({:#x})", Self::NAME, self)
-    }
-}
-impl ::core::fmt::Display for QuoteCellData {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "base", self.base())?;
-        write!(f, ", {}: {}", "quote", self.quote())?;
-        write!(f, " }}")
-    }
-}
-impl ::core::default::Default for QuoteCellData {
-    fn default() -> Self {
-        let v: Vec<u8> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        QuoteCellData::new_unchecked(v.into())
-    }
-}
-impl QuoteCellData {
-    pub const TOTAL_SIZE: usize = 16;
-    pub const FIELD_SIZES: [usize; 2] = [8, 8];
-    pub const FIELD_COUNT: usize = 2;
-    pub fn base(&self) -> Uint64 {
-        Uint64::new_unchecked(self.0.slice(0..8))
-    }
-    pub fn quote(&self) -> Uint64 {
-        Uint64::new_unchecked(self.0.slice(8..16))
-    }
-    pub fn as_reader<'r>(&'r self) -> QuoteCellDataReader<'r> {
-        QuoteCellDataReader::new_unchecked(self.as_slice())
-    }
-}
-impl molecule::prelude::Entity for QuoteCellData {
-    type Builder = QuoteCellDataBuilder;
-    const NAME: &'static str = "QuoteCellData";
-    fn new_unchecked(data: molecule::bytes::Bytes) -> Self {
-        QuoteCellData(data)
-    }
-    fn as_bytes(&self) -> molecule::bytes::Bytes {
-        self.0.clone()
-    }
-    fn as_slice(&self) -> &[u8] {
-        &self.0[..]
-    }
-    fn from_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
-        QuoteCellDataReader::from_slice(slice).map(|reader| reader.to_entity())
-    }
-    fn from_compatible_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
-        QuoteCellDataReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
-    }
-    fn new_builder() -> Self::Builder {
-        ::core::default::Default::default()
-    }
-    fn as_builder(self) -> Self::Builder {
-        Self::new_builder().base(self.base()).quote(self.quote())
-    }
-}
-#[derive(Clone, Copy)]
-pub struct QuoteCellDataReader<'r>(&'r [u8]);
-impl<'r> ::core::fmt::LowerHex for QuoteCellDataReader<'r> {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        if f.alternate() {
-            write!(f, "0x")?;
-        }
-        write!(f, "{}", hex_string(self.as_slice()))
-    }
-}
-impl<'r> ::core::fmt::Debug for QuoteCellDataReader<'r> {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        write!(f, "{}({:#x})", Self::NAME, self)
-    }
-}
-impl<'r> ::core::fmt::Display for QuoteCellDataReader<'r> {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "base", self.base())?;
-        write!(f, ", {}: {}", "quote", self.quote())?;
-        write!(f, " }}")
-    }
-}
-impl<'r> QuoteCellDataReader<'r> {
-    pub const TOTAL_SIZE: usize = 16;
-    pub const FIELD_SIZES: [usize; 2] = [8, 8];
-    pub const FIELD_COUNT: usize = 2;
-    pub fn base(&self) -> Uint64Reader<'r> {
-        Uint64Reader::new_unchecked(&self.as_slice()[0..8])
-    }
-    pub fn quote(&self) -> Uint64Reader<'r> {
-        Uint64Reader::new_unchecked(&self.as_slice()[8..16])
-    }
-}
-impl<'r> molecule::prelude::Reader<'r> for QuoteCellDataReader<'r> {
-    type Entity = QuoteCellData;
-    const NAME: &'static str = "QuoteCellDataReader";
-    fn to_entity(&self) -> Self::Entity {
-        Self::Entity::new_unchecked(self.as_slice().to_owned().into())
-    }
-    fn new_unchecked(slice: &'r [u8]) -> Self {
-        QuoteCellDataReader(slice)
-    }
-    fn as_slice(&self) -> &'r [u8] {
-        self.0
-    }
-    fn verify(slice: &[u8], _compatible: bool) -> molecule::error::VerificationResult<()> {
-        use molecule::verification_error as ve;
-        let slice_len = slice.len();
-        if slice_len != Self::TOTAL_SIZE {
-            return ve!(Self, TotalSizeNotMatch, Self::TOTAL_SIZE, slice_len);
-        }
-        Ok(())
-    }
-}
-#[derive(Debug, Default)]
-pub struct QuoteCellDataBuilder {
-    pub(crate) base: Uint64,
-    pub(crate) quote: Uint64,
-}
-impl QuoteCellDataBuilder {
-    pub const TOTAL_SIZE: usize = 16;
-    pub const FIELD_SIZES: [usize; 2] = [8, 8];
-    pub const FIELD_COUNT: usize = 2;
-    pub fn base(mut self, v: Uint64) -> Self {
-        self.base = v;
-        self
-    }
-    pub fn quote(mut self, v: Uint64) -> Self {
-        self.quote = v;
-        self
-    }
-}
-impl molecule::prelude::Builder for QuoteCellDataBuilder {
-    type Entity = QuoteCellData;
-    const NAME: &'static str = "QuoteCellDataBuilder";
-    fn expected_length(&self) -> usize {
-        Self::TOTAL_SIZE
-    }
-    fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
-        writer.write_all(self.base.as_slice())?;
-        writer.write_all(self.quote.as_slice())?;
-        Ok(())
-    }
-    fn build(&self) -> Self::Entity {
-        let mut inner = Vec::with_capacity(self.expected_length());
-        self.write(&mut inner)
-            .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
-        QuoteCellData::new_unchecked(inner.into())
     }
 }

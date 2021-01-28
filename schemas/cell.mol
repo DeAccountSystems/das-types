@@ -127,6 +127,10 @@ table PreAccountCellData {
     refund_lock: Script,
     // If the PreAccountCell is registered successfully, this field specifies to whom the account should be given.
     owner_lock: Script,
+    // Price of the account at the moment of registration.
+    price: PriceConfig,
+    // The exchange rate between CKB and USD.
+    quote: Uint32,
     created_at: Timestamp,
 }
 
@@ -148,13 +152,4 @@ table BiddingCellData {
     current_price: Uint64,
     // latest bidder's lock script
     current_bidder: ScriptOpt,
-}
-
-// QuoteCellData
-
-struct QuoteCellData {
-    // CKB
-    base: Uint64,
-    // USD
-    quote: Uint64,
 }
