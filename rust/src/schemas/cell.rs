@@ -348,7 +348,7 @@ impl ::core::fmt::Display for ConfigCellData {
             "closing_limit_of_secondary_market_auction",
             self.closing_limit_of_secondary_market_auction()
         )?;
-        write!(f, ", {}: {}", "code_hash_table", self.code_hash_table())?;
+        write!(f, ", {}: {}", "type_id_table", self.type_id_table())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -359,12 +359,12 @@ impl ::core::fmt::Display for ConfigCellData {
 impl ::core::default::Default for ConfigCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            178, 1, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 65, 0, 0, 0, 66, 0, 0, 0, 70, 0, 0, 0, 74, 0,
+            142, 1, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 65, 0, 0, 0, 66, 0, 0, 0, 70, 0, 0, 0, 74, 0,
             0, 0, 78, 0, 0, 0, 82, 0, 0, 0, 86, 0, 0, 0, 90, 0, 0, 0, 94, 0, 0, 0, 98, 0, 0, 0,
             102, 0, 0, 0, 106, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 1, 0,
-            0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0, 0, 136, 0, 0, 0, 168, 0, 0, 0, 200, 0, 0, 0,
-            232, 0, 0, 0, 8, 1, 0, 0, 40, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 1, 0,
+            0, 36, 0, 0, 0, 68, 0, 0, 0, 100, 0, 0, 0, 132, 0, 0, 0, 164, 0, 0, 0, 196, 0, 0, 0,
+            228, 0, 0, 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -373,8 +373,7 @@ impl ::core::default::Default for ConfigCellData {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0,
         ];
         ConfigCellData::new_unchecked(v.into())
     }
@@ -475,14 +474,14 @@ impl ConfigCellData {
         let end = molecule::unpack_number(&slice[56..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn code_hash_table(&self) -> CodeHashTable {
+    pub fn type_id_table(&self) -> TypeIdTable {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[56..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[60..]) as usize;
-            CodeHashTable::new_unchecked(self.0.slice(start..end))
+            TypeIdTable::new_unchecked(self.0.slice(start..end))
         } else {
-            CodeHashTable::new_unchecked(self.0.slice(start..))
+            TypeIdTable::new_unchecked(self.0.slice(start..))
         }
     }
     pub fn as_reader<'r>(&'r self) -> ConfigCellDataReader<'r> {
@@ -527,7 +526,7 @@ impl molecule::prelude::Entity for ConfigCellData {
             .closing_limit_of_secondary_market_auction(
                 self.closing_limit_of_secondary_market_auction(),
             )
-            .code_hash_table(self.code_hash_table())
+            .type_id_table(self.type_id_table())
     }
 }
 #[derive(Clone, Copy)]
@@ -612,7 +611,7 @@ impl<'r> ::core::fmt::Display for ConfigCellDataReader<'r> {
             "closing_limit_of_secondary_market_auction",
             self.closing_limit_of_secondary_market_auction()
         )?;
-        write!(f, ", {}: {}", "code_hash_table", self.code_hash_table())?;
+        write!(f, ", {}: {}", "type_id_table", self.type_id_table())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -716,14 +715,14 @@ impl<'r> ConfigCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[56..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn code_hash_table(&self) -> CodeHashTableReader<'r> {
+    pub fn type_id_table(&self) -> TypeIdTableReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[56..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[60..]) as usize;
-            CodeHashTableReader::new_unchecked(&self.as_slice()[start..end])
+            TypeIdTableReader::new_unchecked(&self.as_slice()[start..end])
         } else {
-            CodeHashTableReader::new_unchecked(&self.as_slice()[start..])
+            TypeIdTableReader::new_unchecked(&self.as_slice()[start..])
         }
     }
 }
@@ -789,7 +788,7 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellDataReader<'r> {
         Uint32Reader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
         Uint32Reader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
         Uint32Reader::verify(&slice[offsets[12]..offsets[13]], compatible)?;
-        CodeHashTableReader::verify(&slice[offsets[13]..offsets[14]], compatible)?;
+        TypeIdTableReader::verify(&slice[offsets[13]..offsets[14]], compatible)?;
         Ok(())
     }
 }
@@ -808,7 +807,7 @@ pub struct ConfigCellDataBuilder {
     pub(crate) min_ttl: Uint32,
     pub(crate) closing_limit_of_primary_market_auction: Uint32,
     pub(crate) closing_limit_of_secondary_market_auction: Uint32,
-    pub(crate) code_hash_table: CodeHashTable,
+    pub(crate) type_id_table: TypeIdTable,
 }
 impl ConfigCellDataBuilder {
     pub const FIELD_COUNT: usize = 14;
@@ -864,8 +863,8 @@ impl ConfigCellDataBuilder {
         self.closing_limit_of_secondary_market_auction = v;
         self
     }
-    pub fn code_hash_table(mut self, v: CodeHashTable) -> Self {
-        self.code_hash_table = v;
+    pub fn type_id_table(mut self, v: TypeIdTable) -> Self {
+        self.type_id_table = v;
         self
     }
 }
@@ -893,7 +892,7 @@ impl molecule::prelude::Builder for ConfigCellDataBuilder {
                 .closing_limit_of_secondary_market_auction
                 .as_slice()
                 .len()
-            + self.code_hash_table.as_slice().len()
+            + self.type_id_table.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -931,7 +930,7 @@ impl molecule::prelude::Builder for ConfigCellDataBuilder {
             .as_slice()
             .len();
         offsets.push(total_size);
-        total_size += self.code_hash_table.as_slice().len();
+        total_size += self.type_id_table.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -949,7 +948,7 @@ impl molecule::prelude::Builder for ConfigCellDataBuilder {
         writer.write_all(self.min_ttl.as_slice())?;
         writer.write_all(self.closing_limit_of_primary_market_auction.as_slice())?;
         writer.write_all(self.closing_limit_of_secondary_market_auction.as_slice())?;
-        writer.write_all(self.code_hash_table.as_slice())?;
+        writer.write_all(self.type_id_table.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -2541,8 +2540,8 @@ impl<'t: 'r, 'r> ::core::iter::ExactSizeIterator for CharsReaderIterator<'t, 'r>
     }
 }
 #[derive(Clone)]
-pub struct CodeHashTable(molecule::bytes::Bytes);
-impl ::core::fmt::LowerHex for CodeHashTable {
+pub struct TypeIdTable(molecule::bytes::Bytes);
+impl ::core::fmt::LowerHex for TypeIdTable {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         use molecule::hex_string;
         if f.alternate() {
@@ -2551,12 +2550,12 @@ impl ::core::fmt::LowerHex for CodeHashTable {
         write!(f, "{}", hex_string(self.as_slice()))
     }
 }
-impl ::core::fmt::Debug for CodeHashTable {
+impl ::core::fmt::Debug for TypeIdTable {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{}({:#x})", Self::NAME, self)
     }
 }
-impl ::core::fmt::Display for CodeHashTable {
+impl ::core::fmt::Display for TypeIdTable {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(
@@ -2577,7 +2576,6 @@ impl ::core::fmt::Display for CodeHashTable {
             "primary_market_cell",
             self.primary_market_cell()
         )?;
-        write!(f, ", {}: {}", "quote_cell", self.quote_cell())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -2585,11 +2583,11 @@ impl ::core::fmt::Display for CodeHashTable {
         write!(f, " }}")
     }
 }
-impl ::core::default::Default for CodeHashTable {
+impl ::core::default::Default for TypeIdTable {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            72, 1, 0, 0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0, 0, 136, 0, 0, 0, 168, 0, 0, 0, 200,
-            0, 0, 0, 232, 0, 0, 0, 8, 1, 0, 0, 40, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            36, 1, 0, 0, 36, 0, 0, 0, 68, 0, 0, 0, 100, 0, 0, 0, 132, 0, 0, 0, 164, 0, 0, 0, 196,
+            0, 0, 0, 228, 0, 0, 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2598,14 +2596,13 @@ impl ::core::default::Default for CodeHashTable {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
         ];
-        CodeHashTable::new_unchecked(v.into())
+        TypeIdTable::new_unchecked(v.into())
     }
 }
-impl CodeHashTable {
-    pub const FIELD_COUNT: usize = 9;
+impl TypeIdTable {
+    pub const FIELD_COUNT: usize = 8;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -2667,28 +2664,22 @@ impl CodeHashTable {
     pub fn primary_market_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
-        let end = molecule::unpack_number(&slice[36..]) as usize;
-        Hash::new_unchecked(self.0.slice(start..end))
-    }
-    pub fn quote_cell(&self) -> Hash {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[36..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[40..]) as usize;
+            let end = molecule::unpack_number(&slice[36..]) as usize;
             Hash::new_unchecked(self.0.slice(start..end))
         } else {
             Hash::new_unchecked(self.0.slice(start..))
         }
     }
-    pub fn as_reader<'r>(&'r self) -> CodeHashTableReader<'r> {
-        CodeHashTableReader::new_unchecked(self.as_slice())
+    pub fn as_reader<'r>(&'r self) -> TypeIdTableReader<'r> {
+        TypeIdTableReader::new_unchecked(self.as_slice())
     }
 }
-impl molecule::prelude::Entity for CodeHashTable {
-    type Builder = CodeHashTableBuilder;
-    const NAME: &'static str = "CodeHashTable";
+impl molecule::prelude::Entity for TypeIdTable {
+    type Builder = TypeIdTableBuilder;
+    const NAME: &'static str = "TypeIdTable";
     fn new_unchecked(data: molecule::bytes::Bytes) -> Self {
-        CodeHashTable(data)
+        TypeIdTable(data)
     }
     fn as_bytes(&self) -> molecule::bytes::Bytes {
         self.0.clone()
@@ -2697,10 +2688,10 @@ impl molecule::prelude::Entity for CodeHashTable {
         &self.0[..]
     }
     fn from_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
-        CodeHashTableReader::from_slice(slice).map(|reader| reader.to_entity())
+        TypeIdTableReader::from_slice(slice).map(|reader| reader.to_entity())
     }
     fn from_compatible_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
-        CodeHashTableReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
+        TypeIdTableReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
     }
     fn new_builder() -> Self::Builder {
         ::core::default::Default::default()
@@ -2715,12 +2706,11 @@ impl molecule::prelude::Entity for CodeHashTable {
             .on_sale_cell(self.on_sale_cell())
             .bidding_cell(self.bidding_cell())
             .primary_market_cell(self.primary_market_cell())
-            .quote_cell(self.quote_cell())
     }
 }
 #[derive(Clone, Copy)]
-pub struct CodeHashTableReader<'r>(&'r [u8]);
-impl<'r> ::core::fmt::LowerHex for CodeHashTableReader<'r> {
+pub struct TypeIdTableReader<'r>(&'r [u8]);
+impl<'r> ::core::fmt::LowerHex for TypeIdTableReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         use molecule::hex_string;
         if f.alternate() {
@@ -2729,12 +2719,12 @@ impl<'r> ::core::fmt::LowerHex for CodeHashTableReader<'r> {
         write!(f, "{}", hex_string(self.as_slice()))
     }
 }
-impl<'r> ::core::fmt::Debug for CodeHashTableReader<'r> {
+impl<'r> ::core::fmt::Debug for TypeIdTableReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{}({:#x})", Self::NAME, self)
     }
 }
-impl<'r> ::core::fmt::Display for CodeHashTableReader<'r> {
+impl<'r> ::core::fmt::Display for TypeIdTableReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(
@@ -2755,7 +2745,6 @@ impl<'r> ::core::fmt::Display for CodeHashTableReader<'r> {
             "primary_market_cell",
             self.primary_market_cell()
         )?;
-        write!(f, ", {}: {}", "quote_cell", self.quote_cell())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -2763,8 +2752,8 @@ impl<'r> ::core::fmt::Display for CodeHashTableReader<'r> {
         write!(f, " }}")
     }
 }
-impl<'r> CodeHashTableReader<'r> {
-    pub const FIELD_COUNT: usize = 9;
+impl<'r> TypeIdTableReader<'r> {
+    pub const FIELD_COUNT: usize = 8;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -2826,28 +2815,22 @@ impl<'r> CodeHashTableReader<'r> {
     pub fn primary_market_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
-        let end = molecule::unpack_number(&slice[36..]) as usize;
-        HashReader::new_unchecked(&self.as_slice()[start..end])
-    }
-    pub fn quote_cell(&self) -> HashReader<'r> {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[36..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[40..]) as usize;
+            let end = molecule::unpack_number(&slice[36..]) as usize;
             HashReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             HashReader::new_unchecked(&self.as_slice()[start..])
         }
     }
 }
-impl<'r> molecule::prelude::Reader<'r> for CodeHashTableReader<'r> {
-    type Entity = CodeHashTable;
-    const NAME: &'static str = "CodeHashTableReader";
+impl<'r> molecule::prelude::Reader<'r> for TypeIdTableReader<'r> {
+    type Entity = TypeIdTable;
+    const NAME: &'static str = "TypeIdTableReader";
     fn to_entity(&self) -> Self::Entity {
         Self::Entity::new_unchecked(self.as_slice().to_owned().into())
     }
     fn new_unchecked(slice: &'r [u8]) -> Self {
-        CodeHashTableReader(slice)
+        TypeIdTableReader(slice)
     }
     fn as_slice(&self) -> &'r [u8] {
         self.0
@@ -2897,12 +2880,11 @@ impl<'r> molecule::prelude::Reader<'r> for CodeHashTableReader<'r> {
         HashReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         HashReader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         HashReader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
-        HashReader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
-pub struct CodeHashTableBuilder {
+pub struct TypeIdTableBuilder {
     pub(crate) apply_register_cell: Hash,
     pub(crate) pre_account_cell: Hash,
     pub(crate) proposal_cell: Hash,
@@ -2911,10 +2893,9 @@ pub struct CodeHashTableBuilder {
     pub(crate) on_sale_cell: Hash,
     pub(crate) bidding_cell: Hash,
     pub(crate) primary_market_cell: Hash,
-    pub(crate) quote_cell: Hash,
 }
-impl CodeHashTableBuilder {
-    pub const FIELD_COUNT: usize = 9;
+impl TypeIdTableBuilder {
+    pub const FIELD_COUNT: usize = 8;
     pub fn apply_register_cell(mut self, v: Hash) -> Self {
         self.apply_register_cell = v;
         self
@@ -2947,14 +2928,10 @@ impl CodeHashTableBuilder {
         self.primary_market_cell = v;
         self
     }
-    pub fn quote_cell(mut self, v: Hash) -> Self {
-        self.quote_cell = v;
-        self
-    }
 }
-impl molecule::prelude::Builder for CodeHashTableBuilder {
-    type Entity = CodeHashTable;
-    const NAME: &'static str = "CodeHashTableBuilder";
+impl molecule::prelude::Builder for TypeIdTableBuilder {
+    type Entity = TypeIdTable;
+    const NAME: &'static str = "TypeIdTableBuilder";
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.apply_register_cell.as_slice().len()
@@ -2965,7 +2942,6 @@ impl molecule::prelude::Builder for CodeHashTableBuilder {
             + self.on_sale_cell.as_slice().len()
             + self.bidding_cell.as_slice().len()
             + self.primary_market_cell.as_slice().len()
-            + self.quote_cell.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -2986,8 +2962,6 @@ impl molecule::prelude::Builder for CodeHashTableBuilder {
         total_size += self.bidding_cell.as_slice().len();
         offsets.push(total_size);
         total_size += self.primary_market_cell.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.quote_cell.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -3000,14 +2974,13 @@ impl molecule::prelude::Builder for CodeHashTableBuilder {
         writer.write_all(self.on_sale_cell.as_slice())?;
         writer.write_all(self.bidding_cell.as_slice())?;
         writer.write_all(self.primary_market_cell.as_slice())?;
-        writer.write_all(self.quote_cell.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
         let mut inner = Vec::with_capacity(self.expected_length());
         self.write(&mut inner)
             .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
-        CodeHashTable::new_unchecked(inner.into())
+        TypeIdTable::new_unchecked(inner.into())
     }
 }
 #[derive(Clone)]

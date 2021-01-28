@@ -36,8 +36,8 @@ table ConfigCellData {
     closing_limit_of_primary_market_auction: Uint32,
     // the closing limit of secondary market auction(seconds)
     closing_limit_of_secondary_market_auction: Uint32,
-    // table of code_hashes of all kinds of cells
-    code_hash_table: CodeHashTable,
+    // table of type ID of all kinds of cells
+    type_id_table: TypeIdTable,
 }
 
 vector PriceConfigList <PriceConfig>;
@@ -58,7 +58,7 @@ table CharSet {
 
 vector Chars <Bytes>;
 
-table CodeHashTable {
+table TypeIdTable {
     apply_register_cell: Hash,
     pre_account_cell: Hash,
     proposal_cell: Hash,
@@ -67,7 +67,6 @@ table CodeHashTable {
     on_sale_cell: Hash,
     bidding_cell: Hash,
     primary_market_cell: Hash,
-    quote_cell: Hash,
 }
 
 // ProposalCellData
