@@ -65,7 +65,13 @@ impl From<Vec<u8>> for Bytes {
 
 impl From<ckb_packed::Bytes> for Bytes {
     fn from(v: ckb_packed::Bytes) -> Self {
-        Bytes::from_slice(v.as_slice()).unwrap()
+        Bytes::new_unchecked(v.as_bytes().into())
+    }
+}
+
+impl Into<ckb_packed::Bytes> for Bytes {
+    fn into(self) -> ckb_packed::Bytes {
+        ckb_packed::Bytes::new_unchecked(self.as_bytes().into())
     }
 }
 
@@ -119,7 +125,13 @@ impl TryFrom<Vec<u8>> for Hash {
 
 impl From<ckb_packed::Byte32> for Hash {
     fn from(v: ckb_packed::Byte32) -> Self {
-        Hash::from_slice(v.as_slice()).unwrap()
+        Hash::new_unchecked(v.as_bytes().into())
+    }
+}
+
+impl Into<ckb_packed::Byte32> for Hash {
+    fn into(self) -> ckb_packed::Byte32 {
+        ckb_packed::Byte32::new_unchecked(self.as_bytes().into())
     }
 }
 

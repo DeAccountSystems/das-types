@@ -74,10 +74,17 @@ fn should_support_bytes() {
 
     assert_eq!(String::try_from(data), Ok(String::from(text)));
 
+    // Convert from ckb_std packed Bytes to das packed Bytes
     let ckb_bytes = ckb_packed::Bytes::default();
     let data = Bytes::default();
 
-    assert!(is_entity_eq(&Bytes::from(ckb_bytes), &data))
+    assert!(is_entity_eq(&Bytes::from(ckb_bytes), &data));
+
+    // Convert from das packed Bytes to ckb_std packed Bytes
+    let ckb_bytes = ckb_packed::Bytes::default();
+    let data = Bytes::default();
+
+    assert!(is_entity_eq(&ckb_bytes, &data.into()));
 }
 
 #[test]
@@ -90,8 +97,15 @@ fn should_support_hash() {
 
     assert_eq!(Vec::from(data), buf.to_vec());
 
+    // Convert from ckb_std packed Bytes to das packed Bytes
     let ckb_byte32 = ckb_packed::Byte32::default();
     let data = Hash::default();
 
-    assert!(is_entity_eq(&Hash::from(ckb_byte32), &data))
+    assert!(is_entity_eq(&Hash::from(ckb_byte32), &data));
+
+    // Convert from das packed Bytes to ckb_std packed Bytes
+    let ckb_byte32 = ckb_packed::Byte32::default();
+    let data = Hash::default();
+
+    assert!(is_entity_eq(&ckb_byte32, &data.into()));
 }
