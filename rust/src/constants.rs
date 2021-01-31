@@ -10,7 +10,7 @@ pub enum DataType {
 }
 
 #[repr(u32)]
-pub enum CharSet {
+pub enum CharSetType {
     Emoji,
     En,
     ZhCn,

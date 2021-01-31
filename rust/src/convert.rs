@@ -1,10 +1,7 @@
 use super::schemas::packed::*;
 use ckb_std::ckb_types::{bytes, packed as ckb_packed};
 use core::convert::TryFrom;
-use molecule::{
-    error::VerificationError,
-    prelude::{Builder, Byte, Entity},
-};
+use molecule::{error::VerificationError, prelude::*};
 use std::prelude::v1::*;
 #[cfg(feature = "std")]
 use std::{str, str::Utf8Error};
@@ -139,5 +136,29 @@ impl Into<ckb_packed::Byte32> for Hash {
 impl From<Hash> for Vec<u8> {
     fn from(v: Hash) -> Self {
         v.as_slice().to_vec()
+    }
+}
+
+/// Convert AccountChars to human-readable string
+impl AccountChars {
+    pub fn as_readable(&self) -> Vec<u8> {
+        let mut ret = Vec::new();
+        for reader in self.as_reader().iter() {
+            ret.append(&mut reader.bytes().raw_data().to_owned());
+        }
+
+        ret
+    }
+}
+
+/// Convert AccountCharsReader to human-readable string
+impl<'r> AccountCharsReader<'r> {
+    pub fn as_readable(&self) -> Vec<u8> {
+        let mut ret = Vec::new();
+        for reader in self.iter() {
+            ret.append(&mut reader.bytes().raw_data().to_owned());
+        }
+
+        ret
     }
 }

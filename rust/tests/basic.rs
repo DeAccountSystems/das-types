@@ -1,7 +1,6 @@
 use ckb_std::ckb_types::packed as ckb_packed;
 use core::convert::TryFrom;
-use das_types::packed::*;
-use das_types::util::is_entity_eq;
+use das_types::{packed::*, util::*};
 use hex;
 
 #[test]
