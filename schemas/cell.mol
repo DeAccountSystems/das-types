@@ -97,7 +97,8 @@ table AccountCellData {
     owner: Script,
     // The lock script of manager.
     manager: Script,
-    account: Bytes,
+    // Separate chars of account.
+    account: AccountChars,
     // The status of the account, 0x00 means normal, 0x01 means being sold, 0x02 means being auctioned.
     status: Uint8,
     registered_at: Timestamp,
@@ -121,7 +122,8 @@ vector Records <Record>;
 // PreAccountCellData
 
 table PreAccountCellData {
-    account: Bytes,
+    // Separate chars of account.
+    account: AccountChars,
     // If the PreAccountCell cannot be registered, this field specifies to whom the refund should be given.
     refund_lock: Script,
     // If the PreAccountCell is registered successfully, this field specifies to whom the account should be given.
@@ -131,6 +133,15 @@ table PreAccountCellData {
     // The exchange rate between CKB and USD.
     quote: Uint32,
     created_at: Timestamp,
+}
+
+vector AccountChars <AccountChar>;
+
+table AccountChar {
+    // Name of the char set which the char belongs.
+    char_set_name: Uint32,
+    // Bytes of the char.
+    bytes: Bytes,
 }
 
 // OnSaleCellData
