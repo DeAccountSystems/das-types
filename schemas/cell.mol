@@ -43,8 +43,11 @@ table ConfigCellData {
 vector PriceConfigList <PriceConfig>;
 
 table PriceConfig {
+  // The length of the account, ".bit" suffix is not included.
   length: Uint8,
+  // The price of registering an account. In USD, accurate to 6 decimal places.
   new: Uint64,
+  // The price of renewing an account. In USD, accurate to 6 decimal places.
   renew: Uint64,
 }
 
