@@ -5889,13 +5889,13 @@ impl ::core::fmt::Display for PreAccountCellData {
 impl ::core::default::Default for PreAccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            183, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 85, 0, 0, 0, 138, 0, 0, 0, 171, 0, 0, 0, 175,
+            187, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 85, 0, 0, 0, 138, 0, 0, 0, 171, 0, 0, 0, 179,
             0, 0, 0, 4, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33,
             0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         PreAccountCellData::new_unchecked(v.into())
     }
@@ -5942,11 +5942,11 @@ impl PreAccountCellData {
         let end = molecule::unpack_number(&slice[20..]) as usize;
         PriceConfig::new_unchecked(self.0.slice(start..end))
     }
-    pub fn quote(&self) -> Uint32 {
+    pub fn quote(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        Uint64::new_unchecked(self.0.slice(start..end))
     }
     pub fn created_at(&self) -> Timestamp {
         let slice = self.as_slice();
@@ -6067,11 +6067,11 @@ impl<'r> PreAccountCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[20..]) as usize;
         PriceConfigReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn quote(&self) -> Uint32Reader<'r> {
+    pub fn quote(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn created_at(&self) -> TimestampReader<'r> {
         let slice = self.as_slice();
@@ -6137,7 +6137,7 @@ impl<'r> molecule::prelude::Reader<'r> for PreAccountCellDataReader<'r> {
         ScriptReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         ScriptReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         PriceConfigReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         TimestampReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Ok(())
     }
@@ -6148,7 +6148,7 @@ pub struct PreAccountCellDataBuilder {
     pub(crate) refund_lock: Script,
     pub(crate) owner_lock: Script,
     pub(crate) price: PriceConfig,
-    pub(crate) quote: Uint32,
+    pub(crate) quote: Uint64,
     pub(crate) created_at: Timestamp,
 }
 impl PreAccountCellDataBuilder {
@@ -6169,7 +6169,7 @@ impl PreAccountCellDataBuilder {
         self.price = v;
         self
     }
-    pub fn quote(mut self, v: Uint32) -> Self {
+    pub fn quote(mut self, v: Uint64) -> Self {
         self.quote = v;
         self
     }

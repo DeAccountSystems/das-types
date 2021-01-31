@@ -134,7 +134,7 @@ table PreAccountCellData {
     // Price of the account at the moment of registration.
     price: PriceConfig,
     // The exchange rate between CKB and USD.
-    quote: Uint32,
+    quote: Uint64,
     created_at: Timestamp,
 }
 
