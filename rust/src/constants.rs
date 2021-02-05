@@ -14,6 +14,7 @@ pub enum DataType {
 #[repr(u32)]
 pub enum CharSetType {
     Emoji,
+    Digit,
     En,
     ZhCn,
 }
