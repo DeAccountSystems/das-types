@@ -1,3 +1,4 @@
+#[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u32)]
 pub enum DataType {
     ActionData,
@@ -9,11 +10,20 @@ pub enum DataType {
     PreAccountCellData,
 }
 
+#[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u32)]
 pub enum CharSetType {
     Emoji,
     En,
     ZhCn,
+}
+
+#[derive(Debug, PartialEq, Copy, Clone)]
+#[repr(u8)]
+pub enum ProposalSliceItemType {
+    Exist,
+    Proposed,
+    New,
 }
 
 // [100, 97, 115] equals "das".as_bytes()

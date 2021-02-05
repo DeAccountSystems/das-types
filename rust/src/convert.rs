@@ -101,7 +101,7 @@ impl TryFrom<&[u8]> for Hash {
     fn try_from(v: &[u8]) -> Result<Self, VerificationError> {
         if v.len() != 32 {
             return Err(VerificationError::TotalSizeNotMatch(
-                "Byte32".to_owned(),
+                "Hash".to_owned(),
                 32,
                 v.len(),
             ));
@@ -135,6 +135,40 @@ impl Into<ckb_packed::Byte32> for Hash {
 /// Convert schemas::basic::Hash to Vec<u8>
 impl From<Hash> for Vec<u8> {
     fn from(v: Hash) -> Self {
+        v.as_slice().to_vec()
+    }
+}
+
+/// Convert &[u8] to schemas::basic::Hash
+///
+/// The difference with from_slice is that it does not require a dynvec header.
+impl TryFrom<&[u8]> for AccountId {
+    type Error = VerificationError;
+    fn try_from(v: &[u8]) -> Result<Self, VerificationError> {
+        if v.len() != 20 {
+            return Err(VerificationError::TotalSizeNotMatch(
+                "AccountId".to_owned(),
+                20,
+                v.len(),
+            ));
+        }
+        let mut inner = [Byte::new(0); 20];
+        let v = v.to_owned().into_iter().map(Byte::new).collect::<Vec<_>>();
+        inner.copy_from_slice(&v);
+        Ok(Self::new_builder().set(inner).build())
+    }
+}
+
+impl TryFrom<Vec<u8>> for AccountId {
+    type Error = VerificationError;
+    fn try_from(v: Vec<u8>) -> Result<Self, VerificationError> {
+        AccountId::try_from(v.as_slice())
+    }
+}
+
+/// Convert schemas::basic::AccountId to Vec<u8>
+impl From<AccountId> for Vec<u8> {
+    fn from(v: AccountId) -> Self {
         v.as_slice().to_vec()
     }
 }
