@@ -16,6 +16,8 @@ table ConfigCellData {
     proposal_min_confirm_require: Uint8,
     // How many blocks to wait before extending the proposal.
     proposal_min_extend_interval: Uint8,
+    // How many blocks to wait before recycle the proposal.
+    proposal_min_recycle_interval: Uint8,
     // How many account_cells every proposal can affect.
     proposal_max_account_affect: Uint32,
     // How many pre_account_cells be included in every proposal.
@@ -75,7 +77,8 @@ table TypeIdTable {
 // ProposalCellData
 
 table ProposalCellData {
-    starter_lock: Script,
+    proposer_lock: Script,
+    proposer_wallet: Hash,
     slices: SliceList,
 }
 
@@ -85,10 +88,11 @@ vector SliceList <SL>;
 vector SL <ProposalItem>;
 
 table ProposalItem {
+  // When account is the root of the linked list, its account_id should be 0x0000... .
   account_id: AccountId,
   item_type: Uint8,
-  // When account is at the end of the linked list, its next pointer should be None.
-  next: AccountIdOpt,
+  // When account is at the end of the linked list, its next pointer should be 0xffff... .
+  next: AccountId,
 }
 
 // AccountCellData
@@ -97,21 +101,17 @@ table AccountCellData {
     // The first 160 bits of the hash of account.
     id: AccountId,
     // The lock script of owner.
-    owner: Script,
+    owner_lock: Script,
     // The lock script of manager.
-    manager: Script,
+    manager_lock: Script,
     // Separate chars of account.
     account: AccountChars,
     // The status of the account, 0x00 means normal, 0x01 means being sold, 0x02 means being auctioned.
     status: Uint8,
-    registered_at: Timestamp,
-    expired_at: Timestamp,
     records: Records,
 }
 
 array AccountId [byte; 20];
-
-option AccountIdOpt (AccountId);
 
 table Record {
     record_type: Bytes,
@@ -131,6 +131,10 @@ table PreAccountCellData {
     refund_lock: Script,
     // If the PreAccountCell is registered successfully, this field specifies to whom the account should be given.
     owner_lock: Script,
+    // The wallet ID of inviter,
+    inviter_wallet: Hash,
+    // The wallet ID of channel,
+    channel_wallet: Hash,
     // Price of the account at the moment of registration.
     price: PriceConfig,
     // The exchange rate between CKB and USD.
