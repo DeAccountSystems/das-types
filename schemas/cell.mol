@@ -72,6 +72,7 @@ table TypeIdTable {
     on_sale_cell: Hash,
     bidding_cell: Hash,
     primary_market_cell: Hash,
+    wallet_cell: Hash,
 }
 
 // ProposalCellData
