@@ -79,7 +79,7 @@ table TypeIdTable {
 
 table ProposalCellData {
     proposer_lock: Script,
-    proposer_wallet: Hash,
+    proposer_wallet: Bytes,
     slices: SliceList,
 }
 
@@ -133,9 +133,9 @@ table PreAccountCellData {
     // If the PreAccountCell is registered successfully, this field specifies to whom the account should be given.
     owner_lock: Script,
     // The wallet ID of inviter,
-    inviter_wallet: Hash,
+    inviter_wallet: Bytes,
     // The wallet ID of channel,
-    channel_wallet: Hash,
+    channel_wallet: Bytes,
     // Price of the account at the moment of registration.
     price: PriceConfig,
     // The exchange rate between CKB and USD.

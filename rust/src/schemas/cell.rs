@@ -3077,9 +3077,8 @@ impl ::core::fmt::Display for ProposalCellData {
 impl ::core::default::Default for ProposalCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            105, 0, 0, 0, 16, 0, 0, 0, 69, 0, 0, 0, 101, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0,
-            0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            77, 0, 0, 0, 16, 0, 0, 0, 69, 0, 0, 0, 73, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0,
+            0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
         ];
         ProposalCellData::new_unchecked(v.into())
@@ -3109,11 +3108,11 @@ impl ProposalCellData {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         Script::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposer_wallet(&self) -> Hash {
+    pub fn proposer_wallet(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
-        Hash::new_unchecked(self.0.slice(start..end))
+        Bytes::new_unchecked(self.0.slice(start..end))
     }
     pub fn slices(&self) -> SliceList {
         let slice = self.as_slice();
@@ -3210,11 +3209,11 @@ impl<'r> ProposalCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         ScriptReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposer_wallet(&self) -> HashReader<'r> {
+    pub fn proposer_wallet(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
-        HashReader::new_unchecked(&self.as_slice()[start..end])
+        BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn slices(&self) -> SliceListReader<'r> {
         let slice = self.as_slice();
@@ -3277,7 +3276,7 @@ impl<'r> molecule::prelude::Reader<'r> for ProposalCellDataReader<'r> {
             return ve!(Self, OffsetsNotMatch);
         }
         ScriptReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
-        HashReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        BytesReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         SliceListReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Ok(())
     }
@@ -3285,7 +3284,7 @@ impl<'r> molecule::prelude::Reader<'r> for ProposalCellDataReader<'r> {
 #[derive(Debug, Default)]
 pub struct ProposalCellDataBuilder {
     pub(crate) proposer_lock: Script,
-    pub(crate) proposer_wallet: Hash,
+    pub(crate) proposer_wallet: Bytes,
     pub(crate) slices: SliceList,
 }
 impl ProposalCellDataBuilder {
@@ -3294,7 +3293,7 @@ impl ProposalCellDataBuilder {
         self.proposer_lock = v;
         self
     }
-    pub fn proposer_wallet(mut self, v: Hash) -> Self {
+    pub fn proposer_wallet(mut self, v: Bytes) -> Self {
         self.proposer_wallet = v;
         self
     }
@@ -5765,16 +5764,14 @@ impl ::core::fmt::Display for PreAccountCellData {
 impl ::core::default::Default for PreAccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            3, 1, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 93, 0, 0, 0, 146, 0, 0, 0, 178, 0, 0, 0, 210, 0,
-            0, 0, 243, 0, 0, 0, 251, 0, 0, 0, 4, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0,
+            203, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 93, 0, 0, 0, 146, 0, 0, 0, 150, 0, 0, 0, 154,
+            0, 0, 0, 187, 0, 0, 0, 195, 0, 0, 0, 4, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0,
             49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0,
+            25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
         ];
         PreAccountCellData::new_unchecked(v.into())
     }
@@ -5815,17 +5812,17 @@ impl PreAccountCellData {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Script::new_unchecked(self.0.slice(start..end))
     }
-    pub fn inviter_wallet(&self) -> Hash {
+    pub fn inviter_wallet(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        Hash::new_unchecked(self.0.slice(start..end))
+        Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn channel_wallet(&self) -> Hash {
+    pub fn channel_wallet(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        Hash::new_unchecked(self.0.slice(start..end))
+        Bytes::new_unchecked(self.0.slice(start..end))
     }
     pub fn price(&self) -> PriceConfig {
         let slice = self.as_slice();
@@ -5956,17 +5953,17 @@ impl<'r> PreAccountCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         ScriptReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn inviter_wallet(&self) -> HashReader<'r> {
+    pub fn inviter_wallet(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        HashReader::new_unchecked(&self.as_slice()[start..end])
+        BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn channel_wallet(&self) -> HashReader<'r> {
+    pub fn channel_wallet(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        HashReader::new_unchecked(&self.as_slice()[start..end])
+        BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn price(&self) -> PriceConfigReader<'r> {
         let slice = self.as_slice();
@@ -6043,8 +6040,8 @@ impl<'r> molecule::prelude::Reader<'r> for PreAccountCellDataReader<'r> {
         AccountCharsReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         ScriptReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         ScriptReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        HashReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        HashReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        BytesReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        BytesReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         PriceConfigReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Uint64Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         TimestampReader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
@@ -6056,8 +6053,8 @@ pub struct PreAccountCellDataBuilder {
     pub(crate) account: AccountChars,
     pub(crate) refund_lock: Script,
     pub(crate) owner_lock: Script,
-    pub(crate) inviter_wallet: Hash,
-    pub(crate) channel_wallet: Hash,
+    pub(crate) inviter_wallet: Bytes,
+    pub(crate) channel_wallet: Bytes,
     pub(crate) price: PriceConfig,
     pub(crate) quote: Uint64,
     pub(crate) created_at: Timestamp,
@@ -6076,11 +6073,11 @@ impl PreAccountCellDataBuilder {
         self.owner_lock = v;
         self
     }
-    pub fn inviter_wallet(mut self, v: Hash) -> Self {
+    pub fn inviter_wallet(mut self, v: Bytes) -> Self {
         self.inviter_wallet = v;
         self
     }
-    pub fn channel_wallet(mut self, v: Hash) -> Self {
+    pub fn channel_wallet(mut self, v: Bytes) -> Self {
         self.channel_wallet = v;
         self
     }
