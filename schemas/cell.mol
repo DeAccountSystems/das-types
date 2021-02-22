@@ -28,6 +28,8 @@ table ConfigCellData {
     apply_max_waiting_time: Uint32,
     // The length of accounts in bytes.
     account_max_length: Uint32,
+    // the grace period for account expiration
+    account_expiration_grace_period: Uint32,
     // lock script of working keeper who aggregate the votes
     price_configs: PriceConfigList,
     // available char sets for account
@@ -164,9 +166,9 @@ table OnSaleCellData {
 table BiddingCellData {
     // market type, 0x01 for primary，0x02 for secondary
     market_type: Uint8,
-    // starting bidding price
+    // starting bidding price in USD
     starting_price: Uint64,
-    // current bidding price
+    // current bidding price in USD
     current_price: Uint64,
     // latest bidder's lock script
     current_bidder: ScriptOpt,

@@ -339,6 +339,12 @@ impl ::core::fmt::Display for ConfigCellData {
             "account_max_length",
             self.account_max_length()
         )?;
+        write!(
+            f,
+            ", {}: {}",
+            "account_expiration_grace_period",
+            self.account_expiration_grace_period()
+        )?;
         write!(f, ", {}: {}", "price_configs", self.price_configs())?;
         write!(f, ", {}: {}", "char_sets", self.char_sets())?;
         write!(f, ", {}: {}", "min_ttl", self.min_ttl())?;
@@ -365,12 +371,12 @@ impl ::core::fmt::Display for ConfigCellData {
 impl ::core::default::Default for ConfigCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            183, 1, 0, 0, 64, 0, 0, 0, 68, 0, 0, 0, 69, 0, 0, 0, 70, 0, 0, 0, 71, 0, 0, 0, 75, 0,
-            0, 0, 79, 0, 0, 0, 83, 0, 0, 0, 87, 0, 0, 0, 91, 0, 0, 0, 95, 0, 0, 0, 99, 0, 0, 0,
-            103, 0, 0, 0, 107, 0, 0, 0, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 72, 1, 0, 0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0, 0, 136, 0, 0, 0, 168, 0, 0,
-            0, 200, 0, 0, 0, 232, 0, 0, 0, 8, 1, 0, 0, 40, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            191, 1, 0, 0, 68, 0, 0, 0, 72, 0, 0, 0, 73, 0, 0, 0, 74, 0, 0, 0, 75, 0, 0, 0, 79, 0,
+            0, 0, 83, 0, 0, 0, 87, 0, 0, 0, 91, 0, 0, 0, 95, 0, 0, 0, 99, 0, 0, 0, 103, 0, 0, 0,
+            107, 0, 0, 0, 111, 0, 0, 0, 115, 0, 0, 0, 119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 1, 0, 0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0,
+            0, 136, 0, 0, 0, 168, 0, 0, 0, 200, 0, 0, 0, 232, 0, 0, 0, 8, 1, 0, 0, 40, 1, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -380,13 +386,13 @@ impl ::core::default::Default for ConfigCellData {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellData::new_unchecked(v.into())
     }
 }
 impl ConfigCellData {
-    pub const FIELD_COUNT: usize = 15;
+    pub const FIELD_COUNT: usize = 16;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -457,41 +463,47 @@ impl ConfigCellData {
         let end = molecule::unpack_number(&slice[40..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn price_configs(&self) -> PriceConfigList {
+    pub fn account_expiration_grace_period(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn price_configs(&self) -> PriceConfigList {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[44..]) as usize;
+        let end = molecule::unpack_number(&slice[48..]) as usize;
         PriceConfigList::new_unchecked(self.0.slice(start..end))
     }
     pub fn char_sets(&self) -> CharSetList {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[44..]) as usize;
-        let end = molecule::unpack_number(&slice[48..]) as usize;
+        let start = molecule::unpack_number(&slice[48..]) as usize;
+        let end = molecule::unpack_number(&slice[52..]) as usize;
         CharSetList::new_unchecked(self.0.slice(start..end))
     }
     pub fn min_ttl(&self) -> Uint32 {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[48..]) as usize;
-        let end = molecule::unpack_number(&slice[52..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
-    }
-    pub fn closing_limit_of_primary_market_auction(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[52..]) as usize;
         let end = molecule::unpack_number(&slice[56..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn closing_limit_of_secondary_market_auction(&self) -> Uint32 {
+    pub fn closing_limit_of_primary_market_auction(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[56..]) as usize;
         let end = molecule::unpack_number(&slice[60..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn type_id_table(&self) -> TypeIdTable {
+    pub fn closing_limit_of_secondary_market_auction(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[60..]) as usize;
+        let end = molecule::unpack_number(&slice[64..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn type_id_table(&self) -> TypeIdTable {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[64..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[64..]) as usize;
+            let end = molecule::unpack_number(&slice[68..]) as usize;
             TypeIdTable::new_unchecked(self.0.slice(start..end))
         } else {
             TypeIdTable::new_unchecked(self.0.slice(start..))
@@ -533,6 +545,7 @@ impl molecule::prelude::Entity for ConfigCellData {
             .apply_min_waiting_time(self.apply_min_waiting_time())
             .apply_max_waiting_time(self.apply_max_waiting_time())
             .account_max_length(self.account_max_length())
+            .account_expiration_grace_period(self.account_expiration_grace_period())
             .price_configs(self.price_configs())
             .char_sets(self.char_sets())
             .min_ttl(self.min_ttl())
@@ -616,6 +629,12 @@ impl<'r> ::core::fmt::Display for ConfigCellDataReader<'r> {
             "account_max_length",
             self.account_max_length()
         )?;
+        write!(
+            f,
+            ", {}: {}",
+            "account_expiration_grace_period",
+            self.account_expiration_grace_period()
+        )?;
         write!(f, ", {}: {}", "price_configs", self.price_configs())?;
         write!(f, ", {}: {}", "char_sets", self.char_sets())?;
         write!(f, ", {}: {}", "min_ttl", self.min_ttl())?;
@@ -640,7 +659,7 @@ impl<'r> ::core::fmt::Display for ConfigCellDataReader<'r> {
     }
 }
 impl<'r> ConfigCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 15;
+    pub const FIELD_COUNT: usize = 16;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -711,41 +730,47 @@ impl<'r> ConfigCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[40..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn price_configs(&self) -> PriceConfigListReader<'r> {
+    pub fn account_expiration_grace_period(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn price_configs(&self) -> PriceConfigListReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[44..]) as usize;
+        let end = molecule::unpack_number(&slice[48..]) as usize;
         PriceConfigListReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn char_sets(&self) -> CharSetListReader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[44..]) as usize;
-        let end = molecule::unpack_number(&slice[48..]) as usize;
+        let start = molecule::unpack_number(&slice[48..]) as usize;
+        let end = molecule::unpack_number(&slice[52..]) as usize;
         CharSetListReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn min_ttl(&self) -> Uint32Reader<'r> {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[48..]) as usize;
-        let end = molecule::unpack_number(&slice[52..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
-    }
-    pub fn closing_limit_of_primary_market_auction(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[52..]) as usize;
         let end = molecule::unpack_number(&slice[56..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn closing_limit_of_secondary_market_auction(&self) -> Uint32Reader<'r> {
+    pub fn closing_limit_of_primary_market_auction(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[56..]) as usize;
         let end = molecule::unpack_number(&slice[60..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn type_id_table(&self) -> TypeIdTableReader<'r> {
+    pub fn closing_limit_of_secondary_market_auction(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[60..]) as usize;
+        let end = molecule::unpack_number(&slice[64..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn type_id_table(&self) -> TypeIdTableReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[64..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[64..]) as usize;
+            let end = molecule::unpack_number(&slice[68..]) as usize;
             TypeIdTableReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             TypeIdTableReader::new_unchecked(&self.as_slice()[start..])
@@ -810,12 +835,13 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellDataReader<'r> {
         Uint32Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         Uint32Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
         Uint32Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
-        PriceConfigListReader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
-        CharSetListReader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
+        PriceConfigListReader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
+        CharSetListReader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
         Uint32Reader::verify(&slice[offsets[12]..offsets[13]], compatible)?;
         Uint32Reader::verify(&slice[offsets[13]..offsets[14]], compatible)?;
-        TypeIdTableReader::verify(&slice[offsets[14]..offsets[15]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[14]..offsets[15]], compatible)?;
+        TypeIdTableReader::verify(&slice[offsets[15]..offsets[16]], compatible)?;
         Ok(())
     }
 }
@@ -830,6 +856,7 @@ pub struct ConfigCellDataBuilder {
     pub(crate) apply_min_waiting_time: Uint32,
     pub(crate) apply_max_waiting_time: Uint32,
     pub(crate) account_max_length: Uint32,
+    pub(crate) account_expiration_grace_period: Uint32,
     pub(crate) price_configs: PriceConfigList,
     pub(crate) char_sets: CharSetList,
     pub(crate) min_ttl: Uint32,
@@ -838,7 +865,7 @@ pub struct ConfigCellDataBuilder {
     pub(crate) type_id_table: TypeIdTable,
 }
 impl ConfigCellDataBuilder {
-    pub const FIELD_COUNT: usize = 15;
+    pub const FIELD_COUNT: usize = 16;
     pub fn reserved_account_filter(mut self, v: Bytes) -> Self {
         self.reserved_account_filter = v;
         self
@@ -873,6 +900,10 @@ impl ConfigCellDataBuilder {
     }
     pub fn account_max_length(mut self, v: Uint32) -> Self {
         self.account_max_length = v;
+        self
+    }
+    pub fn account_expiration_grace_period(mut self, v: Uint32) -> Self {
+        self.account_expiration_grace_period = v;
         self
     }
     pub fn price_configs(mut self, v: PriceConfigList) -> Self {
@@ -914,6 +945,7 @@ impl molecule::prelude::Builder for ConfigCellDataBuilder {
             + self.apply_min_waiting_time.as_slice().len()
             + self.apply_max_waiting_time.as_slice().len()
             + self.account_max_length.as_slice().len()
+            + self.account_expiration_grace_period.as_slice().len()
             + self.price_configs.as_slice().len()
             + self.char_sets.as_slice().len()
             + self.min_ttl.as_slice().len()
@@ -949,6 +981,8 @@ impl molecule::prelude::Builder for ConfigCellDataBuilder {
         offsets.push(total_size);
         total_size += self.account_max_length.as_slice().len();
         offsets.push(total_size);
+        total_size += self.account_expiration_grace_period.as_slice().len();
+        offsets.push(total_size);
         total_size += self.price_configs.as_slice().len();
         offsets.push(total_size);
         total_size += self.char_sets.as_slice().len();
@@ -979,6 +1013,7 @@ impl molecule::prelude::Builder for ConfigCellDataBuilder {
         writer.write_all(self.apply_min_waiting_time.as_slice())?;
         writer.write_all(self.apply_max_waiting_time.as_slice())?;
         writer.write_all(self.account_max_length.as_slice())?;
+        writer.write_all(self.account_expiration_grace_period.as_slice())?;
         writer.write_all(self.price_configs.as_slice())?;
         writer.write_all(self.char_sets.as_slice())?;
         writer.write_all(self.min_ttl.as_slice())?;
