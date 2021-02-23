@@ -6801,6 +6801,7 @@ impl ::core::fmt::Display for OnSaleCellData {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "price", self.price())?;
+        write!(f, ", {}: {}", "started_at", self.started_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -6810,12 +6811,14 @@ impl ::core::fmt::Display for OnSaleCellData {
 }
 impl ::core::default::Default for OnSaleCellData {
     fn default() -> Self {
-        let v: Vec<u8> = vec![16, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let v: Vec<u8> = vec![
+            28, 0, 0, 0, 12, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ];
         OnSaleCellData::new_unchecked(v.into())
     }
 }
 impl OnSaleCellData {
-    pub const FIELD_COUNT: usize = 1;
+    pub const FIELD_COUNT: usize = 2;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -6835,8 +6838,14 @@ impl OnSaleCellData {
     pub fn price(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint64::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn started_at(&self) -> Uint64 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[8..]) as usize;
+            let end = molecule::unpack_number(&slice[12..]) as usize;
             Uint64::new_unchecked(self.0.slice(start..end))
         } else {
             Uint64::new_unchecked(self.0.slice(start..))
@@ -6868,7 +6877,9 @@ impl molecule::prelude::Entity for OnSaleCellData {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder().price(self.price())
+        Self::new_builder()
+            .price(self.price())
+            .started_at(self.started_at())
     }
 }
 #[derive(Clone, Copy)]
@@ -6891,6 +6902,7 @@ impl<'r> ::core::fmt::Display for OnSaleCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "price", self.price())?;
+        write!(f, ", {}: {}", "started_at", self.started_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -6899,7 +6911,7 @@ impl<'r> ::core::fmt::Display for OnSaleCellDataReader<'r> {
     }
 }
 impl<'r> OnSaleCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 1;
+    pub const FIELD_COUNT: usize = 2;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -6919,8 +6931,14 @@ impl<'r> OnSaleCellDataReader<'r> {
     pub fn price(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn started_at(&self) -> Uint64Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[8..]) as usize;
+            let end = molecule::unpack_number(&slice[12..]) as usize;
             Uint64Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint64Reader::new_unchecked(&self.as_slice()[start..])
@@ -6977,17 +6995,23 @@ impl<'r> molecule::prelude::Reader<'r> for OnSaleCellDataReader<'r> {
             return ve!(Self, OffsetsNotMatch);
         }
         Uint64Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct OnSaleCellDataBuilder {
     pub(crate) price: Uint64,
+    pub(crate) started_at: Uint64,
 }
 impl OnSaleCellDataBuilder {
-    pub const FIELD_COUNT: usize = 1;
+    pub const FIELD_COUNT: usize = 2;
     pub fn price(mut self, v: Uint64) -> Self {
         self.price = v;
+        self
+    }
+    pub fn started_at(mut self, v: Uint64) -> Self {
+        self.started_at = v;
         self
     }
 }
@@ -6995,18 +7019,23 @@ impl molecule::prelude::Builder for OnSaleCellDataBuilder {
     type Entity = OnSaleCellData;
     const NAME: &'static str = "OnSaleCellDataBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1) + self.price.as_slice().len()
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
+            + self.price.as_slice().len()
+            + self.started_at.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
         offsets.push(total_size);
         total_size += self.price.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.started_at.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
         writer.write_all(self.price.as_slice())?;
+        writer.write_all(self.started_at.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -7039,6 +7068,7 @@ impl ::core::fmt::Display for BiddingCellData {
         write!(f, ", {}: {}", "starting_price", self.starting_price())?;
         write!(f, ", {}: {}", "current_price", self.current_price())?;
         write!(f, ", {}: {}", "current_bidder", self.current_bidder())?;
+        write!(f, ", {}: {}", "started_at", self.started_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -7049,14 +7079,14 @@ impl ::core::fmt::Display for BiddingCellData {
 impl ::core::default::Default for BiddingCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            37, 0, 0, 0, 20, 0, 0, 0, 21, 0, 0, 0, 29, 0, 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            49, 0, 0, 0, 24, 0, 0, 0, 25, 0, 0, 0, 33, 0, 0, 0, 41, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         BiddingCellData::new_unchecked(v.into())
     }
 }
 impl BiddingCellData {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -7094,11 +7124,17 @@ impl BiddingCellData {
     pub fn current_bidder(&self) -> ScriptOpt {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
+        ScriptOpt::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn started_at(&self) -> Uint64 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[20..]) as usize;
-            ScriptOpt::new_unchecked(self.0.slice(start..end))
+            let end = molecule::unpack_number(&slice[24..]) as usize;
+            Uint64::new_unchecked(self.0.slice(start..end))
         } else {
-            ScriptOpt::new_unchecked(self.0.slice(start..))
+            Uint64::new_unchecked(self.0.slice(start..))
         }
     }
     pub fn as_reader<'r>(&'r self) -> BiddingCellDataReader<'r> {
@@ -7132,6 +7168,7 @@ impl molecule::prelude::Entity for BiddingCellData {
             .starting_price(self.starting_price())
             .current_price(self.current_price())
             .current_bidder(self.current_bidder())
+            .started_at(self.started_at())
     }
 }
 #[derive(Clone, Copy)]
@@ -7157,6 +7194,7 @@ impl<'r> ::core::fmt::Display for BiddingCellDataReader<'r> {
         write!(f, ", {}: {}", "starting_price", self.starting_price())?;
         write!(f, ", {}: {}", "current_price", self.current_price())?;
         write!(f, ", {}: {}", "current_bidder", self.current_bidder())?;
+        write!(f, ", {}: {}", "started_at", self.started_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -7165,7 +7203,7 @@ impl<'r> ::core::fmt::Display for BiddingCellDataReader<'r> {
     }
 }
 impl<'r> BiddingCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -7203,11 +7241,17 @@ impl<'r> BiddingCellDataReader<'r> {
     pub fn current_bidder(&self) -> ScriptOptReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
+        ScriptOptReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn started_at(&self) -> Uint64Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[20..]) as usize;
-            ScriptOptReader::new_unchecked(&self.as_slice()[start..end])
+            let end = molecule::unpack_number(&slice[24..]) as usize;
+            Uint64Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
-            ScriptOptReader::new_unchecked(&self.as_slice()[start..])
+            Uint64Reader::new_unchecked(&self.as_slice()[start..])
         }
     }
 }
@@ -7264,6 +7308,7 @@ impl<'r> molecule::prelude::Reader<'r> for BiddingCellDataReader<'r> {
         Uint64Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         ScriptOptReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Ok(())
     }
 }
@@ -7273,9 +7318,10 @@ pub struct BiddingCellDataBuilder {
     pub(crate) starting_price: Uint64,
     pub(crate) current_price: Uint64,
     pub(crate) current_bidder: ScriptOpt,
+    pub(crate) started_at: Uint64,
 }
 impl BiddingCellDataBuilder {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn market_type(mut self, v: Uint8) -> Self {
         self.market_type = v;
         self
@@ -7292,6 +7338,10 @@ impl BiddingCellDataBuilder {
         self.current_bidder = v;
         self
     }
+    pub fn started_at(mut self, v: Uint64) -> Self {
+        self.started_at = v;
+        self
+    }
 }
 impl molecule::prelude::Builder for BiddingCellDataBuilder {
     type Entity = BiddingCellData;
@@ -7302,6 +7352,7 @@ impl molecule::prelude::Builder for BiddingCellDataBuilder {
             + self.starting_price.as_slice().len()
             + self.current_price.as_slice().len()
             + self.current_bidder.as_slice().len()
+            + self.started_at.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -7314,6 +7365,8 @@ impl molecule::prelude::Builder for BiddingCellDataBuilder {
         total_size += self.current_price.as_slice().len();
         offsets.push(total_size);
         total_size += self.current_bidder.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.started_at.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -7322,6 +7375,7 @@ impl molecule::prelude::Builder for BiddingCellDataBuilder {
         writer.write_all(self.starting_price.as_slice())?;
         writer.write_all(self.current_price.as_slice())?;
         writer.write_all(self.current_bidder.as_slice())?;
+        writer.write_all(self.started_at.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {

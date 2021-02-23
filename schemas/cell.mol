@@ -159,6 +159,8 @@ table AccountChar {
 table OnSaleCellData {
     // the price of account
     price: Uint64,
+    // the timestamp when sale starting
+    started_at: Uint64,
 }
 
 // BiddingCellData
@@ -172,4 +174,6 @@ table BiddingCellData {
     current_price: Uint64,
     // latest bidder's lock script
     current_bidder: ScriptOpt,
+    // the timestamp when sale starting
+    started_at: Uint64,
 }
