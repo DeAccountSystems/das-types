@@ -10,8 +10,22 @@ table ActionData {
 // ConfigCellData
 
 table ConfigCellData {
-    // bloom filter bits array of approximately 200 KB
-    reserved_account_filter: Bytes,
+    // The minimum waiting seconds before apply_register_cell can be converted to pre_account_cell.
+    apply_min_waiting_time: Uint32,
+    // The maximum waiting seconds which apply_register_cell can be converted to pre_account_cell.
+    apply_max_waiting_time: Uint32,
+    // The length of accounts in bytes.
+    account_max_length: Uint32,
+    // the grace period for account expiration in seconds
+    account_expiration_grace_period: Uint32,
+    // available char sets for account
+    char_sets: CharSetList,
+    // the minimum ttl of record in seconds
+    min_ttl: Uint32,
+    // Price list of different account length.
+    price_configs: PriceConfigList,
+    // primary market configurations
+    primary_market: MarketConfig,
     // How many blocks required for every proposal to be confirmed.
     proposal_min_confirm_require: Uint8,
     // How many blocks to wait before extending the proposal.
@@ -22,24 +36,12 @@ table ConfigCellData {
     proposal_max_account_affect: Uint32,
     // How many pre_account_cells be included in every proposal.
     proposal_max_pre_account_contain: Uint32,
-    // The minimum waiting seconds before apply_register_cell can be converted to pre_account_cell.
-    apply_min_waiting_time: Uint32,
-    // The maximum waiting seconds which apply_register_cell can be converted to pre_account_cell.
-    apply_max_waiting_time: Uint32,
-    // The length of accounts in bytes.
-    account_max_length: Uint32,
-    // the grace period for account expiration
-    account_expiration_grace_period: Uint32,
-    // lock script of working keeper who aggregate the votes
-    price_configs: PriceConfigList,
-    // available char sets for account
-    char_sets: CharSetList,
-    // the minimum ttl of record
-    min_ttl: Uint32,
-    // the closing limit of primary market auction(seconds)
-    closing_limit_of_primary_market_auction: Uint32,
-    // the closing limit of secondary market auction(seconds)
-    closing_limit_of_secondary_market_auction: Uint32,
+    // profit configurations
+    profit: ProfitConfig,
+    // bloom filter bits array of approximately 200 KB
+    reserved_account_filter: Bytes,
+    // primary market configurations
+    secondary_market: MarketConfig,
     // table of type ID of all kinds of cells
     type_id_table: TypeIdTable,
 }
@@ -64,6 +66,26 @@ table CharSet {
 }
 
 vector Chars <Bytes>;
+
+table MarketConfig {
+    // The maximum time, in seconds, that an account in a sale can exist in the market.
+    max_selling_time: Uint32,
+    // The maximum time, in seconds, that an account in an auction can exist in the market.
+    max_auction_time: Uint32,
+    // The maximum time, in seconds, that an account in an auction waits before it closes.
+    max_auction_waiting: Uint32,
+    // The minimum percentage of raise at each bid in the auction.
+    min_auction_raise_rate: Uint32,
+}
+
+table ProfitConfig {
+    // The profit rate of inviters who invite people to buy DAS accounts.
+    profit_rate_of_inviter: Uint32,
+    // The profit rate of channels who support people to create DAS accounts.
+    profit_rate_of_channel: Uint32,
+    // The profit rate of DAS itself.
+    profit_rate_of_das: Uint32,
+}
 
 table TypeIdTable {
     apply_register_cell: Hash,

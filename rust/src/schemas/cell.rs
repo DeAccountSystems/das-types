@@ -288,9 +288,31 @@ impl ::core::fmt::Display for ConfigCellData {
         write!(
             f,
             "{}: {}",
-            "reserved_account_filter",
-            self.reserved_account_filter()
+            "apply_min_waiting_time",
+            self.apply_min_waiting_time()
         )?;
+        write!(
+            f,
+            ", {}: {}",
+            "apply_max_waiting_time",
+            self.apply_max_waiting_time()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "account_max_length",
+            self.account_max_length()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "account_expiration_grace_period",
+            self.account_expiration_grace_period()
+        )?;
+        write!(f, ", {}: {}", "char_sets", self.char_sets())?;
+        write!(f, ", {}: {}", "min_ttl", self.min_ttl())?;
+        write!(f, ", {}: {}", "price_configs", self.price_configs())?;
+        write!(f, ", {}: {}", "primary_market", self.primary_market())?;
         write!(
             f,
             ", {}: {}",
@@ -321,45 +343,14 @@ impl ::core::fmt::Display for ConfigCellData {
             "proposal_max_pre_account_contain",
             self.proposal_max_pre_account_contain()
         )?;
+        write!(f, ", {}: {}", "profit", self.profit())?;
         write!(
             f,
             ", {}: {}",
-            "apply_min_waiting_time",
-            self.apply_min_waiting_time()
+            "reserved_account_filter",
+            self.reserved_account_filter()
         )?;
-        write!(
-            f,
-            ", {}: {}",
-            "apply_max_waiting_time",
-            self.apply_max_waiting_time()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "account_max_length",
-            self.account_max_length()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "account_expiration_grace_period",
-            self.account_expiration_grace_period()
-        )?;
-        write!(f, ", {}: {}", "price_configs", self.price_configs())?;
-        write!(f, ", {}: {}", "char_sets", self.char_sets())?;
-        write!(f, ", {}: {}", "min_ttl", self.min_ttl())?;
-        write!(
-            f,
-            ", {}: {}",
-            "closing_limit_of_primary_market_auction",
-            self.closing_limit_of_primary_market_auction()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "closing_limit_of_secondary_market_auction",
-            self.closing_limit_of_secondary_market_auction()
-        )?;
+        write!(f, ", {}: {}", "secondary_market", self.secondary_market())?;
         write!(f, ", {}: {}", "type_id_table", self.type_id_table())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -371,12 +362,16 @@ impl ::core::fmt::Display for ConfigCellData {
 impl ::core::default::Default for ConfigCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            191, 1, 0, 0, 68, 0, 0, 0, 72, 0, 0, 0, 73, 0, 0, 0, 74, 0, 0, 0, 75, 0, 0, 0, 79, 0,
-            0, 0, 83, 0, 0, 0, 87, 0, 0, 0, 91, 0, 0, 0, 95, 0, 0, 0, 99, 0, 0, 0, 103, 0, 0, 0,
-            107, 0, 0, 0, 111, 0, 0, 0, 115, 0, 0, 0, 119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 1, 0, 0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0,
-            0, 136, 0, 0, 0, 168, 0, 0, 0, 200, 0, 0, 0, 232, 0, 0, 0, 8, 1, 0, 0, 40, 1, 0, 0, 0,
+            31, 2, 0, 0, 72, 0, 0, 0, 76, 0, 0, 0, 80, 0, 0, 0, 84, 0, 0, 0, 88, 0, 0, 0, 92, 0, 0,
+            0, 96, 0, 0, 0, 100, 0, 0, 0, 136, 0, 0, 0, 137, 0, 0, 0, 138, 0, 0, 0, 139, 0, 0, 0,
+            143, 0, 0, 0, 147, 0, 0, 0, 175, 0, 0, 0, 179, 0, 0, 0, 215, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 36, 0, 0, 0, 20, 0,
+            0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 16, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0,
+            0, 28, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 1, 0,
+            0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0, 0, 136, 0, 0, 0, 168, 0, 0, 0, 200, 0, 0, 0,
+            232, 0, 0, 0, 8, 1, 0, 0, 40, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -386,13 +381,13 @@ impl ::core::default::Default for ConfigCellData {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellData::new_unchecked(v.into())
     }
 }
 impl ConfigCellData {
-    pub const FIELD_COUNT: usize = 16;
+    pub const FIELD_COUNT: usize = 17;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -409,101 +404,107 @@ impl ConfigCellData {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn reserved_account_filter(&self) -> Bytes {
+    pub fn apply_min_waiting_time(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
-        Bytes::new_unchecked(self.0.slice(start..end))
+        Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_min_confirm_require(&self) -> Uint8 {
+    pub fn apply_max_waiting_time(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
-        Uint8::new_unchecked(self.0.slice(start..end))
+        Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_min_extend_interval(&self) -> Uint8 {
+    pub fn account_max_length(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
-        Uint8::new_unchecked(self.0.slice(start..end))
+        Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_min_recycle_interval(&self) -> Uint8 {
+    pub fn account_expiration_grace_period(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        Uint8::new_unchecked(self.0.slice(start..end))
+        Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_max_account_affect(&self) -> Uint32 {
+    pub fn char_sets(&self) -> CharSetList {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        CharSetList::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_max_pre_account_contain(&self) -> Uint32 {
+    pub fn min_ttl(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn apply_min_waiting_time(&self) -> Uint32 {
+    pub fn price_configs(&self) -> PriceConfigList {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        PriceConfigList::new_unchecked(self.0.slice(start..end))
     }
-    pub fn apply_max_waiting_time(&self) -> Uint32 {
+    pub fn primary_market(&self) -> MarketConfig {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
         let end = molecule::unpack_number(&slice[36..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        MarketConfig::new_unchecked(self.0.slice(start..end))
     }
-    pub fn account_max_length(&self) -> Uint32 {
+    pub fn proposal_min_confirm_require(&self) -> Uint8 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[36..]) as usize;
         let end = molecule::unpack_number(&slice[40..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        Uint8::new_unchecked(self.0.slice(start..end))
     }
-    pub fn account_expiration_grace_period(&self) -> Uint32 {
+    pub fn proposal_min_extend_interval(&self) -> Uint8 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        Uint8::new_unchecked(self.0.slice(start..end))
     }
-    pub fn price_configs(&self) -> PriceConfigList {
+    pub fn proposal_min_recycle_interval(&self) -> Uint8 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[44..]) as usize;
         let end = molecule::unpack_number(&slice[48..]) as usize;
-        PriceConfigList::new_unchecked(self.0.slice(start..end))
+        Uint8::new_unchecked(self.0.slice(start..end))
     }
-    pub fn char_sets(&self) -> CharSetList {
+    pub fn proposal_max_account_affect(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[48..]) as usize;
         let end = molecule::unpack_number(&slice[52..]) as usize;
-        CharSetList::new_unchecked(self.0.slice(start..end))
+        Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn min_ttl(&self) -> Uint32 {
+    pub fn proposal_max_pre_account_contain(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[52..]) as usize;
         let end = molecule::unpack_number(&slice[56..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn closing_limit_of_primary_market_auction(&self) -> Uint32 {
+    pub fn profit(&self) -> ProfitConfig {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[56..]) as usize;
         let end = molecule::unpack_number(&slice[60..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        ProfitConfig::new_unchecked(self.0.slice(start..end))
     }
-    pub fn closing_limit_of_secondary_market_auction(&self) -> Uint32 {
+    pub fn reserved_account_filter(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[60..]) as usize;
         let end = molecule::unpack_number(&slice[64..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        Bytes::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn secondary_market(&self) -> MarketConfig {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[64..]) as usize;
+        let end = molecule::unpack_number(&slice[68..]) as usize;
+        MarketConfig::new_unchecked(self.0.slice(start..end))
     }
     pub fn type_id_table(&self) -> TypeIdTable {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[64..]) as usize;
+        let start = molecule::unpack_number(&slice[68..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[68..]) as usize;
+            let end = molecule::unpack_number(&slice[72..]) as usize;
             TypeIdTable::new_unchecked(self.0.slice(start..end))
         } else {
             TypeIdTable::new_unchecked(self.0.slice(start..))
@@ -536,23 +537,22 @@ impl molecule::prelude::Entity for ConfigCellData {
     }
     fn as_builder(self) -> Self::Builder {
         Self::new_builder()
-            .reserved_account_filter(self.reserved_account_filter())
+            .apply_min_waiting_time(self.apply_min_waiting_time())
+            .apply_max_waiting_time(self.apply_max_waiting_time())
+            .account_max_length(self.account_max_length())
+            .account_expiration_grace_period(self.account_expiration_grace_period())
+            .char_sets(self.char_sets())
+            .min_ttl(self.min_ttl())
+            .price_configs(self.price_configs())
+            .primary_market(self.primary_market())
             .proposal_min_confirm_require(self.proposal_min_confirm_require())
             .proposal_min_extend_interval(self.proposal_min_extend_interval())
             .proposal_min_recycle_interval(self.proposal_min_recycle_interval())
             .proposal_max_account_affect(self.proposal_max_account_affect())
             .proposal_max_pre_account_contain(self.proposal_max_pre_account_contain())
-            .apply_min_waiting_time(self.apply_min_waiting_time())
-            .apply_max_waiting_time(self.apply_max_waiting_time())
-            .account_max_length(self.account_max_length())
-            .account_expiration_grace_period(self.account_expiration_grace_period())
-            .price_configs(self.price_configs())
-            .char_sets(self.char_sets())
-            .min_ttl(self.min_ttl())
-            .closing_limit_of_primary_market_auction(self.closing_limit_of_primary_market_auction())
-            .closing_limit_of_secondary_market_auction(
-                self.closing_limit_of_secondary_market_auction(),
-            )
+            .profit(self.profit())
+            .reserved_account_filter(self.reserved_account_filter())
+            .secondary_market(self.secondary_market())
             .type_id_table(self.type_id_table())
     }
 }
@@ -578,9 +578,31 @@ impl<'r> ::core::fmt::Display for ConfigCellDataReader<'r> {
         write!(
             f,
             "{}: {}",
-            "reserved_account_filter",
-            self.reserved_account_filter()
+            "apply_min_waiting_time",
+            self.apply_min_waiting_time()
         )?;
+        write!(
+            f,
+            ", {}: {}",
+            "apply_max_waiting_time",
+            self.apply_max_waiting_time()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "account_max_length",
+            self.account_max_length()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "account_expiration_grace_period",
+            self.account_expiration_grace_period()
+        )?;
+        write!(f, ", {}: {}", "char_sets", self.char_sets())?;
+        write!(f, ", {}: {}", "min_ttl", self.min_ttl())?;
+        write!(f, ", {}: {}", "price_configs", self.price_configs())?;
+        write!(f, ", {}: {}", "primary_market", self.primary_market())?;
         write!(
             f,
             ", {}: {}",
@@ -611,45 +633,14 @@ impl<'r> ::core::fmt::Display for ConfigCellDataReader<'r> {
             "proposal_max_pre_account_contain",
             self.proposal_max_pre_account_contain()
         )?;
+        write!(f, ", {}: {}", "profit", self.profit())?;
         write!(
             f,
             ", {}: {}",
-            "apply_min_waiting_time",
-            self.apply_min_waiting_time()
+            "reserved_account_filter",
+            self.reserved_account_filter()
         )?;
-        write!(
-            f,
-            ", {}: {}",
-            "apply_max_waiting_time",
-            self.apply_max_waiting_time()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "account_max_length",
-            self.account_max_length()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "account_expiration_grace_period",
-            self.account_expiration_grace_period()
-        )?;
-        write!(f, ", {}: {}", "price_configs", self.price_configs())?;
-        write!(f, ", {}: {}", "char_sets", self.char_sets())?;
-        write!(f, ", {}: {}", "min_ttl", self.min_ttl())?;
-        write!(
-            f,
-            ", {}: {}",
-            "closing_limit_of_primary_market_auction",
-            self.closing_limit_of_primary_market_auction()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "closing_limit_of_secondary_market_auction",
-            self.closing_limit_of_secondary_market_auction()
-        )?;
+        write!(f, ", {}: {}", "secondary_market", self.secondary_market())?;
         write!(f, ", {}: {}", "type_id_table", self.type_id_table())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -659,7 +650,7 @@ impl<'r> ::core::fmt::Display for ConfigCellDataReader<'r> {
     }
 }
 impl<'r> ConfigCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 16;
+    pub const FIELD_COUNT: usize = 17;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -676,101 +667,107 @@ impl<'r> ConfigCellDataReader<'r> {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn reserved_account_filter(&self) -> BytesReader<'r> {
+    pub fn apply_min_waiting_time(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
-        BytesReader::new_unchecked(&self.as_slice()[start..end])
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_min_confirm_require(&self) -> Uint8Reader<'r> {
+    pub fn apply_max_waiting_time(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
-        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_min_extend_interval(&self) -> Uint8Reader<'r> {
+    pub fn account_max_length(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
-        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_min_recycle_interval(&self) -> Uint8Reader<'r> {
+    pub fn account_expiration_grace_period(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_max_account_affect(&self) -> Uint32Reader<'r> {
+    pub fn char_sets(&self) -> CharSetListReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        CharSetListReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_max_pre_account_contain(&self) -> Uint32Reader<'r> {
+    pub fn min_ttl(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn apply_min_waiting_time(&self) -> Uint32Reader<'r> {
+    pub fn price_configs(&self) -> PriceConfigListReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        PriceConfigListReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn apply_max_waiting_time(&self) -> Uint32Reader<'r> {
+    pub fn primary_market(&self) -> MarketConfigReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
         let end = molecule::unpack_number(&slice[36..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        MarketConfigReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn account_max_length(&self) -> Uint32Reader<'r> {
+    pub fn proposal_min_confirm_require(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[36..]) as usize;
         let end = molecule::unpack_number(&slice[40..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn account_expiration_grace_period(&self) -> Uint32Reader<'r> {
+    pub fn proposal_min_extend_interval(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn price_configs(&self) -> PriceConfigListReader<'r> {
+    pub fn proposal_min_recycle_interval(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[44..]) as usize;
         let end = molecule::unpack_number(&slice[48..]) as usize;
-        PriceConfigListReader::new_unchecked(&self.as_slice()[start..end])
+        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn char_sets(&self) -> CharSetListReader<'r> {
+    pub fn proposal_max_account_affect(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[48..]) as usize;
         let end = molecule::unpack_number(&slice[52..]) as usize;
-        CharSetListReader::new_unchecked(&self.as_slice()[start..end])
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn min_ttl(&self) -> Uint32Reader<'r> {
+    pub fn proposal_max_pre_account_contain(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[52..]) as usize;
         let end = molecule::unpack_number(&slice[56..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn closing_limit_of_primary_market_auction(&self) -> Uint32Reader<'r> {
+    pub fn profit(&self) -> ProfitConfigReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[56..]) as usize;
         let end = molecule::unpack_number(&slice[60..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        ProfitConfigReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn closing_limit_of_secondary_market_auction(&self) -> Uint32Reader<'r> {
+    pub fn reserved_account_filter(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[60..]) as usize;
         let end = molecule::unpack_number(&slice[64..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        BytesReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn secondary_market(&self) -> MarketConfigReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[64..]) as usize;
+        let end = molecule::unpack_number(&slice[68..]) as usize;
+        MarketConfigReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn type_id_table(&self) -> TypeIdTableReader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[64..]) as usize;
+        let start = molecule::unpack_number(&slice[68..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[68..]) as usize;
+            let end = molecule::unpack_number(&slice[72..]) as usize;
             TypeIdTableReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             TypeIdTableReader::new_unchecked(&self.as_slice()[start..])
@@ -826,48 +823,78 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellDataReader<'r> {
         if offsets.windows(2).any(|i| i[0] > i[1]) {
             return ve!(Self, OffsetsNotMatch);
         }
-        BytesReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
-        Uint8Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
-        Uint8Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        Uint8Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        CharSetListReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Uint32Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
-        PriceConfigListReader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
-        CharSetListReader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
+        PriceConfigListReader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
+        MarketConfigReader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
+        Uint8Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
+        Uint8Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
+        Uint8Reader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
         Uint32Reader::verify(&slice[offsets[12]..offsets[13]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[13]..offsets[14]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[14]..offsets[15]], compatible)?;
-        TypeIdTableReader::verify(&slice[offsets[15]..offsets[16]], compatible)?;
+        ProfitConfigReader::verify(&slice[offsets[13]..offsets[14]], compatible)?;
+        BytesReader::verify(&slice[offsets[14]..offsets[15]], compatible)?;
+        MarketConfigReader::verify(&slice[offsets[15]..offsets[16]], compatible)?;
+        TypeIdTableReader::verify(&slice[offsets[16]..offsets[17]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct ConfigCellDataBuilder {
-    pub(crate) reserved_account_filter: Bytes,
+    pub(crate) apply_min_waiting_time: Uint32,
+    pub(crate) apply_max_waiting_time: Uint32,
+    pub(crate) account_max_length: Uint32,
+    pub(crate) account_expiration_grace_period: Uint32,
+    pub(crate) char_sets: CharSetList,
+    pub(crate) min_ttl: Uint32,
+    pub(crate) price_configs: PriceConfigList,
+    pub(crate) primary_market: MarketConfig,
     pub(crate) proposal_min_confirm_require: Uint8,
     pub(crate) proposal_min_extend_interval: Uint8,
     pub(crate) proposal_min_recycle_interval: Uint8,
     pub(crate) proposal_max_account_affect: Uint32,
     pub(crate) proposal_max_pre_account_contain: Uint32,
-    pub(crate) apply_min_waiting_time: Uint32,
-    pub(crate) apply_max_waiting_time: Uint32,
-    pub(crate) account_max_length: Uint32,
-    pub(crate) account_expiration_grace_period: Uint32,
-    pub(crate) price_configs: PriceConfigList,
-    pub(crate) char_sets: CharSetList,
-    pub(crate) min_ttl: Uint32,
-    pub(crate) closing_limit_of_primary_market_auction: Uint32,
-    pub(crate) closing_limit_of_secondary_market_auction: Uint32,
+    pub(crate) profit: ProfitConfig,
+    pub(crate) reserved_account_filter: Bytes,
+    pub(crate) secondary_market: MarketConfig,
     pub(crate) type_id_table: TypeIdTable,
 }
 impl ConfigCellDataBuilder {
-    pub const FIELD_COUNT: usize = 16;
-    pub fn reserved_account_filter(mut self, v: Bytes) -> Self {
-        self.reserved_account_filter = v;
+    pub const FIELD_COUNT: usize = 17;
+    pub fn apply_min_waiting_time(mut self, v: Uint32) -> Self {
+        self.apply_min_waiting_time = v;
+        self
+    }
+    pub fn apply_max_waiting_time(mut self, v: Uint32) -> Self {
+        self.apply_max_waiting_time = v;
+        self
+    }
+    pub fn account_max_length(mut self, v: Uint32) -> Self {
+        self.account_max_length = v;
+        self
+    }
+    pub fn account_expiration_grace_period(mut self, v: Uint32) -> Self {
+        self.account_expiration_grace_period = v;
+        self
+    }
+    pub fn char_sets(mut self, v: CharSetList) -> Self {
+        self.char_sets = v;
+        self
+    }
+    pub fn min_ttl(mut self, v: Uint32) -> Self {
+        self.min_ttl = v;
+        self
+    }
+    pub fn price_configs(mut self, v: PriceConfigList) -> Self {
+        self.price_configs = v;
+        self
+    }
+    pub fn primary_market(mut self, v: MarketConfig) -> Self {
+        self.primary_market = v;
         self
     }
     pub fn proposal_min_confirm_require(mut self, v: Uint8) -> Self {
@@ -890,40 +917,16 @@ impl ConfigCellDataBuilder {
         self.proposal_max_pre_account_contain = v;
         self
     }
-    pub fn apply_min_waiting_time(mut self, v: Uint32) -> Self {
-        self.apply_min_waiting_time = v;
+    pub fn profit(mut self, v: ProfitConfig) -> Self {
+        self.profit = v;
         self
     }
-    pub fn apply_max_waiting_time(mut self, v: Uint32) -> Self {
-        self.apply_max_waiting_time = v;
+    pub fn reserved_account_filter(mut self, v: Bytes) -> Self {
+        self.reserved_account_filter = v;
         self
     }
-    pub fn account_max_length(mut self, v: Uint32) -> Self {
-        self.account_max_length = v;
-        self
-    }
-    pub fn account_expiration_grace_period(mut self, v: Uint32) -> Self {
-        self.account_expiration_grace_period = v;
-        self
-    }
-    pub fn price_configs(mut self, v: PriceConfigList) -> Self {
-        self.price_configs = v;
-        self
-    }
-    pub fn char_sets(mut self, v: CharSetList) -> Self {
-        self.char_sets = v;
-        self
-    }
-    pub fn min_ttl(mut self, v: Uint32) -> Self {
-        self.min_ttl = v;
-        self
-    }
-    pub fn closing_limit_of_primary_market_auction(mut self, v: Uint32) -> Self {
-        self.closing_limit_of_primary_market_auction = v;
-        self
-    }
-    pub fn closing_limit_of_secondary_market_auction(mut self, v: Uint32) -> Self {
-        self.closing_limit_of_secondary_market_auction = v;
+    pub fn secondary_market(mut self, v: MarketConfig) -> Self {
+        self.secondary_market = v;
         self
     }
     pub fn type_id_table(mut self, v: TypeIdTable) -> Self {
@@ -936,34 +939,43 @@ impl molecule::prelude::Builder for ConfigCellDataBuilder {
     const NAME: &'static str = "ConfigCellDataBuilder";
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
-            + self.reserved_account_filter.as_slice().len()
+            + self.apply_min_waiting_time.as_slice().len()
+            + self.apply_max_waiting_time.as_slice().len()
+            + self.account_max_length.as_slice().len()
+            + self.account_expiration_grace_period.as_slice().len()
+            + self.char_sets.as_slice().len()
+            + self.min_ttl.as_slice().len()
+            + self.price_configs.as_slice().len()
+            + self.primary_market.as_slice().len()
             + self.proposal_min_confirm_require.as_slice().len()
             + self.proposal_min_extend_interval.as_slice().len()
             + self.proposal_min_recycle_interval.as_slice().len()
             + self.proposal_max_account_affect.as_slice().len()
             + self.proposal_max_pre_account_contain.as_slice().len()
-            + self.apply_min_waiting_time.as_slice().len()
-            + self.apply_max_waiting_time.as_slice().len()
-            + self.account_max_length.as_slice().len()
-            + self.account_expiration_grace_period.as_slice().len()
-            + self.price_configs.as_slice().len()
-            + self.char_sets.as_slice().len()
-            + self.min_ttl.as_slice().len()
-            + self
-                .closing_limit_of_primary_market_auction
-                .as_slice()
-                .len()
-            + self
-                .closing_limit_of_secondary_market_auction
-                .as_slice()
-                .len()
+            + self.profit.as_slice().len()
+            + self.reserved_account_filter.as_slice().len()
+            + self.secondary_market.as_slice().len()
             + self.type_id_table.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
         offsets.push(total_size);
-        total_size += self.reserved_account_filter.as_slice().len();
+        total_size += self.apply_min_waiting_time.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.apply_max_waiting_time.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.account_max_length.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.account_expiration_grace_period.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.char_sets.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.min_ttl.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.price_configs.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.primary_market.as_slice().len();
         offsets.push(total_size);
         total_size += self.proposal_min_confirm_require.as_slice().len();
         offsets.push(total_size);
@@ -975,50 +987,33 @@ impl molecule::prelude::Builder for ConfigCellDataBuilder {
         offsets.push(total_size);
         total_size += self.proposal_max_pre_account_contain.as_slice().len();
         offsets.push(total_size);
-        total_size += self.apply_min_waiting_time.as_slice().len();
+        total_size += self.profit.as_slice().len();
         offsets.push(total_size);
-        total_size += self.apply_max_waiting_time.as_slice().len();
+        total_size += self.reserved_account_filter.as_slice().len();
         offsets.push(total_size);
-        total_size += self.account_max_length.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.account_expiration_grace_period.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.price_configs.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.char_sets.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.min_ttl.as_slice().len();
-        offsets.push(total_size);
-        total_size += self
-            .closing_limit_of_primary_market_auction
-            .as_slice()
-            .len();
-        offsets.push(total_size);
-        total_size += self
-            .closing_limit_of_secondary_market_auction
-            .as_slice()
-            .len();
+        total_size += self.secondary_market.as_slice().len();
         offsets.push(total_size);
         total_size += self.type_id_table.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
-        writer.write_all(self.reserved_account_filter.as_slice())?;
+        writer.write_all(self.apply_min_waiting_time.as_slice())?;
+        writer.write_all(self.apply_max_waiting_time.as_slice())?;
+        writer.write_all(self.account_max_length.as_slice())?;
+        writer.write_all(self.account_expiration_grace_period.as_slice())?;
+        writer.write_all(self.char_sets.as_slice())?;
+        writer.write_all(self.min_ttl.as_slice())?;
+        writer.write_all(self.price_configs.as_slice())?;
+        writer.write_all(self.primary_market.as_slice())?;
         writer.write_all(self.proposal_min_confirm_require.as_slice())?;
         writer.write_all(self.proposal_min_extend_interval.as_slice())?;
         writer.write_all(self.proposal_min_recycle_interval.as_slice())?;
         writer.write_all(self.proposal_max_account_affect.as_slice())?;
         writer.write_all(self.proposal_max_pre_account_contain.as_slice())?;
-        writer.write_all(self.apply_min_waiting_time.as_slice())?;
-        writer.write_all(self.apply_max_waiting_time.as_slice())?;
-        writer.write_all(self.account_max_length.as_slice())?;
-        writer.write_all(self.account_expiration_grace_period.as_slice())?;
-        writer.write_all(self.price_configs.as_slice())?;
-        writer.write_all(self.char_sets.as_slice())?;
-        writer.write_all(self.min_ttl.as_slice())?;
-        writer.write_all(self.closing_limit_of_primary_market_auction.as_slice())?;
-        writer.write_all(self.closing_limit_of_secondary_market_auction.as_slice())?;
+        writer.write_all(self.profit.as_slice())?;
+        writer.write_all(self.reserved_account_filter.as_slice())?;
+        writer.write_all(self.secondary_market.as_slice())?;
         writer.write_all(self.type_id_table.as_slice())?;
         Ok(())
     }
@@ -2608,6 +2603,660 @@ impl<'t: 'r, 'r> ::core::iter::Iterator for CharsReaderIterator<'t, 'r> {
 impl<'t: 'r, 'r> ::core::iter::ExactSizeIterator for CharsReaderIterator<'t, 'r> {
     fn len(&self) -> usize {
         self.2 - self.1
+    }
+}
+#[derive(Clone)]
+pub struct MarketConfig(molecule::bytes::Bytes);
+impl ::core::fmt::LowerHex for MarketConfig {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl ::core::fmt::Debug for MarketConfig {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl ::core::fmt::Display for MarketConfig {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} {{ ", Self::NAME)?;
+        write!(f, "{}: {}", "max_selling_time", self.max_selling_time())?;
+        write!(f, ", {}: {}", "max_auction_time", self.max_auction_time())?;
+        write!(
+            f,
+            ", {}: {}",
+            "max_auction_waiting",
+            self.max_auction_waiting()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "min_auction_raise_rate",
+            self.min_auction_raise_rate()
+        )?;
+        let extra_count = self.count_extra_fields();
+        if extra_count != 0 {
+            write!(f, ", .. ({} fields)", extra_count)?;
+        }
+        write!(f, " }}")
+    }
+}
+impl ::core::default::Default for MarketConfig {
+    fn default() -> Self {
+        let v: Vec<u8> = vec![
+            36, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ];
+        MarketConfig::new_unchecked(v.into())
+    }
+}
+impl MarketConfig {
+    pub const FIELD_COUNT: usize = 4;
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn field_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn count_extra_fields(&self) -> usize {
+        self.field_count() - Self::FIELD_COUNT
+    }
+    pub fn has_extra_fields(&self) -> bool {
+        Self::FIELD_COUNT != self.field_count()
+    }
+    pub fn max_selling_time(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn max_auction_time(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn max_auction_waiting(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        let end = molecule::unpack_number(&slice[16..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn min_auction_raise_rate(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[16..]) as usize;
+        if self.has_extra_fields() {
+            let end = molecule::unpack_number(&slice[20..]) as usize;
+            Uint32::new_unchecked(self.0.slice(start..end))
+        } else {
+            Uint32::new_unchecked(self.0.slice(start..))
+        }
+    }
+    pub fn as_reader<'r>(&'r self) -> MarketConfigReader<'r> {
+        MarketConfigReader::new_unchecked(self.as_slice())
+    }
+}
+impl molecule::prelude::Entity for MarketConfig {
+    type Builder = MarketConfigBuilder;
+    const NAME: &'static str = "MarketConfig";
+    fn new_unchecked(data: molecule::bytes::Bytes) -> Self {
+        MarketConfig(data)
+    }
+    fn as_bytes(&self) -> molecule::bytes::Bytes {
+        self.0.clone()
+    }
+    fn as_slice(&self) -> &[u8] {
+        &self.0[..]
+    }
+    fn from_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        MarketConfigReader::from_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn from_compatible_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        MarketConfigReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn new_builder() -> Self::Builder {
+        ::core::default::Default::default()
+    }
+    fn as_builder(self) -> Self::Builder {
+        Self::new_builder()
+            .max_selling_time(self.max_selling_time())
+            .max_auction_time(self.max_auction_time())
+            .max_auction_waiting(self.max_auction_waiting())
+            .min_auction_raise_rate(self.min_auction_raise_rate())
+    }
+}
+#[derive(Clone, Copy)]
+pub struct MarketConfigReader<'r>(&'r [u8]);
+impl<'r> ::core::fmt::LowerHex for MarketConfigReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl<'r> ::core::fmt::Debug for MarketConfigReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl<'r> ::core::fmt::Display for MarketConfigReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} {{ ", Self::NAME)?;
+        write!(f, "{}: {}", "max_selling_time", self.max_selling_time())?;
+        write!(f, ", {}: {}", "max_auction_time", self.max_auction_time())?;
+        write!(
+            f,
+            ", {}: {}",
+            "max_auction_waiting",
+            self.max_auction_waiting()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "min_auction_raise_rate",
+            self.min_auction_raise_rate()
+        )?;
+        let extra_count = self.count_extra_fields();
+        if extra_count != 0 {
+            write!(f, ", .. ({} fields)", extra_count)?;
+        }
+        write!(f, " }}")
+    }
+}
+impl<'r> MarketConfigReader<'r> {
+    pub const FIELD_COUNT: usize = 4;
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn field_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn count_extra_fields(&self) -> usize {
+        self.field_count() - Self::FIELD_COUNT
+    }
+    pub fn has_extra_fields(&self) -> bool {
+        Self::FIELD_COUNT != self.field_count()
+    }
+    pub fn max_selling_time(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn max_auction_time(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn max_auction_waiting(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        let end = molecule::unpack_number(&slice[16..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn min_auction_raise_rate(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[16..]) as usize;
+        if self.has_extra_fields() {
+            let end = molecule::unpack_number(&slice[20..]) as usize;
+            Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        } else {
+            Uint32Reader::new_unchecked(&self.as_slice()[start..])
+        }
+    }
+}
+impl<'r> molecule::prelude::Reader<'r> for MarketConfigReader<'r> {
+    type Entity = MarketConfig;
+    const NAME: &'static str = "MarketConfigReader";
+    fn to_entity(&self) -> Self::Entity {
+        Self::Entity::new_unchecked(self.as_slice().to_owned().into())
+    }
+    fn new_unchecked(slice: &'r [u8]) -> Self {
+        MarketConfigReader(slice)
+    }
+    fn as_slice(&self) -> &'r [u8] {
+        self.0
+    }
+    fn verify(slice: &[u8], compatible: bool) -> molecule::error::VerificationResult<()> {
+        use molecule::verification_error as ve;
+        let slice_len = slice.len();
+        if slice_len < molecule::NUMBER_SIZE {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE, slice_len);
+        }
+        let total_size = molecule::unpack_number(slice) as usize;
+        if slice_len != total_size {
+            return ve!(Self, TotalSizeNotMatch, total_size, slice_len);
+        }
+        if slice_len == molecule::NUMBER_SIZE && Self::FIELD_COUNT == 0 {
+            return Ok(());
+        }
+        if slice_len < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE * 2, slice_len);
+        }
+        let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
+        if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        if slice_len < offset_first {
+            return ve!(Self, HeaderIsBroken, offset_first, slice_len);
+        }
+        let field_count = offset_first / molecule::NUMBER_SIZE - 1;
+        if field_count < Self::FIELD_COUNT {
+            return ve!(Self, FieldCountNotMatch, Self::FIELD_COUNT, field_count);
+        } else if !compatible && field_count > Self::FIELD_COUNT {
+            return ve!(Self, FieldCountNotMatch, Self::FIELD_COUNT, field_count);
+        };
+        let mut offsets: Vec<usize> = slice[molecule::NUMBER_SIZE..offset_first]
+            .chunks_exact(molecule::NUMBER_SIZE)
+            .map(|x| molecule::unpack_number(x) as usize)
+            .collect();
+        offsets.push(total_size);
+        if offsets.windows(2).any(|i| i[0] > i[1]) {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        Uint32Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        Ok(())
+    }
+}
+#[derive(Debug, Default)]
+pub struct MarketConfigBuilder {
+    pub(crate) max_selling_time: Uint32,
+    pub(crate) max_auction_time: Uint32,
+    pub(crate) max_auction_waiting: Uint32,
+    pub(crate) min_auction_raise_rate: Uint32,
+}
+impl MarketConfigBuilder {
+    pub const FIELD_COUNT: usize = 4;
+    pub fn max_selling_time(mut self, v: Uint32) -> Self {
+        self.max_selling_time = v;
+        self
+    }
+    pub fn max_auction_time(mut self, v: Uint32) -> Self {
+        self.max_auction_time = v;
+        self
+    }
+    pub fn max_auction_waiting(mut self, v: Uint32) -> Self {
+        self.max_auction_waiting = v;
+        self
+    }
+    pub fn min_auction_raise_rate(mut self, v: Uint32) -> Self {
+        self.min_auction_raise_rate = v;
+        self
+    }
+}
+impl molecule::prelude::Builder for MarketConfigBuilder {
+    type Entity = MarketConfig;
+    const NAME: &'static str = "MarketConfigBuilder";
+    fn expected_length(&self) -> usize {
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
+            + self.max_selling_time.as_slice().len()
+            + self.max_auction_time.as_slice().len()
+            + self.max_auction_waiting.as_slice().len()
+            + self.min_auction_raise_rate.as_slice().len()
+    }
+    fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
+        let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
+        let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
+        offsets.push(total_size);
+        total_size += self.max_selling_time.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.max_auction_time.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.max_auction_waiting.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.min_auction_raise_rate.as_slice().len();
+        writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
+        for offset in offsets.into_iter() {
+            writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
+        }
+        writer.write_all(self.max_selling_time.as_slice())?;
+        writer.write_all(self.max_auction_time.as_slice())?;
+        writer.write_all(self.max_auction_waiting.as_slice())?;
+        writer.write_all(self.min_auction_raise_rate.as_slice())?;
+        Ok(())
+    }
+    fn build(&self) -> Self::Entity {
+        let mut inner = Vec::with_capacity(self.expected_length());
+        self.write(&mut inner)
+            .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
+        MarketConfig::new_unchecked(inner.into())
+    }
+}
+#[derive(Clone)]
+pub struct ProfitConfig(molecule::bytes::Bytes);
+impl ::core::fmt::LowerHex for ProfitConfig {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl ::core::fmt::Debug for ProfitConfig {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl ::core::fmt::Display for ProfitConfig {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} {{ ", Self::NAME)?;
+        write!(
+            f,
+            "{}: {}",
+            "profit_rate_of_inviter",
+            self.profit_rate_of_inviter()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "profit_rate_of_channel",
+            self.profit_rate_of_channel()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "profit_rate_of_das",
+            self.profit_rate_of_das()
+        )?;
+        let extra_count = self.count_extra_fields();
+        if extra_count != 0 {
+            write!(f, ", .. ({} fields)", extra_count)?;
+        }
+        write!(f, " }}")
+    }
+}
+impl ::core::default::Default for ProfitConfig {
+    fn default() -> Self {
+        let v: Vec<u8> = vec![
+            28, 0, 0, 0, 16, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ];
+        ProfitConfig::new_unchecked(v.into())
+    }
+}
+impl ProfitConfig {
+    pub const FIELD_COUNT: usize = 3;
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn field_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn count_extra_fields(&self) -> usize {
+        self.field_count() - Self::FIELD_COUNT
+    }
+    pub fn has_extra_fields(&self) -> bool {
+        Self::FIELD_COUNT != self.field_count()
+    }
+    pub fn profit_rate_of_inviter(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn profit_rate_of_channel(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn profit_rate_of_das(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        if self.has_extra_fields() {
+            let end = molecule::unpack_number(&slice[16..]) as usize;
+            Uint32::new_unchecked(self.0.slice(start..end))
+        } else {
+            Uint32::new_unchecked(self.0.slice(start..))
+        }
+    }
+    pub fn as_reader<'r>(&'r self) -> ProfitConfigReader<'r> {
+        ProfitConfigReader::new_unchecked(self.as_slice())
+    }
+}
+impl molecule::prelude::Entity for ProfitConfig {
+    type Builder = ProfitConfigBuilder;
+    const NAME: &'static str = "ProfitConfig";
+    fn new_unchecked(data: molecule::bytes::Bytes) -> Self {
+        ProfitConfig(data)
+    }
+    fn as_bytes(&self) -> molecule::bytes::Bytes {
+        self.0.clone()
+    }
+    fn as_slice(&self) -> &[u8] {
+        &self.0[..]
+    }
+    fn from_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        ProfitConfigReader::from_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn from_compatible_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        ProfitConfigReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn new_builder() -> Self::Builder {
+        ::core::default::Default::default()
+    }
+    fn as_builder(self) -> Self::Builder {
+        Self::new_builder()
+            .profit_rate_of_inviter(self.profit_rate_of_inviter())
+            .profit_rate_of_channel(self.profit_rate_of_channel())
+            .profit_rate_of_das(self.profit_rate_of_das())
+    }
+}
+#[derive(Clone, Copy)]
+pub struct ProfitConfigReader<'r>(&'r [u8]);
+impl<'r> ::core::fmt::LowerHex for ProfitConfigReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl<'r> ::core::fmt::Debug for ProfitConfigReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl<'r> ::core::fmt::Display for ProfitConfigReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} {{ ", Self::NAME)?;
+        write!(
+            f,
+            "{}: {}",
+            "profit_rate_of_inviter",
+            self.profit_rate_of_inviter()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "profit_rate_of_channel",
+            self.profit_rate_of_channel()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "profit_rate_of_das",
+            self.profit_rate_of_das()
+        )?;
+        let extra_count = self.count_extra_fields();
+        if extra_count != 0 {
+            write!(f, ", .. ({} fields)", extra_count)?;
+        }
+        write!(f, " }}")
+    }
+}
+impl<'r> ProfitConfigReader<'r> {
+    pub const FIELD_COUNT: usize = 3;
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn field_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn count_extra_fields(&self) -> usize {
+        self.field_count() - Self::FIELD_COUNT
+    }
+    pub fn has_extra_fields(&self) -> bool {
+        Self::FIELD_COUNT != self.field_count()
+    }
+    pub fn profit_rate_of_inviter(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn profit_rate_of_channel(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn profit_rate_of_das(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        if self.has_extra_fields() {
+            let end = molecule::unpack_number(&slice[16..]) as usize;
+            Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        } else {
+            Uint32Reader::new_unchecked(&self.as_slice()[start..])
+        }
+    }
+}
+impl<'r> molecule::prelude::Reader<'r> for ProfitConfigReader<'r> {
+    type Entity = ProfitConfig;
+    const NAME: &'static str = "ProfitConfigReader";
+    fn to_entity(&self) -> Self::Entity {
+        Self::Entity::new_unchecked(self.as_slice().to_owned().into())
+    }
+    fn new_unchecked(slice: &'r [u8]) -> Self {
+        ProfitConfigReader(slice)
+    }
+    fn as_slice(&self) -> &'r [u8] {
+        self.0
+    }
+    fn verify(slice: &[u8], compatible: bool) -> molecule::error::VerificationResult<()> {
+        use molecule::verification_error as ve;
+        let slice_len = slice.len();
+        if slice_len < molecule::NUMBER_SIZE {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE, slice_len);
+        }
+        let total_size = molecule::unpack_number(slice) as usize;
+        if slice_len != total_size {
+            return ve!(Self, TotalSizeNotMatch, total_size, slice_len);
+        }
+        if slice_len == molecule::NUMBER_SIZE && Self::FIELD_COUNT == 0 {
+            return Ok(());
+        }
+        if slice_len < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE * 2, slice_len);
+        }
+        let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
+        if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        if slice_len < offset_first {
+            return ve!(Self, HeaderIsBroken, offset_first, slice_len);
+        }
+        let field_count = offset_first / molecule::NUMBER_SIZE - 1;
+        if field_count < Self::FIELD_COUNT {
+            return ve!(Self, FieldCountNotMatch, Self::FIELD_COUNT, field_count);
+        } else if !compatible && field_count > Self::FIELD_COUNT {
+            return ve!(Self, FieldCountNotMatch, Self::FIELD_COUNT, field_count);
+        };
+        let mut offsets: Vec<usize> = slice[molecule::NUMBER_SIZE..offset_first]
+            .chunks_exact(molecule::NUMBER_SIZE)
+            .map(|x| molecule::unpack_number(x) as usize)
+            .collect();
+        offsets.push(total_size);
+        if offsets.windows(2).any(|i| i[0] > i[1]) {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        Uint32Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Ok(())
+    }
+}
+#[derive(Debug, Default)]
+pub struct ProfitConfigBuilder {
+    pub(crate) profit_rate_of_inviter: Uint32,
+    pub(crate) profit_rate_of_channel: Uint32,
+    pub(crate) profit_rate_of_das: Uint32,
+}
+impl ProfitConfigBuilder {
+    pub const FIELD_COUNT: usize = 3;
+    pub fn profit_rate_of_inviter(mut self, v: Uint32) -> Self {
+        self.profit_rate_of_inviter = v;
+        self
+    }
+    pub fn profit_rate_of_channel(mut self, v: Uint32) -> Self {
+        self.profit_rate_of_channel = v;
+        self
+    }
+    pub fn profit_rate_of_das(mut self, v: Uint32) -> Self {
+        self.profit_rate_of_das = v;
+        self
+    }
+}
+impl molecule::prelude::Builder for ProfitConfigBuilder {
+    type Entity = ProfitConfig;
+    const NAME: &'static str = "ProfitConfigBuilder";
+    fn expected_length(&self) -> usize {
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
+            + self.profit_rate_of_inviter.as_slice().len()
+            + self.profit_rate_of_channel.as_slice().len()
+            + self.profit_rate_of_das.as_slice().len()
+    }
+    fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
+        let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
+        let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
+        offsets.push(total_size);
+        total_size += self.profit_rate_of_inviter.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.profit_rate_of_channel.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.profit_rate_of_das.as_slice().len();
+        writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
+        for offset in offsets.into_iter() {
+            writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
+        }
+        writer.write_all(self.profit_rate_of_inviter.as_slice())?;
+        writer.write_all(self.profit_rate_of_channel.as_slice())?;
+        writer.write_all(self.profit_rate_of_das.as_slice())?;
+        Ok(())
+    }
+    fn build(&self) -> Self::Entity {
+        let mut inner = Vec::with_capacity(self.expected_length());
+        self.write(&mut inner)
+            .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
+        ProfitConfig::new_unchecked(inner.into())
     }
 }
 #[derive(Clone)]
