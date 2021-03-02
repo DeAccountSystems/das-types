@@ -2,12 +2,16 @@
 #[repr(u32)]
 pub enum DataType {
     ActionData,
-    ConfigCellData,
+    ConfigCellData, // Deprecated
     AccountCellData,
     OnSaleCellData,
     BiddingCellData,
     ProposalCellData,
     PreAccountCellData,
+    ConfigCellMain = 7,
+    ConfigCellRegister,
+    ConfigCellBloomFilter,
+    ConfigCellMarket,
 }
 
 #[derive(Debug, PartialEq, Copy, Clone)]
