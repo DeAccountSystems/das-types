@@ -37,8 +37,6 @@ table ConfigCellRegister {
     apply_max_waiting_time: Uint32,
     // The length of accounts in bytes.
     account_max_length: Uint32,
-    // the grace period for account expiration in seconds
-    account_expiration_grace_period: Uint32,
     // available char sets for account
     char_sets: CharSetList,
     // Price list of different account length.
@@ -137,14 +135,14 @@ table AccountCellData {
     manager_lock: Script,
     // Separate chars of account.
     account: AccountChars,
-    // Suffix of account, the default should be ".bit" .
-    suffix: Bytes,
+    // AccountCell register timestamp.
+    registered_at: Uint64,
     // The status of the account, 0x00 means normal, 0x01 means being sold, 0x02 means being auctioned.
     status: Uint8,
     records: Records,
 }
 
-array AccountId [byte; 20];
+array AccountId [byte; 10];
 
 table Record {
     record_type: Bytes,

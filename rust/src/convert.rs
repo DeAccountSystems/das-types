@@ -145,14 +145,14 @@ impl From<Hash> for Vec<u8> {
 impl TryFrom<&[u8]> for AccountId {
     type Error = VerificationError;
     fn try_from(v: &[u8]) -> Result<Self, VerificationError> {
-        if v.len() != 20 {
+        if v.len() != 10 {
             return Err(VerificationError::TotalSizeNotMatch(
                 "AccountId".to_owned(),
-                20,
+                10,
                 v.len(),
             ));
         }
-        let mut inner = [Byte::new(0); 20];
+        let mut inner = [Byte::new(0); 10];
         let v = v.to_owned().into_iter().map(Byte::new).collect::<Vec<_>>();
         inner.copy_from_slice(&v);
         Ok(Self::new_builder().set(inner).build())

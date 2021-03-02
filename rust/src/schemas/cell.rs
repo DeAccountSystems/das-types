@@ -1084,12 +1084,6 @@ impl ::core::fmt::Display for ConfigCellRegister {
             "account_max_length",
             self.account_max_length()
         )?;
-        write!(
-            f,
-            ", {}: {}",
-            "account_expiration_grace_period",
-            self.account_expiration_grace_period()
-        )?;
         write!(f, ", {}: {}", "char_sets", self.char_sets())?;
         write!(f, ", {}: {}", "price_configs", self.price_configs())?;
         write!(
@@ -1133,17 +1127,16 @@ impl ::core::fmt::Display for ConfigCellRegister {
 impl ::core::default::Default for ConfigCellRegister {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            115, 0, 0, 0, 52, 0, 0, 0, 56, 0, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 68, 0, 0, 0, 72, 0,
-            0, 0, 76, 0, 0, 0, 77, 0, 0, 0, 78, 0, 0, 0, 79, 0, 0, 0, 83, 0, 0, 0, 87, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 28, 0, 0, 0, 16, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
+            107, 0, 0, 0, 48, 0, 0, 0, 52, 0, 0, 0, 56, 0, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 68, 0,
+            0, 0, 69, 0, 0, 0, 70, 0, 0, 0, 71, 0, 0, 0, 75, 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 0,
+            0, 16, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellRegister::new_unchecked(v.into())
     }
 }
 impl ConfigCellRegister {
-    pub const FIELD_COUNT: usize = 12;
+    pub const FIELD_COUNT: usize = 11;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1178,59 +1171,53 @@ impl ConfigCellRegister {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn account_expiration_grace_period(&self) -> Uint32 {
+    pub fn char_sets(&self) -> CharSetList {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
-    }
-    pub fn char_sets(&self) -> CharSetList {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[20..]) as usize;
-        let end = molecule::unpack_number(&slice[24..]) as usize;
         CharSetList::new_unchecked(self.0.slice(start..end))
     }
     pub fn price_configs(&self) -> PriceConfigList {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[24..]) as usize;
-        let end = molecule::unpack_number(&slice[28..]) as usize;
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
         PriceConfigList::new_unchecked(self.0.slice(start..end))
     }
     pub fn proposal_min_confirm_require(&self) -> Uint8 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[24..]) as usize;
+        let end = molecule::unpack_number(&slice[28..]) as usize;
+        Uint8::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn proposal_min_extend_interval(&self) -> Uint8 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
         Uint8::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_min_extend_interval(&self) -> Uint8 {
+    pub fn proposal_min_recycle_interval(&self) -> Uint8 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
         let end = molecule::unpack_number(&slice[36..]) as usize;
         Uint8::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_min_recycle_interval(&self) -> Uint8 {
+    pub fn proposal_max_account_affect(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[36..]) as usize;
         let end = molecule::unpack_number(&slice[40..]) as usize;
-        Uint8::new_unchecked(self.0.slice(start..end))
+        Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_max_account_affect(&self) -> Uint32 {
+    pub fn proposal_max_pre_account_contain(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_max_pre_account_contain(&self) -> Uint32 {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[44..]) as usize;
-        let end = molecule::unpack_number(&slice[48..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
-    }
     pub fn profit(&self) -> ProfitConfig {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[48..]) as usize;
+        let start = molecule::unpack_number(&slice[44..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[52..]) as usize;
+            let end = molecule::unpack_number(&slice[48..]) as usize;
             ProfitConfig::new_unchecked(self.0.slice(start..end))
         } else {
             ProfitConfig::new_unchecked(self.0.slice(start..))
@@ -1266,7 +1253,6 @@ impl molecule::prelude::Entity for ConfigCellRegister {
             .apply_min_waiting_time(self.apply_min_waiting_time())
             .apply_max_waiting_time(self.apply_max_waiting_time())
             .account_max_length(self.account_max_length())
-            .account_expiration_grace_period(self.account_expiration_grace_period())
             .char_sets(self.char_sets())
             .price_configs(self.price_configs())
             .proposal_min_confirm_require(self.proposal_min_confirm_require())
@@ -1314,12 +1300,6 @@ impl<'r> ::core::fmt::Display for ConfigCellRegisterReader<'r> {
             "account_max_length",
             self.account_max_length()
         )?;
-        write!(
-            f,
-            ", {}: {}",
-            "account_expiration_grace_period",
-            self.account_expiration_grace_period()
-        )?;
         write!(f, ", {}: {}", "char_sets", self.char_sets())?;
         write!(f, ", {}: {}", "price_configs", self.price_configs())?;
         write!(
@@ -1361,7 +1341,7 @@ impl<'r> ::core::fmt::Display for ConfigCellRegisterReader<'r> {
     }
 }
 impl<'r> ConfigCellRegisterReader<'r> {
-    pub const FIELD_COUNT: usize = 12;
+    pub const FIELD_COUNT: usize = 11;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1396,59 +1376,53 @@ impl<'r> ConfigCellRegisterReader<'r> {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn account_expiration_grace_period(&self) -> Uint32Reader<'r> {
+    pub fn char_sets(&self) -> CharSetListReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
-    }
-    pub fn char_sets(&self) -> CharSetListReader<'r> {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[20..]) as usize;
-        let end = molecule::unpack_number(&slice[24..]) as usize;
         CharSetListReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn price_configs(&self) -> PriceConfigListReader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[24..]) as usize;
-        let end = molecule::unpack_number(&slice[28..]) as usize;
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
         PriceConfigListReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn proposal_min_confirm_require(&self) -> Uint8Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[24..]) as usize;
+        let end = molecule::unpack_number(&slice[28..]) as usize;
+        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn proposal_min_extend_interval(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
         Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_min_extend_interval(&self) -> Uint8Reader<'r> {
+    pub fn proposal_min_recycle_interval(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
         let end = molecule::unpack_number(&slice[36..]) as usize;
         Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_min_recycle_interval(&self) -> Uint8Reader<'r> {
+    pub fn proposal_max_account_affect(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[36..]) as usize;
         let end = molecule::unpack_number(&slice[40..]) as usize;
-        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_max_account_affect(&self) -> Uint32Reader<'r> {
+    pub fn proposal_max_pre_account_contain(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_max_pre_account_contain(&self) -> Uint32Reader<'r> {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[44..]) as usize;
-        let end = molecule::unpack_number(&slice[48..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
-    }
     pub fn profit(&self) -> ProfitConfigReader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[48..]) as usize;
+        let start = molecule::unpack_number(&slice[44..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[52..]) as usize;
+            let end = molecule::unpack_number(&slice[48..]) as usize;
             ProfitConfigReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             ProfitConfigReader::new_unchecked(&self.as_slice()[start..])
@@ -1507,15 +1481,14 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellRegisterReader<'r> {
         Uint32Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         Uint32Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         Uint32Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        CharSetListReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
-        PriceConfigListReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
+        CharSetListReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        PriceConfigListReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        Uint8Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Uint8Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         Uint8Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
-        Uint8Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
         Uint32Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
-        ProfitConfigReader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
+        ProfitConfigReader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
         Ok(())
     }
 }
@@ -1524,7 +1497,6 @@ pub struct ConfigCellRegisterBuilder {
     pub(crate) apply_min_waiting_time: Uint32,
     pub(crate) apply_max_waiting_time: Uint32,
     pub(crate) account_max_length: Uint32,
-    pub(crate) account_expiration_grace_period: Uint32,
     pub(crate) char_sets: CharSetList,
     pub(crate) price_configs: PriceConfigList,
     pub(crate) proposal_min_confirm_require: Uint8,
@@ -1535,7 +1507,7 @@ pub struct ConfigCellRegisterBuilder {
     pub(crate) profit: ProfitConfig,
 }
 impl ConfigCellRegisterBuilder {
-    pub const FIELD_COUNT: usize = 12;
+    pub const FIELD_COUNT: usize = 11;
     pub fn apply_min_waiting_time(mut self, v: Uint32) -> Self {
         self.apply_min_waiting_time = v;
         self
@@ -1546,10 +1518,6 @@ impl ConfigCellRegisterBuilder {
     }
     pub fn account_max_length(mut self, v: Uint32) -> Self {
         self.account_max_length = v;
-        self
-    }
-    pub fn account_expiration_grace_period(mut self, v: Uint32) -> Self {
-        self.account_expiration_grace_period = v;
         self
     }
     pub fn char_sets(mut self, v: CharSetList) -> Self {
@@ -1593,7 +1561,6 @@ impl molecule::prelude::Builder for ConfigCellRegisterBuilder {
             + self.apply_min_waiting_time.as_slice().len()
             + self.apply_max_waiting_time.as_slice().len()
             + self.account_max_length.as_slice().len()
-            + self.account_expiration_grace_period.as_slice().len()
             + self.char_sets.as_slice().len()
             + self.price_configs.as_slice().len()
             + self.proposal_min_confirm_require.as_slice().len()
@@ -1612,8 +1579,6 @@ impl molecule::prelude::Builder for ConfigCellRegisterBuilder {
         total_size += self.apply_max_waiting_time.as_slice().len();
         offsets.push(total_size);
         total_size += self.account_max_length.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.account_expiration_grace_period.as_slice().len();
         offsets.push(total_size);
         total_size += self.char_sets.as_slice().len();
         offsets.push(total_size);
@@ -1637,7 +1602,6 @@ impl molecule::prelude::Builder for ConfigCellRegisterBuilder {
         writer.write_all(self.apply_min_waiting_time.as_slice())?;
         writer.write_all(self.apply_max_waiting_time.as_slice())?;
         writer.write_all(self.account_max_length.as_slice())?;
-        writer.write_all(self.account_expiration_grace_period.as_slice())?;
         writer.write_all(self.char_sets.as_slice())?;
         writer.write_all(self.price_configs.as_slice())?;
         writer.write_all(self.proposal_min_confirm_require.as_slice())?;
@@ -5148,8 +5112,8 @@ impl ::core::fmt::Display for ProposalItem {
 impl ::core::default::Default for ProposalItem {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            57, 0, 0, 0, 16, 0, 0, 0, 36, 0, 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            37, 0, 0, 0, 16, 0, 0, 0, 26, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ProposalItem::new_unchecked(v.into())
     }
@@ -5429,7 +5393,7 @@ impl ::core::fmt::Display for AccountCellData {
         write!(f, ", {}: {}", "owner_lock", self.owner_lock())?;
         write!(f, ", {}: {}", "manager_lock", self.manager_lock())?;
         write!(f, ", {}: {}", "account", self.account())?;
-        write!(f, ", {}: {}", "suffix", self.suffix())?;
+        write!(f, ", {}: {}", "registered_at", self.registered_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "records", self.records())?;
         let extra_count = self.count_extra_fields();
@@ -5442,13 +5406,12 @@ impl ::core::fmt::Display for AccountCellData {
 impl ::core::default::Default for AccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            171, 0, 0, 0, 32, 0, 0, 0, 52, 0, 0, 0, 105, 0, 0, 0, 158, 0, 0, 0, 162, 0, 0, 0, 166,
-            0, 0, 0, 167, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53,
-            0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0,
-            16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0,
-            0, 4, 0, 0, 0,
+            165, 0, 0, 0, 32, 0, 0, 0, 42, 0, 0, 0, 95, 0, 0, 0, 148, 0, 0, 0, 152, 0, 0, 0, 160,
+            0, 0, 0, 161, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0,
+            0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
         ];
         AccountCellData::new_unchecked(v.into())
     }
@@ -5495,11 +5458,11 @@ impl AccountCellData {
         let end = molecule::unpack_number(&slice[20..]) as usize;
         AccountChars::new_unchecked(self.0.slice(start..end))
     }
-    pub fn suffix(&self) -> Bytes {
+    pub fn registered_at(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        Bytes::new_unchecked(self.0.slice(start..end))
+        Uint64::new_unchecked(self.0.slice(start..end))
     }
     pub fn status(&self) -> Uint8 {
         let slice = self.as_slice();
@@ -5548,7 +5511,7 @@ impl molecule::prelude::Entity for AccountCellData {
             .owner_lock(self.owner_lock())
             .manager_lock(self.manager_lock())
             .account(self.account())
-            .suffix(self.suffix())
+            .registered_at(self.registered_at())
             .status(self.status())
             .records(self.records())
     }
@@ -5576,7 +5539,7 @@ impl<'r> ::core::fmt::Display for AccountCellDataReader<'r> {
         write!(f, ", {}: {}", "owner_lock", self.owner_lock())?;
         write!(f, ", {}: {}", "manager_lock", self.manager_lock())?;
         write!(f, ", {}: {}", "account", self.account())?;
-        write!(f, ", {}: {}", "suffix", self.suffix())?;
+        write!(f, ", {}: {}", "registered_at", self.registered_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "records", self.records())?;
         let extra_count = self.count_extra_fields();
@@ -5628,11 +5591,11 @@ impl<'r> AccountCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[20..]) as usize;
         AccountCharsReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn suffix(&self) -> BytesReader<'r> {
+    pub fn registered_at(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        BytesReader::new_unchecked(&self.as_slice()[start..end])
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn status(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
@@ -5704,7 +5667,7 @@ impl<'r> molecule::prelude::Reader<'r> for AccountCellDataReader<'r> {
         ScriptReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         ScriptReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         AccountCharsReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        BytesReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Uint8Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         RecordsReader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         Ok(())
@@ -5716,7 +5679,7 @@ pub struct AccountCellDataBuilder {
     pub(crate) owner_lock: Script,
     pub(crate) manager_lock: Script,
     pub(crate) account: AccountChars,
-    pub(crate) suffix: Bytes,
+    pub(crate) registered_at: Uint64,
     pub(crate) status: Uint8,
     pub(crate) records: Records,
 }
@@ -5738,8 +5701,8 @@ impl AccountCellDataBuilder {
         self.account = v;
         self
     }
-    pub fn suffix(mut self, v: Bytes) -> Self {
-        self.suffix = v;
+    pub fn registered_at(mut self, v: Uint64) -> Self {
+        self.registered_at = v;
         self
     }
     pub fn status(mut self, v: Uint8) -> Self {
@@ -5760,7 +5723,7 @@ impl molecule::prelude::Builder for AccountCellDataBuilder {
             + self.owner_lock.as_slice().len()
             + self.manager_lock.as_slice().len()
             + self.account.as_slice().len()
-            + self.suffix.as_slice().len()
+            + self.registered_at.as_slice().len()
             + self.status.as_slice().len()
             + self.records.as_slice().len()
     }
@@ -5776,7 +5739,7 @@ impl molecule::prelude::Builder for AccountCellDataBuilder {
         offsets.push(total_size);
         total_size += self.account.as_slice().len();
         offsets.push(total_size);
-        total_size += self.suffix.as_slice().len();
+        total_size += self.registered_at.as_slice().len();
         offsets.push(total_size);
         total_size += self.status.as_slice().len();
         offsets.push(total_size);
@@ -5789,7 +5752,7 @@ impl molecule::prelude::Builder for AccountCellDataBuilder {
         writer.write_all(self.owner_lock.as_slice())?;
         writer.write_all(self.manager_lock.as_slice())?;
         writer.write_all(self.account.as_slice())?;
-        writer.write_all(self.suffix.as_slice())?;
+        writer.write_all(self.registered_at.as_slice())?;
         writer.write_all(self.status.as_slice())?;
         writer.write_all(self.records.as_slice())?;
         Ok(())
@@ -5826,14 +5789,14 @@ impl ::core::fmt::Display for AccountId {
 }
 impl ::core::default::Default for AccountId {
     fn default() -> Self {
-        let v: Vec<u8> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let v: Vec<u8> = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         AccountId::new_unchecked(v.into())
     }
 }
 impl AccountId {
-    pub const TOTAL_SIZE: usize = 20;
+    pub const TOTAL_SIZE: usize = 10;
     pub const ITEM_SIZE: usize = 1;
-    pub const ITEM_COUNT: usize = 20;
+    pub const ITEM_COUNT: usize = 10;
     pub fn nth0(&self) -> Byte {
         Byte::new_unchecked(self.0.slice(0..1))
     }
@@ -5863,36 +5826,6 @@ impl AccountId {
     }
     pub fn nth9(&self) -> Byte {
         Byte::new_unchecked(self.0.slice(9..10))
-    }
-    pub fn nth10(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(10..11))
-    }
-    pub fn nth11(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(11..12))
-    }
-    pub fn nth12(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(12..13))
-    }
-    pub fn nth13(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(13..14))
-    }
-    pub fn nth14(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(14..15))
-    }
-    pub fn nth15(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(15..16))
-    }
-    pub fn nth16(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(16..17))
-    }
-    pub fn nth17(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(17..18))
-    }
-    pub fn nth18(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(18..19))
-    }
-    pub fn nth19(&self) -> Byte {
-        Byte::new_unchecked(self.0.slice(19..20))
     }
     pub fn raw_data(&self) -> molecule::bytes::Bytes {
         self.as_bytes()
@@ -5934,16 +5867,6 @@ impl molecule::prelude::Entity for AccountId {
             self.nth7(),
             self.nth8(),
             self.nth9(),
-            self.nth10(),
-            self.nth11(),
-            self.nth12(),
-            self.nth13(),
-            self.nth14(),
-            self.nth15(),
-            self.nth16(),
-            self.nth17(),
-            self.nth18(),
-            self.nth19(),
         ])
     }
 }
@@ -5971,9 +5894,9 @@ impl<'r> ::core::fmt::Display for AccountIdReader<'r> {
     }
 }
 impl<'r> AccountIdReader<'r> {
-    pub const TOTAL_SIZE: usize = 20;
+    pub const TOTAL_SIZE: usize = 10;
     pub const ITEM_SIZE: usize = 1;
-    pub const ITEM_COUNT: usize = 20;
+    pub const ITEM_COUNT: usize = 10;
     pub fn nth0(&self) -> ByteReader<'r> {
         ByteReader::new_unchecked(&self.as_slice()[0..1])
     }
@@ -6004,36 +5927,6 @@ impl<'r> AccountIdReader<'r> {
     pub fn nth9(&self) -> ByteReader<'r> {
         ByteReader::new_unchecked(&self.as_slice()[9..10])
     }
-    pub fn nth10(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[10..11])
-    }
-    pub fn nth11(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[11..12])
-    }
-    pub fn nth12(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[12..13])
-    }
-    pub fn nth13(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[13..14])
-    }
-    pub fn nth14(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[14..15])
-    }
-    pub fn nth15(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[15..16])
-    }
-    pub fn nth16(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[16..17])
-    }
-    pub fn nth17(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[17..18])
-    }
-    pub fn nth18(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[18..19])
-    }
-    pub fn nth19(&self) -> ByteReader<'r> {
-        ByteReader::new_unchecked(&self.as_slice()[19..20])
-    }
     pub fn raw_data(&self) -> &'r [u8] {
         self.as_slice()
     }
@@ -6059,7 +5952,7 @@ impl<'r> molecule::prelude::Reader<'r> for AccountIdReader<'r> {
         Ok(())
     }
 }
-pub struct AccountIdBuilder(pub(crate) [Byte; 20]);
+pub struct AccountIdBuilder(pub(crate) [Byte; 10]);
 impl ::core::fmt::Debug for AccountIdBuilder {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{}({:?})", Self::NAME, &self.0[..])
@@ -6078,24 +5971,14 @@ impl ::core::default::Default for AccountIdBuilder {
             Byte::default(),
             Byte::default(),
             Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
         ])
     }
 }
 impl AccountIdBuilder {
-    pub const TOTAL_SIZE: usize = 20;
+    pub const TOTAL_SIZE: usize = 10;
     pub const ITEM_SIZE: usize = 1;
-    pub const ITEM_COUNT: usize = 20;
-    pub fn set(mut self, v: [Byte; 20]) -> Self {
+    pub const ITEM_COUNT: usize = 10;
+    pub fn set(mut self, v: [Byte; 10]) -> Self {
         self.0 = v;
         self
     }
@@ -6139,46 +6022,6 @@ impl AccountIdBuilder {
         self.0[9] = v;
         self
     }
-    pub fn nth10(mut self, v: Byte) -> Self {
-        self.0[10] = v;
-        self
-    }
-    pub fn nth11(mut self, v: Byte) -> Self {
-        self.0[11] = v;
-        self
-    }
-    pub fn nth12(mut self, v: Byte) -> Self {
-        self.0[12] = v;
-        self
-    }
-    pub fn nth13(mut self, v: Byte) -> Self {
-        self.0[13] = v;
-        self
-    }
-    pub fn nth14(mut self, v: Byte) -> Self {
-        self.0[14] = v;
-        self
-    }
-    pub fn nth15(mut self, v: Byte) -> Self {
-        self.0[15] = v;
-        self
-    }
-    pub fn nth16(mut self, v: Byte) -> Self {
-        self.0[16] = v;
-        self
-    }
-    pub fn nth17(mut self, v: Byte) -> Self {
-        self.0[17] = v;
-        self
-    }
-    pub fn nth18(mut self, v: Byte) -> Self {
-        self.0[18] = v;
-        self
-    }
-    pub fn nth19(mut self, v: Byte) -> Self {
-        self.0[19] = v;
-        self
-    }
 }
 impl molecule::prelude::Builder for AccountIdBuilder {
     type Entity = AccountId;
@@ -6197,16 +6040,6 @@ impl molecule::prelude::Builder for AccountIdBuilder {
         writer.write_all(self.0[7].as_slice())?;
         writer.write_all(self.0[8].as_slice())?;
         writer.write_all(self.0[9].as_slice())?;
-        writer.write_all(self.0[10].as_slice())?;
-        writer.write_all(self.0[11].as_slice())?;
-        writer.write_all(self.0[12].as_slice())?;
-        writer.write_all(self.0[13].as_slice())?;
-        writer.write_all(self.0[14].as_slice())?;
-        writer.write_all(self.0[15].as_slice())?;
-        writer.write_all(self.0[16].as_slice())?;
-        writer.write_all(self.0[17].as_slice())?;
-        writer.write_all(self.0[18].as_slice())?;
-        writer.write_all(self.0[19].as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
