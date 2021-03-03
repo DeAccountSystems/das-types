@@ -24,11 +24,23 @@ pub fn wrap_data_entity_opt(version: u32, index: u32, entity: impl Entity) -> Da
         .build()
 }
 
-pub fn wrap_witness(data_type: DataType, entity: impl Entity) -> Bytes {
+pub fn wrap_raw_witness(data_type: DataType, mut bytes: Vec<u8>) -> Bytes {
     let mut data = Vec::new();
-    let type_: Uint32 = Uint32::from(data_type as u32);
+    let mut data_type_bytes = (data_type as u32).to_le_bytes().to_vec();
     data.append(&mut WITNESS_HEADER.to_vec());
-    data.append(&mut type_.as_slice().to_vec());
+    data.append(&mut data_type_bytes);
+    data.append(&mut bytes);
+
+    Bytes::new_builder()
+        .set(data.into_iter().map(Byte::new).collect())
+        .build()
+}
+
+pub fn wrap_entity_witness(data_type: DataType, entity: impl Entity) -> Bytes {
+    let mut data = Vec::new();
+    let mut data_type_bytes = (data_type as u32).to_le_bytes().to_vec();
+    data.append(&mut WITNESS_HEADER.to_vec());
+    data.append(&mut data_type_bytes);
     data.append(&mut entity.as_slice().to_vec());
 
     Bytes::new_builder()
@@ -43,7 +55,7 @@ pub fn wrap_action_witness(action: &str, params_opt: Option<Bytes>) -> Bytes {
         builder = builder.params(params);
     }
 
-    wrap_witness(DataType::ActionData, builder.build())
+    wrap_entity_witness(DataType::ActionData, builder.build())
 }
 
 pub fn wrap_data_witness<T: Entity>(
@@ -69,5 +81,5 @@ pub fn wrap_data_witness<T: Entity>(
 
     let builder = Data::new_builder().dep(dep).new(new).old(old);
 
-    wrap_witness(data_type, builder.build())
+    wrap_entity_witness(data_type, builder.build())
 }
