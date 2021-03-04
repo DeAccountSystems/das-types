@@ -147,6 +147,7 @@ array AccountId [byte; 10];
 table Record {
     record_type: Bytes,
     record_label: Bytes,
+    record_key: Bytes,
     record_value: Bytes,
     record_ttl: Uint32,
 }

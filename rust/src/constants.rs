@@ -1,5 +1,4 @@
 use core::convert::TryFrom;
-use molecule::error::VerificationError;
 
 #[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u32)]
@@ -18,7 +17,7 @@ pub enum DataType {
 }
 
 impl TryFrom<u32> for DataType {
-    type Error = VerificationError;
+    type Error = ();
 
     fn try_from(v: u32) -> Result<Self, Self::Error> {
         match v {
@@ -44,6 +43,20 @@ pub enum ConfigID {
     ConfigCellRegister,
     ConfigCellBloomFilter,
     ConfigCellMarket,
+}
+
+impl TryFrom<u32> for ConfigID {
+    type Error = ();
+
+    fn try_from(v: u32) -> Result<Self, Self::Error> {
+        match v {
+            x if x == ConfigID::ConfigCellMain as u32 => Ok(ConfigID::ConfigCellMain),
+            x if x == ConfigID::ConfigCellRegister as u32 => Ok(ConfigID::ConfigCellRegister),
+            x if x == ConfigID::ConfigCellBloomFilter as u32 => Ok(ConfigID::ConfigCellBloomFilter),
+            x if x == ConfigID::ConfigCellMarket as u32 => Ok(ConfigID::ConfigCellMarket),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Copy, Clone)]

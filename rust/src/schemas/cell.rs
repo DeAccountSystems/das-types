@@ -6070,6 +6070,7 @@ impl ::core::fmt::Display for Record {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "record_type", self.record_type())?;
         write!(f, ", {}: {}", "record_label", self.record_label())?;
+        write!(f, ", {}: {}", "record_key", self.record_key())?;
         write!(f, ", {}: {}", "record_value", self.record_value())?;
         write!(f, ", {}: {}", "record_ttl", self.record_ttl())?;
         let extra_count = self.count_extra_fields();
@@ -6082,14 +6083,14 @@ impl ::core::fmt::Display for Record {
 impl ::core::default::Default for Record {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            36, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            44, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         Record::new_unchecked(v.into())
     }
 }
 impl Record {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -6118,17 +6119,23 @@ impl Record {
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn record_value(&self) -> Bytes {
+    pub fn record_key(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn record_ttl(&self) -> Uint32 {
+    pub fn record_value(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
+        Bytes::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn record_ttl(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[20..]) as usize;
+            let end = molecule::unpack_number(&slice[24..]) as usize;
             Uint32::new_unchecked(self.0.slice(start..end))
         } else {
             Uint32::new_unchecked(self.0.slice(start..))
@@ -6163,6 +6170,7 @@ impl molecule::prelude::Entity for Record {
         Self::new_builder()
             .record_type(self.record_type())
             .record_label(self.record_label())
+            .record_key(self.record_key())
             .record_value(self.record_value())
             .record_ttl(self.record_ttl())
     }
@@ -6188,6 +6196,7 @@ impl<'r> ::core::fmt::Display for RecordReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "record_type", self.record_type())?;
         write!(f, ", {}: {}", "record_label", self.record_label())?;
+        write!(f, ", {}: {}", "record_key", self.record_key())?;
         write!(f, ", {}: {}", "record_value", self.record_value())?;
         write!(f, ", {}: {}", "record_ttl", self.record_ttl())?;
         let extra_count = self.count_extra_fields();
@@ -6198,7 +6207,7 @@ impl<'r> ::core::fmt::Display for RecordReader<'r> {
     }
 }
 impl<'r> RecordReader<'r> {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -6227,17 +6236,23 @@ impl<'r> RecordReader<'r> {
         let end = molecule::unpack_number(&slice[12..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn record_value(&self) -> BytesReader<'r> {
+    pub fn record_key(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn record_ttl(&self) -> Uint32Reader<'r> {
+    pub fn record_value(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
+        BytesReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn record_ttl(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[20..]) as usize;
+            let end = molecule::unpack_number(&slice[24..]) as usize;
             Uint32Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint32Reader::new_unchecked(&self.as_slice()[start..])
@@ -6296,7 +6311,8 @@ impl<'r> molecule::prelude::Reader<'r> for RecordReader<'r> {
         BytesReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         BytesReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         BytesReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        BytesReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Ok(())
     }
 }
@@ -6304,17 +6320,22 @@ impl<'r> molecule::prelude::Reader<'r> for RecordReader<'r> {
 pub struct RecordBuilder {
     pub(crate) record_type: Bytes,
     pub(crate) record_label: Bytes,
+    pub(crate) record_key: Bytes,
     pub(crate) record_value: Bytes,
     pub(crate) record_ttl: Uint32,
 }
 impl RecordBuilder {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn record_type(mut self, v: Bytes) -> Self {
         self.record_type = v;
         self
     }
     pub fn record_label(mut self, v: Bytes) -> Self {
         self.record_label = v;
+        self
+    }
+    pub fn record_key(mut self, v: Bytes) -> Self {
+        self.record_key = v;
         self
     }
     pub fn record_value(mut self, v: Bytes) -> Self {
@@ -6333,6 +6354,7 @@ impl molecule::prelude::Builder for RecordBuilder {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.record_type.as_slice().len()
             + self.record_label.as_slice().len()
+            + self.record_key.as_slice().len()
             + self.record_value.as_slice().len()
             + self.record_ttl.as_slice().len()
     }
@@ -6344,6 +6366,8 @@ impl molecule::prelude::Builder for RecordBuilder {
         offsets.push(total_size);
         total_size += self.record_label.as_slice().len();
         offsets.push(total_size);
+        total_size += self.record_key.as_slice().len();
+        offsets.push(total_size);
         total_size += self.record_value.as_slice().len();
         offsets.push(total_size);
         total_size += self.record_ttl.as_slice().len();
@@ -6353,6 +6377,7 @@ impl molecule::prelude::Builder for RecordBuilder {
         }
         writer.write_all(self.record_type.as_slice())?;
         writer.write_all(self.record_label.as_slice())?;
+        writer.write_all(self.record_key.as_slice())?;
         writer.write_all(self.record_value.as_slice())?;
         writer.write_all(self.record_ttl.as_slice())?;
         Ok(())
