@@ -120,6 +120,16 @@ impl TryFrom<Vec<u8>> for Hash {
     }
 }
 
+impl From<[u8; 32]> for Hash {
+    fn from(v: [u8; 32]) -> Self {
+        let mut inner = [Byte::new(0); 32];
+        for (i, item) in v.iter().enumerate() {
+            inner[i] = Byte::new(*item);
+        }
+        Self::new_builder().set(inner).build()
+    }
+}
+
 impl From<ckb_packed::Byte32> for Hash {
     fn from(v: ckb_packed::Byte32) -> Self {
         Hash::new_unchecked(v.as_bytes().into())
