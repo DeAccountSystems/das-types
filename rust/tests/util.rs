@@ -7,6 +7,7 @@ use das_types::{
     util,
 };
 use hex;
+use std::convert::TryInto;
 
 #[test]
 fn test_is_entity_eq() {
@@ -70,29 +71,6 @@ fn test_wrap_as_data_entity_opt() {
 }
 
 #[test]
-fn test_wrap_witness() {
-    let witness = util::wrap_witness(DataType::ActionData, Bytes::default());
-
-    let header = witness.as_slice().get(4..7).unwrap();
-    assert_eq!(
-        header, &WITNESS_HEADER,
-        "The wrapped bytes should have DAS header."
-    );
-
-    let raw = witness.as_slice().get(7..11).unwrap();
-    let data_type = u32::from(Uint32::new_unchecked(raw.to_vec().into()));
-    assert_eq!(
-        data_type,
-        DataType::ActionData as u32,
-        "The wrapped bytes should have DAS data type."
-    );
-
-    let raw = witness.as_slice().get(11..).unwrap();
-    let data = Bytes::new_unchecked(raw.to_vec().into());
-    assert!(is_entity_eq(&data, &Bytes::default()))
-}
-
-#[test]
 fn test_wrap_action_witness() {
     let params = Bytes::from(&[1, 0, 1][..]);
     let witness = util::wrap_action_witness("config", Some(params));
@@ -125,31 +103,12 @@ fn test_wrap_action_witness() {
 }
 
 #[test]
-fn test_wrap_data_witness() {
-    let config_cell_data = ConfigCellData::new_builder()
-        .reserved_account_filter(Bytes::default())
-        .proposal_min_confirm_require(Uint8::from(4u8))
-        .proposal_min_extend_interval(Uint8::from(2u8))
-        .proposal_max_account_affect(Uint32::from(50))
-        .proposal_max_pre_account_contain(Uint32::from(50))
-        .apply_min_waiting_time(Uint32::from(60))
-        .apply_max_waiting_time(Uint32::from(86400))
-        .account_max_length(Uint32::from(1000))
-        // .price_configs()
-        // .char_sets()
-        .min_ttl(Uint32::from(300))
-        .closing_limit_of_primary_market_auction(Uint32::from(86400))
-        .closing_limit_of_secondary_market_auction(Uint32::from(86400))
-        .build();
-    // eprintln!("config_cell_data = {:#?}", config_cell_data);
+fn test_wrap_raw_witness() {
+    let raw_bytes = vec![1, 0, 0, 0, 0, 0, 0, 1];
+    // println!("raw_bytes = {:?}", raw_bytes);
 
-    let witness = util::wrap_data_witness(
-        DataType::ConfigCellData,
-        Some((1, 0, config_cell_data.clone())),
-        None,
-        None,
-    );
-    // eprintln!("witness = {:#?}", witness);
+    let witness = util::wrap_raw_witness(DataType::ConfigCellBloomFilter, raw_bytes.clone());
+    // println!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
     assert_eq!(
@@ -158,27 +117,75 @@ fn test_wrap_data_witness() {
     );
 
     let raw = witness.as_slice().get(7..11).unwrap();
-    let data_type = u32::from(Uint32::new_unchecked(raw.to_vec().into()));
+    let data_type = u32::from_le_bytes(raw.try_into().unwrap());
     assert_eq!(
         data_type,
-        DataType::ConfigCellData as u32,
+        DataType::ConfigCellBloomFilter as u32,
+        "The wrapped bytes should be DataType::ConfigCellBloomFilter ."
+    );
+
+    let raw = witness.as_slice().get(11..).unwrap();
+    assert!(raw == raw_bytes, "The wrapped bytes should be raw bytes.")
+}
+
+#[test]
+fn test_wrap_entity_witness() {
+    let entity = ConfigCellMain::default();
+    // println!("entity = {:#?}", entity);
+
+    let witness = util::wrap_entity_witness(DataType::ConfigCellMain, entity);
+    // println!("witness = {:#?}", witness);
+
+    let header = witness.as_slice().get(4..7).unwrap();
+    assert_eq!(
+        header, &WITNESS_HEADER,
+        "The wrapped bytes should have DAS header."
+    );
+
+    let raw = witness.as_slice().get(7..11).unwrap();
+    let data_type = u32::from_le_bytes(raw.try_into().unwrap());
+    assert_eq!(
+        data_type,
+        DataType::ConfigCellMain as u32,
+        "The wrapped bytes should be DataType::ConfigCellMain ."
+    );
+
+    let raw = witness.as_slice().get(11..).unwrap();
+    let ret = ConfigCellMain::from_slice(raw);
+    assert!(ret.is_ok(), "The wrapped bytes should be an entity.")
+}
+
+#[test]
+fn test_wrap_data_witness() {
+    let entity = AccountCellData::default();
+    // println!("entity = {:#?}", entity);
+
+    let witness = util::wrap_data_witness(
+        DataType::AccountCellData,
+        Some((1, 0, entity.clone())),
+        None,
+        None,
+    );
+    // println!("witness = {:#?}", witness);
+
+    let header = witness.as_slice().get(4..7).unwrap();
+    assert_eq!(
+        header, &WITNESS_HEADER,
+        "The wrapped bytes should have DAS header."
+    );
+
+    let raw = witness.as_slice().get(7..11).unwrap();
+    let data_type = u32::from_le_bytes(raw.try_into().unwrap());
+    assert_eq!(
+        data_type,
+        DataType::AccountCellData as u32,
         "The wrapped bytes should have DAS data type."
     );
 
     let raw = witness.as_slice().get(11..).unwrap();
-    let data = Data::new_unchecked(raw.to_vec().into());
-    let result = ConfigCellData::new_unchecked(
-        data.new()
-            .to_opt()
-            .unwrap()
-            .entity()
-            .as_reader()
-            .raw_data()
-            .to_vec()
-            .into(),
-    );
+    let ret = Data::from_slice(raw);
     assert!(
-        util::is_entity_eq(&result, &config_cell_data),
+        ret.is_ok(),
         "The wrapped bytes should have original entity data."
     );
 }

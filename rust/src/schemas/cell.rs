@@ -1069,14 +1069,14 @@ impl ::core::fmt::Display for ConfigCellRegister {
         write!(
             f,
             "{}: {}",
-            "apply_min_waiting_time",
-            self.apply_min_waiting_time()
+            "apply_min_waiting_block_number",
+            self.apply_min_waiting_block_number()
         )?;
         write!(
             f,
             ", {}: {}",
-            "apply_max_waiting_time",
-            self.apply_max_waiting_time()
+            "apply_max_waiting_block_number",
+            self.apply_max_waiting_block_number()
         )?;
         write!(
             f,
@@ -1089,8 +1089,8 @@ impl ::core::fmt::Display for ConfigCellRegister {
         write!(
             f,
             ", {}: {}",
-            "proposal_min_confirm_require",
-            self.proposal_min_confirm_require()
+            "proposal_min_confirm_interval",
+            self.proposal_min_confirm_interval()
         )?;
         write!(
             f,
@@ -1153,13 +1153,13 @@ impl ConfigCellRegister {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn apply_min_waiting_time(&self) -> Uint32 {
+    pub fn apply_min_waiting_block_number(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn apply_max_waiting_time(&self) -> Uint32 {
+    pub fn apply_max_waiting_block_number(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
@@ -1183,7 +1183,7 @@ impl ConfigCellRegister {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         PriceConfigList::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_min_confirm_require(&self) -> Uint8 {
+    pub fn proposal_min_confirm_interval(&self) -> Uint8 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
@@ -1250,12 +1250,12 @@ impl molecule::prelude::Entity for ConfigCellRegister {
     }
     fn as_builder(self) -> Self::Builder {
         Self::new_builder()
-            .apply_min_waiting_time(self.apply_min_waiting_time())
-            .apply_max_waiting_time(self.apply_max_waiting_time())
+            .apply_min_waiting_block_number(self.apply_min_waiting_block_number())
+            .apply_max_waiting_block_number(self.apply_max_waiting_block_number())
             .account_max_length(self.account_max_length())
             .char_sets(self.char_sets())
             .price_configs(self.price_configs())
-            .proposal_min_confirm_require(self.proposal_min_confirm_require())
+            .proposal_min_confirm_interval(self.proposal_min_confirm_interval())
             .proposal_min_extend_interval(self.proposal_min_extend_interval())
             .proposal_min_recycle_interval(self.proposal_min_recycle_interval())
             .proposal_max_account_affect(self.proposal_max_account_affect())
@@ -1285,14 +1285,14 @@ impl<'r> ::core::fmt::Display for ConfigCellRegisterReader<'r> {
         write!(
             f,
             "{}: {}",
-            "apply_min_waiting_time",
-            self.apply_min_waiting_time()
+            "apply_min_waiting_block_number",
+            self.apply_min_waiting_block_number()
         )?;
         write!(
             f,
             ", {}: {}",
-            "apply_max_waiting_time",
-            self.apply_max_waiting_time()
+            "apply_max_waiting_block_number",
+            self.apply_max_waiting_block_number()
         )?;
         write!(
             f,
@@ -1305,8 +1305,8 @@ impl<'r> ::core::fmt::Display for ConfigCellRegisterReader<'r> {
         write!(
             f,
             ", {}: {}",
-            "proposal_min_confirm_require",
-            self.proposal_min_confirm_require()
+            "proposal_min_confirm_interval",
+            self.proposal_min_confirm_interval()
         )?;
         write!(
             f,
@@ -1358,13 +1358,13 @@ impl<'r> ConfigCellRegisterReader<'r> {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn apply_min_waiting_time(&self) -> Uint32Reader<'r> {
+    pub fn apply_min_waiting_block_number(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn apply_max_waiting_time(&self) -> Uint32Reader<'r> {
+    pub fn apply_max_waiting_block_number(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
@@ -1388,7 +1388,7 @@ impl<'r> ConfigCellRegisterReader<'r> {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         PriceConfigListReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_min_confirm_require(&self) -> Uint8Reader<'r> {
+    pub fn proposal_min_confirm_interval(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
@@ -1494,12 +1494,12 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellRegisterReader<'r> {
 }
 #[derive(Debug, Default)]
 pub struct ConfigCellRegisterBuilder {
-    pub(crate) apply_min_waiting_time: Uint32,
-    pub(crate) apply_max_waiting_time: Uint32,
+    pub(crate) apply_min_waiting_block_number: Uint32,
+    pub(crate) apply_max_waiting_block_number: Uint32,
     pub(crate) account_max_length: Uint32,
     pub(crate) char_sets: CharSetList,
     pub(crate) price_configs: PriceConfigList,
-    pub(crate) proposal_min_confirm_require: Uint8,
+    pub(crate) proposal_min_confirm_interval: Uint8,
     pub(crate) proposal_min_extend_interval: Uint8,
     pub(crate) proposal_min_recycle_interval: Uint8,
     pub(crate) proposal_max_account_affect: Uint32,
@@ -1508,12 +1508,12 @@ pub struct ConfigCellRegisterBuilder {
 }
 impl ConfigCellRegisterBuilder {
     pub const FIELD_COUNT: usize = 11;
-    pub fn apply_min_waiting_time(mut self, v: Uint32) -> Self {
-        self.apply_min_waiting_time = v;
+    pub fn apply_min_waiting_block_number(mut self, v: Uint32) -> Self {
+        self.apply_min_waiting_block_number = v;
         self
     }
-    pub fn apply_max_waiting_time(mut self, v: Uint32) -> Self {
-        self.apply_max_waiting_time = v;
+    pub fn apply_max_waiting_block_number(mut self, v: Uint32) -> Self {
+        self.apply_max_waiting_block_number = v;
         self
     }
     pub fn account_max_length(mut self, v: Uint32) -> Self {
@@ -1528,8 +1528,8 @@ impl ConfigCellRegisterBuilder {
         self.price_configs = v;
         self
     }
-    pub fn proposal_min_confirm_require(mut self, v: Uint8) -> Self {
-        self.proposal_min_confirm_require = v;
+    pub fn proposal_min_confirm_interval(mut self, v: Uint8) -> Self {
+        self.proposal_min_confirm_interval = v;
         self
     }
     pub fn proposal_min_extend_interval(mut self, v: Uint8) -> Self {
@@ -1558,12 +1558,12 @@ impl molecule::prelude::Builder for ConfigCellRegisterBuilder {
     const NAME: &'static str = "ConfigCellRegisterBuilder";
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
-            + self.apply_min_waiting_time.as_slice().len()
-            + self.apply_max_waiting_time.as_slice().len()
+            + self.apply_min_waiting_block_number.as_slice().len()
+            + self.apply_max_waiting_block_number.as_slice().len()
             + self.account_max_length.as_slice().len()
             + self.char_sets.as_slice().len()
             + self.price_configs.as_slice().len()
-            + self.proposal_min_confirm_require.as_slice().len()
+            + self.proposal_min_confirm_interval.as_slice().len()
             + self.proposal_min_extend_interval.as_slice().len()
             + self.proposal_min_recycle_interval.as_slice().len()
             + self.proposal_max_account_affect.as_slice().len()
@@ -1574,9 +1574,9 @@ impl molecule::prelude::Builder for ConfigCellRegisterBuilder {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
         offsets.push(total_size);
-        total_size += self.apply_min_waiting_time.as_slice().len();
+        total_size += self.apply_min_waiting_block_number.as_slice().len();
         offsets.push(total_size);
-        total_size += self.apply_max_waiting_time.as_slice().len();
+        total_size += self.apply_max_waiting_block_number.as_slice().len();
         offsets.push(total_size);
         total_size += self.account_max_length.as_slice().len();
         offsets.push(total_size);
@@ -1584,7 +1584,7 @@ impl molecule::prelude::Builder for ConfigCellRegisterBuilder {
         offsets.push(total_size);
         total_size += self.price_configs.as_slice().len();
         offsets.push(total_size);
-        total_size += self.proposal_min_confirm_require.as_slice().len();
+        total_size += self.proposal_min_confirm_interval.as_slice().len();
         offsets.push(total_size);
         total_size += self.proposal_min_extend_interval.as_slice().len();
         offsets.push(total_size);
@@ -1599,12 +1599,12 @@ impl molecule::prelude::Builder for ConfigCellRegisterBuilder {
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
-        writer.write_all(self.apply_min_waiting_time.as_slice())?;
-        writer.write_all(self.apply_max_waiting_time.as_slice())?;
+        writer.write_all(self.apply_min_waiting_block_number.as_slice())?;
+        writer.write_all(self.apply_max_waiting_block_number.as_slice())?;
         writer.write_all(self.account_max_length.as_slice())?;
         writer.write_all(self.char_sets.as_slice())?;
         writer.write_all(self.price_configs.as_slice())?;
-        writer.write_all(self.proposal_min_confirm_require.as_slice())?;
+        writer.write_all(self.proposal_min_confirm_interval.as_slice())?;
         writer.write_all(self.proposal_min_extend_interval.as_slice())?;
         writer.write_all(self.proposal_min_recycle_interval.as_slice())?;
         writer.write_all(self.proposal_max_account_affect.as_slice())?;

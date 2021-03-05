@@ -31,10 +31,10 @@ table TypeIdTable {
 }
 
 table ConfigCellRegister {
-    // The minimum waiting seconds before apply_register_cell can be converted to pre_account_cell.
-    apply_min_waiting_time: Uint32,
-    // The maximum waiting seconds which apply_register_cell can be converted to pre_account_cell.
-    apply_max_waiting_time: Uint32,
+    // The minimum waiting block number before apply_register_cell can be converted to pre_account_cell.
+    apply_min_waiting_block_number: Uint32,
+    // The maximum waiting block number which apply_register_cell can be converted to pre_account_cell.
+    apply_max_waiting_block_number: Uint32,
     // The length of accounts in bytes.
     account_max_length: Uint32,
     // available char sets for account
@@ -42,7 +42,7 @@ table ConfigCellRegister {
     // Price list of different account length.
     price_configs: PriceConfigList,
     // How many blocks required for every proposal to be confirmed.
-    proposal_min_confirm_require: Uint8,
+    proposal_min_confirm_interval: Uint8,
     // How many blocks to wait before extending the proposal.
     proposal_min_extend_interval: Uint8,
     // How many blocks to wait before recycle the proposal.
