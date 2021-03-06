@@ -108,6 +108,7 @@ table MarketConfig {
 table ProposalCellData {
     proposer_lock: Script,
     proposer_wallet: Bytes,
+    created_at_height: Uint64,
     slices: SliceList,
 }
 
