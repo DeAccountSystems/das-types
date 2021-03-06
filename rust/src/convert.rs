@@ -149,6 +149,18 @@ impl From<Hash> for Vec<u8> {
     }
 }
 
+impl From<ckb_packed::Script> for Script {
+    fn from(v: ckb_packed::Script) -> Self {
+        Script::new_unchecked(v.as_bytes().into())
+    }
+}
+
+impl Into<ckb_packed::Script> for Script {
+    fn into(self) -> ckb_packed::Script {
+        ckb_packed::Script::new_unchecked(self.as_bytes().into())
+    }
+}
+
 /// Convert &[u8] to schemas::basic::Hash
 ///
 /// The difference with from_slice is that it does not require a dynvec header.
