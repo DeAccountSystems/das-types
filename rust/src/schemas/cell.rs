@@ -4142,6 +4142,7 @@ impl ::core::fmt::Display for ProposalCellData {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "proposer_lock", self.proposer_lock())?;
         write!(f, ", {}: {}", "proposer_wallet", self.proposer_wallet())?;
+        write!(f, ", {}: {}", "created_at_height", self.created_at_height())?;
         write!(f, ", {}: {}", "slices", self.slices())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -4153,15 +4154,16 @@ impl ::core::fmt::Display for ProposalCellData {
 impl ::core::default::Default for ProposalCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            77, 0, 0, 0, 16, 0, 0, 0, 69, 0, 0, 0, 73, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0,
-            0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
+            89, 0, 0, 0, 20, 0, 0, 0, 73, 0, 0, 0, 77, 0, 0, 0, 85, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0,
+            0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 4, 0, 0, 0,
         ];
         ProposalCellData::new_unchecked(v.into())
     }
 }
 impl ProposalCellData {
-    pub const FIELD_COUNT: usize = 3;
+    pub const FIELD_COUNT: usize = 4;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -4190,11 +4192,17 @@ impl ProposalCellData {
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn slices(&self) -> SliceList {
+    pub fn created_at_height(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
+        let end = molecule::unpack_number(&slice[16..]) as usize;
+        Uint64::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn slices(&self) -> SliceList {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[16..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[16..]) as usize;
+            let end = molecule::unpack_number(&slice[20..]) as usize;
             SliceList::new_unchecked(self.0.slice(start..end))
         } else {
             SliceList::new_unchecked(self.0.slice(start..))
@@ -4229,6 +4237,7 @@ impl molecule::prelude::Entity for ProposalCellData {
         Self::new_builder()
             .proposer_lock(self.proposer_lock())
             .proposer_wallet(self.proposer_wallet())
+            .created_at_height(self.created_at_height())
             .slices(self.slices())
     }
 }
@@ -4253,6 +4262,7 @@ impl<'r> ::core::fmt::Display for ProposalCellDataReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "proposer_lock", self.proposer_lock())?;
         write!(f, ", {}: {}", "proposer_wallet", self.proposer_wallet())?;
+        write!(f, ", {}: {}", "created_at_height", self.created_at_height())?;
         write!(f, ", {}: {}", "slices", self.slices())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -4262,7 +4272,7 @@ impl<'r> ::core::fmt::Display for ProposalCellDataReader<'r> {
     }
 }
 impl<'r> ProposalCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 3;
+    pub const FIELD_COUNT: usize = 4;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -4291,11 +4301,17 @@ impl<'r> ProposalCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[12..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn slices(&self) -> SliceListReader<'r> {
+    pub fn created_at_height(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
+        let end = molecule::unpack_number(&slice[16..]) as usize;
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn slices(&self) -> SliceListReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[16..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[16..]) as usize;
+            let end = molecule::unpack_number(&slice[20..]) as usize;
             SliceListReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             SliceListReader::new_unchecked(&self.as_slice()[start..])
@@ -4353,7 +4369,8 @@ impl<'r> molecule::prelude::Reader<'r> for ProposalCellDataReader<'r> {
         }
         ScriptReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         BytesReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
-        SliceListReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        SliceListReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
         Ok(())
     }
 }
@@ -4361,16 +4378,21 @@ impl<'r> molecule::prelude::Reader<'r> for ProposalCellDataReader<'r> {
 pub struct ProposalCellDataBuilder {
     pub(crate) proposer_lock: Script,
     pub(crate) proposer_wallet: Bytes,
+    pub(crate) created_at_height: Uint64,
     pub(crate) slices: SliceList,
 }
 impl ProposalCellDataBuilder {
-    pub const FIELD_COUNT: usize = 3;
+    pub const FIELD_COUNT: usize = 4;
     pub fn proposer_lock(mut self, v: Script) -> Self {
         self.proposer_lock = v;
         self
     }
     pub fn proposer_wallet(mut self, v: Bytes) -> Self {
         self.proposer_wallet = v;
+        self
+    }
+    pub fn created_at_height(mut self, v: Uint64) -> Self {
+        self.created_at_height = v;
         self
     }
     pub fn slices(mut self, v: SliceList) -> Self {
@@ -4385,6 +4407,7 @@ impl molecule::prelude::Builder for ProposalCellDataBuilder {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.proposer_lock.as_slice().len()
             + self.proposer_wallet.as_slice().len()
+            + self.created_at_height.as_slice().len()
             + self.slices.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
@@ -4395,6 +4418,8 @@ impl molecule::prelude::Builder for ProposalCellDataBuilder {
         offsets.push(total_size);
         total_size += self.proposer_wallet.as_slice().len();
         offsets.push(total_size);
+        total_size += self.created_at_height.as_slice().len();
+        offsets.push(total_size);
         total_size += self.slices.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
@@ -4402,6 +4427,7 @@ impl molecule::prelude::Builder for ProposalCellDataBuilder {
         }
         writer.write_all(self.proposer_lock.as_slice())?;
         writer.write_all(self.proposer_wallet.as_slice())?;
+        writer.write_all(self.created_at_height.as_slice())?;
         writer.write_all(self.slices.as_slice())?;
         Ok(())
     }
