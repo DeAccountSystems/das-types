@@ -2,6 +2,8 @@ use super::constants::{DataType, WITNESS_HEADER};
 use super::schemas::packed::*;
 use molecule::prelude::*;
 
+pub use molecule::hex_string;
+
 pub fn is_entity_eq<T: Entity>(a: &T, b: &T) -> bool {
     a.as_slice() == b.as_slice()
 }
