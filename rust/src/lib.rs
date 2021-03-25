@@ -9,5 +9,5 @@ pub mod util;
 
 mod schemas;
 
-pub use molecule::prelude;
+pub use molecule::{error::VerificationError, prelude};
 pub use schemas::packed;
