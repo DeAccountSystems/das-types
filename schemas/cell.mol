@@ -92,6 +92,7 @@ table ProfitConfig {
 }
 
 table DiscountConfig {
+    // The discount rate for invited user
     invited_discount: Uint32,
 }
 
@@ -182,6 +183,8 @@ table PreAccountCellData {
     price: PriceConfig,
     // The exchange rate between CKB and USD.
     quote: Uint64,
+    // The discount rate for invited user
+    invited_discount: Uint32,
     created_at: Timestamp,
 }
 

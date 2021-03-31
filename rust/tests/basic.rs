@@ -15,17 +15,6 @@ fn should_support_u8() {
 }
 
 #[test]
-fn should_support_u16() {
-    let num: u16 = u16::MAX;
-    let data = Uint16::from(num);
-    let reader = data.as_reader();
-    // println!("{:?}", data);
-
-    assert_eq!(num, u16::from(reader));
-    assert_eq!(num, u16::from(data));
-}
-
-#[test]
 fn should_support_u32() {
     let num: u32 = u32::MAX;
     let data = Uint32::from(num);

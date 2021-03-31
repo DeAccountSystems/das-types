@@ -7120,6 +7120,7 @@ impl ::core::fmt::Display for PreAccountCellData {
         write!(f, ", {}: {}", "channel_wallet", self.channel_wallet())?;
         write!(f, ", {}: {}", "price", self.price())?;
         write!(f, ", {}: {}", "quote", self.quote())?;
+        write!(f, ", {}: {}", "invited_discount", self.invited_discount())?;
         write!(f, ", {}: {}", "created_at", self.created_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -7131,20 +7132,20 @@ impl ::core::fmt::Display for PreAccountCellData {
 impl ::core::default::Default for PreAccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            203, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 93, 0, 0, 0, 146, 0, 0, 0, 150, 0, 0, 0, 154,
-            0, 0, 0, 187, 0, 0, 0, 195, 0, 0, 0, 4, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0,
-            49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0,
-            25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0,
+            211, 0, 0, 0, 40, 0, 0, 0, 44, 0, 0, 0, 97, 0, 0, 0, 150, 0, 0, 0, 154, 0, 0, 0, 158,
+            0, 0, 0, 191, 0, 0, 0, 199, 0, 0, 0, 203, 0, 0, 0, 4, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0,
+            0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0,
+            0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0, 16, 0,
+            0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         PreAccountCellData::new_unchecked(v.into())
     }
 }
 impl PreAccountCellData {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 9;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -7203,11 +7204,17 @@ impl PreAccountCellData {
         let end = molecule::unpack_number(&slice[32..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn created_at(&self) -> Timestamp {
+    pub fn invited_discount(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
+        let end = molecule::unpack_number(&slice[36..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn created_at(&self) -> Timestamp {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[36..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[36..]) as usize;
+            let end = molecule::unpack_number(&slice[40..]) as usize;
             Timestamp::new_unchecked(self.0.slice(start..end))
         } else {
             Timestamp::new_unchecked(self.0.slice(start..))
@@ -7247,6 +7254,7 @@ impl molecule::prelude::Entity for PreAccountCellData {
             .channel_wallet(self.channel_wallet())
             .price(self.price())
             .quote(self.quote())
+            .invited_discount(self.invited_discount())
             .created_at(self.created_at())
     }
 }
@@ -7276,6 +7284,7 @@ impl<'r> ::core::fmt::Display for PreAccountCellDataReader<'r> {
         write!(f, ", {}: {}", "channel_wallet", self.channel_wallet())?;
         write!(f, ", {}: {}", "price", self.price())?;
         write!(f, ", {}: {}", "quote", self.quote())?;
+        write!(f, ", {}: {}", "invited_discount", self.invited_discount())?;
         write!(f, ", {}: {}", "created_at", self.created_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
@@ -7285,7 +7294,7 @@ impl<'r> ::core::fmt::Display for PreAccountCellDataReader<'r> {
     }
 }
 impl<'r> PreAccountCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 9;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -7344,11 +7353,17 @@ impl<'r> PreAccountCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[32..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn created_at(&self) -> TimestampReader<'r> {
+    pub fn invited_discount(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
+        let end = molecule::unpack_number(&slice[36..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn created_at(&self) -> TimestampReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[36..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[36..]) as usize;
+            let end = molecule::unpack_number(&slice[40..]) as usize;
             TimestampReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             TimestampReader::new_unchecked(&self.as_slice()[start..])
@@ -7411,7 +7426,8 @@ impl<'r> molecule::prelude::Reader<'r> for PreAccountCellDataReader<'r> {
         BytesReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         PriceConfigReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Uint64Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
-        TimestampReader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
+        TimestampReader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
         Ok(())
     }
 }
@@ -7424,10 +7440,11 @@ pub struct PreAccountCellDataBuilder {
     pub(crate) channel_wallet: Bytes,
     pub(crate) price: PriceConfig,
     pub(crate) quote: Uint64,
+    pub(crate) invited_discount: Uint32,
     pub(crate) created_at: Timestamp,
 }
 impl PreAccountCellDataBuilder {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 9;
     pub fn account(mut self, v: AccountChars) -> Self {
         self.account = v;
         self
@@ -7456,6 +7473,10 @@ impl PreAccountCellDataBuilder {
         self.quote = v;
         self
     }
+    pub fn invited_discount(mut self, v: Uint32) -> Self {
+        self.invited_discount = v;
+        self
+    }
     pub fn created_at(mut self, v: Timestamp) -> Self {
         self.created_at = v;
         self
@@ -7473,6 +7494,7 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
             + self.channel_wallet.as_slice().len()
             + self.price.as_slice().len()
             + self.quote.as_slice().len()
+            + self.invited_discount.as_slice().len()
             + self.created_at.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
@@ -7493,6 +7515,8 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
         offsets.push(total_size);
         total_size += self.quote.as_slice().len();
         offsets.push(total_size);
+        total_size += self.invited_discount.as_slice().len();
+        offsets.push(total_size);
         total_size += self.created_at.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
@@ -7505,6 +7529,7 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
         writer.write_all(self.channel_wallet.as_slice())?;
         writer.write_all(self.price.as_slice())?;
         writer.write_all(self.quote.as_slice())?;
+        writer.write_all(self.invited_discount.as_slice())?;
         writer.write_all(self.created_at.as_slice())?;
         Ok(())
     }
