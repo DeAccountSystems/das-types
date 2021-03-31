@@ -171,7 +171,6 @@ pub fn virtualize_data(data_type: &str, raw: &[u8]) -> Result<(), Box<dyn Error>
 
     match data_type {
         "Uint8" => data = Box::new(u8::from(Uint8::from_slice(raw).map_err(error_to_string)?)),
-        "Uint16" => data = Box::new(u16::from(Uint16::from_slice(raw).map_err(error_to_string)?)),
         "Uint32" => data = Box::new(u32::from(Uint32::from_slice(raw).map_err(error_to_string)?)),
         "Uint64" => data = Box::new(u64::from(Uint64::from_slice(raw).map_err(error_to_string)?)),
         "Script" => data = Box::new(Script::from_slice(raw).map_err(error_to_string)?),

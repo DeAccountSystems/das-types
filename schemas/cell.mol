@@ -53,6 +53,8 @@ table ConfigCellRegister {
     proposal_max_pre_account_contain: Uint32,
     // profit configurations
     profit: ProfitConfig,
+    // discount configurations
+    discount: DiscountConfig,
 }
 
 vector PriceConfigList <PriceConfig>;
@@ -83,6 +85,14 @@ table ProfitConfig {
     profit_rate_of_channel: Uint32,
     // The profit rate of DAS itself.
     profit_rate_of_das: Uint32,
+    // The profit rate for who created proposal
+    profit_rate_of_proposal_create: Uint32,
+    // The profit rate for who confirmed proposal
+    profit_rate_of_proposal_confirm: Uint32,
+}
+
+table DiscountConfig {
+    invited_discount: Uint32,
 }
 
 table ConfigCellMarket {

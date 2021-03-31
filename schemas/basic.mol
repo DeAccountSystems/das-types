@@ -1,5 +1,4 @@
 array Uint8   [byte; 1];
-array Uint16  [byte; 2];
 array Uint32  [byte; 4];
 array Uint64  [byte; 8];
 
