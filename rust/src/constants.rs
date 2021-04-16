@@ -12,8 +12,9 @@ pub enum DataType {
     PreAccountCellData,
     ConfigCellMain = 7,
     ConfigCellRegister,
-    ConfigCellBloomFilter,
+    ConfigCellRecord,
     ConfigCellMarket,
+    ConfigCellBloomFilter,
 }
 
 impl TryFrom<u32> for DataType {
@@ -29,8 +30,9 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::PreAccountCellData as u32 => Ok(DataType::PreAccountCellData),
             x if x == DataType::ConfigCellMain as u32 => Ok(DataType::ConfigCellMain),
             x if x == DataType::ConfigCellRegister as u32 => Ok(DataType::ConfigCellRegister),
-            x if x == DataType::ConfigCellBloomFilter as u32 => Ok(DataType::ConfigCellBloomFilter),
+            x if x == DataType::ConfigCellRecord as u32 => Ok(DataType::ConfigCellRecord),
             x if x == DataType::ConfigCellMarket as u32 => Ok(DataType::ConfigCellMarket),
+            x if x == DataType::ConfigCellBloomFilter as u32 => Ok(DataType::ConfigCellBloomFilter),
             _ => Err(()),
         }
     }
@@ -41,8 +43,9 @@ impl TryFrom<u32> for DataType {
 pub enum ConfigID {
     ConfigCellMain,
     ConfigCellRegister,
-    ConfigCellBloomFilter,
+    ConfigCellRecord,
     ConfigCellMarket,
+    ConfigCellBloomFilter = 10,
 }
 
 impl TryFrom<u32> for ConfigID {
@@ -52,8 +55,9 @@ impl TryFrom<u32> for ConfigID {
         match v {
             x if x == ConfigID::ConfigCellMain as u32 => Ok(ConfigID::ConfigCellMain),
             x if x == ConfigID::ConfigCellRegister as u32 => Ok(ConfigID::ConfigCellRegister),
-            x if x == ConfigID::ConfigCellBloomFilter as u32 => Ok(ConfigID::ConfigCellBloomFilter),
+            x if x == ConfigID::ConfigCellRecord as u32 => Ok(ConfigID::ConfigCellRecord),
             x if x == ConfigID::ConfigCellMarket as u32 => Ok(ConfigID::ConfigCellMarket),
+            x if x == ConfigID::ConfigCellBloomFilter as u32 => Ok(ConfigID::ConfigCellBloomFilter),
             _ => Err(()),
         }
     }

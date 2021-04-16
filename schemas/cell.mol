@@ -96,6 +96,19 @@ table DiscountConfig {
     invited_discount: Uint32,
 }
 
+table ConfigCellRecord {
+    record_types: RecordTypes,
+}
+
+table RecordType {
+    type_name: Bytes,
+    keys: RecordKeys,
+}
+
+vector RecordTypes <RecordType>;
+
+vector RecordKeys <Bytes>;
+
 table ConfigCellMarket {
     // primary market configurations
     primary_market: MarketConfig,
@@ -118,7 +131,6 @@ table MarketConfig {
 
 table ProposalCellData {
     proposer_lock: Script,
-    proposer_wallet: Bytes,
     created_at_height: Uint64,
     slices: SliceList,
 }
