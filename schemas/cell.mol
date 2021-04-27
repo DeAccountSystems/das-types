@@ -153,10 +153,6 @@ table ProposalItem {
 table AccountCellData {
     // The first 160 bits of the hash of account.
     id: AccountId,
-    // The lock script of owner.
-    owner_lock: Script,
-    // The lock script of manager.
-    manager_lock: Script,
     // Separate chars of account.
     account: AccountChars,
     // AccountCell register timestamp.
@@ -186,7 +182,7 @@ table PreAccountCellData {
     // If the PreAccountCell cannot be registered, this field specifies to whom the refund should be given.
     refund_lock: Script,
     // If the PreAccountCell is registered successfully, this field specifies to whom the account should be given.
-    owner_lock: Script,
+    owner_lock_args: Bytes,
     // The wallet ID of inviter,
     inviter_wallet: Bytes,
     // The wallet ID of channel,

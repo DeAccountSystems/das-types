@@ -59,6 +59,13 @@ impl From<Vec<u8>> for Bytes {
     }
 }
 
+/// Convert bytes::Bytes to schemas::basic::Bytes
+impl From<bytes::Bytes> for Bytes {
+    fn from(v: bytes::Bytes) -> Self {
+        Bytes::from(v.as_ref())
+    }
+}
+
 impl From<ckb_packed::Bytes> for Bytes {
     fn from(v: ckb_packed::Bytes) -> Self {
         Bytes::new_unchecked(v.as_bytes().into())

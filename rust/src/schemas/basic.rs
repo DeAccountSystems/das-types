@@ -19,12 +19,14 @@ impl ::core::fmt::Debug for Uint8 {
 }
 impl ::core::fmt::Display for Uint8 {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        use core::convert::TryInto;
         use alloc::string::ToString;
+        use core::convert::TryInto;
+        use molecule::hex_string;
         let bytes = self.raw_data();
         let raw_data = hex_string(&bytes);
-        let number = bytes.as_ref().try_into()
+        let number = bytes
+            .as_ref()
+            .try_into()
             .map(|item| u8::from_le_bytes(item).to_string())
             .unwrap_or("decode_error".to_string());
         write!(f, "{}(0x{}, {})", Self::NAME, raw_data, number)
@@ -93,12 +95,13 @@ impl<'r> ::core::fmt::Debug for Uint8Reader<'r> {
 }
 impl<'r> ::core::fmt::Display for Uint8Reader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        use core::convert::TryInto;
         use alloc::string::ToString;
+        use core::convert::TryInto;
+        use molecule::hex_string;
         let bytes = self.raw_data();
         let raw_data = hex_string(bytes);
-        let number = bytes.try_into()
+        let number = bytes
+            .try_into()
             .map(|item| u8::from_le_bytes(item).to_string())
             .unwrap_or("decode_error".to_string());
         write!(f, "{}(0x{}, {})", Self::NAME, raw_data, number)
@@ -195,12 +198,14 @@ impl ::core::fmt::Debug for Uint32 {
 }
 impl ::core::fmt::Display for Uint32 {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        use core::convert::TryInto;
         use alloc::string::ToString;
+        use core::convert::TryInto;
+        use molecule::hex_string;
         let bytes = self.raw_data();
         let raw_data = hex_string(&bytes);
-        let number = bytes.as_ref().try_into()
+        let number = bytes
+            .as_ref()
+            .try_into()
             .map(|item| u32::from_le_bytes(item).to_string())
             .unwrap_or("decode_error".to_string());
         write!(f, "{}(0x{}, {})", Self::NAME, raw_data, number)
@@ -278,12 +283,13 @@ impl<'r> ::core::fmt::Debug for Uint32Reader<'r> {
 }
 impl<'r> ::core::fmt::Display for Uint32Reader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        use core::convert::TryInto;
         use alloc::string::ToString;
+        use core::convert::TryInto;
+        use molecule::hex_string;
         let bytes = self.raw_data();
         let raw_data = hex_string(bytes);
-        let number = bytes.try_into()
+        let number = bytes
+            .try_into()
             .map(|item| u32::from_le_bytes(item).to_string())
             .unwrap_or("decode_error".to_string());
         write!(f, "{}(0x{}, {})", Self::NAME, raw_data, number)
@@ -409,12 +415,14 @@ impl ::core::fmt::Debug for Uint64 {
 }
 impl ::core::fmt::Display for Uint64 {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        use core::convert::TryInto;
         use alloc::string::ToString;
+        use core::convert::TryInto;
+        use molecule::hex_string;
         let bytes = self.raw_data();
         let raw_data = hex_string(&bytes);
-        let number = bytes.as_ref().try_into()
+        let number = bytes
+            .as_ref()
+            .try_into()
             .map(|item| u64::from_le_bytes(item).to_string())
             .unwrap_or("decode_error".to_string());
         write!(f, "{}(0x{}, {})", Self::NAME, raw_data, number)
@@ -513,12 +521,13 @@ impl<'r> ::core::fmt::Debug for Uint64Reader<'r> {
 }
 impl<'r> ::core::fmt::Display for Uint64Reader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        use core::convert::TryInto;
         use alloc::string::ToString;
+        use core::convert::TryInto;
+        use molecule::hex_string;
         let bytes = self.raw_data();
         let raw_data = hex_string(bytes);
-        let number = bytes.try_into()
+        let number = bytes
+            .try_into()
             .map(|item| u64::from_le_bytes(item).to_string())
             .unwrap_or("decode_error".to_string());
         write!(f, "{}(0x{}, {})", Self::NAME, raw_data, number)
@@ -917,12 +926,14 @@ impl ::core::fmt::Debug for Timestamp {
 }
 impl ::core::fmt::Display for Timestamp {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        use core::convert::TryInto;
         use alloc::string::ToString;
+        use core::convert::TryInto;
+        use molecule::hex_string;
         let bytes = self.raw_data();
         let raw_data = hex_string(&bytes);
-        let number = bytes.as_ref().try_into()
+        let number = bytes
+            .as_ref()
+            .try_into()
             .map(|item| u64::from_le_bytes(item).to_string())
             .unwrap_or("decode_error".to_string());
         write!(f, "{}(0x{}, {})", Self::NAME, raw_data, number)
@@ -1021,12 +1032,13 @@ impl<'r> ::core::fmt::Debug for TimestampReader<'r> {
 }
 impl<'r> ::core::fmt::Display for TimestampReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use molecule::hex_string;
-        use core::convert::TryInto;
         use alloc::string::ToString;
+        use core::convert::TryInto;
+        use molecule::hex_string;
         let bytes = self.raw_data();
         let raw_data = hex_string(bytes);
-        let number = bytes.try_into()
+        let number = bytes
+            .try_into()
             .map(|item| u64::from_le_bytes(item).to_string())
             .unwrap_or("decode_error".to_string());
         write!(f, "{}(0x{}, {})", Self::NAME, raw_data, number)
