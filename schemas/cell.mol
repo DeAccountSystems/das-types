@@ -22,7 +22,6 @@ table TypeIdTable {
     apply_register_cell: Hash,
     pre_account_cell: Hash,
     proposal_cell: Hash,
-    ref_cell: Hash,
     account_cell: Hash,
     on_sale_cell: Hash,
     bidding_cell: Hash,
