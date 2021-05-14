@@ -3,18 +3,30 @@ use core::convert::TryFrom;
 #[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u32)]
 pub enum DataType {
-    ActionData,
-    ConfigCellData, // Deprecated
+    ActionData = 0,
     AccountCellData,
     OnSaleCellData,
     BiddingCellData,
     ProposalCellData,
     PreAccountCellData,
-    ConfigCellMain = 7,
-    ConfigCellRegister,
-    ConfigCellRecord,
-    ConfigCellMarket,
-    ConfigCellBloomFilter,
+    IncomeCellData,
+    ConfigCellAccount = 100,
+    ConfigCellApply,
+    ConfigCellCharSet,
+    ConfigCellIncome,
+    ConfigCellMain,
+    ConfigCellPrice,
+    ConfigCellProposal,
+    ConfigCellProfitRate,
+    ConfigCellRecordKeyNamespace,
+    ConfigCellPreservedAccount00 = 150,
+    // ConfigCellPreservedAccount01,
+    // ConfigCellPreservedAccount02,
+    // ConfigCellPreservedAccount03,
+    // ConfigCellPreservedAccount04,
+    // ConfigCellPreservedAccount05,
+    // ConfigCellPreservedAccount06,
+    // ConfigCellPreservedAccount07,
 }
 
 impl TryFrom<u32> for DataType {
@@ -28,36 +40,21 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::BiddingCellData as u32 => Ok(DataType::BiddingCellData),
             x if x == DataType::ProposalCellData as u32 => Ok(DataType::ProposalCellData),
             x if x == DataType::PreAccountCellData as u32 => Ok(DataType::PreAccountCellData),
+            x if x == DataType::IncomeCellData as u32 => Ok(DataType::IncomeCellData),
+            x if x == DataType::ConfigCellAccount as u32 => Ok(DataType::ConfigCellAccount),
+            x if x == DataType::ConfigCellApply as u32 => Ok(DataType::ConfigCellApply),
+            x if x == DataType::ConfigCellCharSet as u32 => Ok(DataType::ConfigCellCharSet),
+            x if x == DataType::ConfigCellIncome as u32 => Ok(DataType::ConfigCellIncome),
             x if x == DataType::ConfigCellMain as u32 => Ok(DataType::ConfigCellMain),
-            x if x == DataType::ConfigCellRegister as u32 => Ok(DataType::ConfigCellRegister),
-            x if x == DataType::ConfigCellRecord as u32 => Ok(DataType::ConfigCellRecord),
-            x if x == DataType::ConfigCellMarket as u32 => Ok(DataType::ConfigCellMarket),
-            x if x == DataType::ConfigCellBloomFilter as u32 => Ok(DataType::ConfigCellBloomFilter),
-            _ => Err(()),
-        }
-    }
-}
-
-#[derive(Debug, PartialEq, Copy, Clone)]
-#[repr(u32)]
-pub enum ConfigID {
-    ConfigCellMain,
-    ConfigCellRegister,
-    ConfigCellRecord,
-    ConfigCellMarket,
-    ConfigCellBloomFilter = 10,
-}
-
-impl TryFrom<u32> for ConfigID {
-    type Error = ();
-
-    fn try_from(v: u32) -> Result<Self, Self::Error> {
-        match v {
-            x if x == ConfigID::ConfigCellMain as u32 => Ok(ConfigID::ConfigCellMain),
-            x if x == ConfigID::ConfigCellRegister as u32 => Ok(ConfigID::ConfigCellRegister),
-            x if x == ConfigID::ConfigCellRecord as u32 => Ok(ConfigID::ConfigCellRecord),
-            x if x == ConfigID::ConfigCellMarket as u32 => Ok(ConfigID::ConfigCellMarket),
-            x if x == ConfigID::ConfigCellBloomFilter as u32 => Ok(ConfigID::ConfigCellBloomFilter),
+            x if x == DataType::ConfigCellPrice as u32 => Ok(DataType::ConfigCellPrice),
+            x if x == DataType::ConfigCellProposal as u32 => Ok(DataType::ConfigCellProposal),
+            x if x == DataType::ConfigCellProfitRate as u32 => Ok(DataType::ConfigCellProfitRate),
+            x if x == DataType::ConfigCellRecordKeyNamespace as u32 => {
+                Ok(DataType::ConfigCellRecordKeyNamespace)
+            }
+            x if x == DataType::ConfigCellPreservedAccount00 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount00)
+            }
             _ => Err(()),
         }
     }

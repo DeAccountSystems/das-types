@@ -123,7 +123,7 @@ fn test_wrap_raw_witness() {
     let raw_bytes = vec![1, 0, 0, 0, 0, 0, 0, 1];
     // println!("raw_bytes = {:?}", raw_bytes);
 
-    let witness = util::wrap_raw_witness(DataType::ConfigCellBloomFilter, raw_bytes.clone());
+    let witness = util::wrap_raw_witness(DataType::ConfigCellRecordKeyNamespace, raw_bytes.clone());
     // println!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
@@ -136,8 +136,8 @@ fn test_wrap_raw_witness() {
     let data_type = u32::from_le_bytes(raw.try_into().unwrap());
     assert_eq!(
         data_type,
-        DataType::ConfigCellBloomFilter as u32,
-        "The wrapped bytes should be DataType::ConfigCellBloomFilter ."
+        DataType::ConfigCellRecordKeyNamespace as u32,
+        "The wrapped bytes should be DataType::ConfigCellRecordKeyNamespace ."
     );
 
     let raw = witness.as_slice().get(11..).unwrap();

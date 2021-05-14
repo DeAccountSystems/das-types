@@ -87,9 +87,14 @@ pub fn hex_to_bytes(input: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn Error>> {
     match data_type {
         DataType::ActionData
+        | DataType::ConfigCellApply
+        | DataType::ConfigCellAccount
+        | DataType::ConfigCellCharSet
+        | DataType::ConfigCellIncome
         | DataType::ConfigCellMain
-        | DataType::ConfigCellRegister
-        | DataType::ConfigCellMarket => {
+        | DataType::ConfigCellPrice
+        | DataType::ConfigCellProposal
+        | DataType::ConfigCellProfitRate => {
             println!("{}", virtualize_entity(data_type, raw)?);
         }
         _ => {
@@ -151,14 +156,29 @@ pub fn virtualize_entity(
         DataType::PreAccountCellData => {
             entity = Box::new(PreAccountCellData::from_slice(raw).map_err(error_to_string)?);
         }
+        DataType::ConfigCellAccount => {
+            entity = Box::new(ConfigCellApply::from_slice(raw).map_err(error_to_string)?);
+        }
+        DataType::ConfigCellApply => {
+            entity = Box::new(ConfigCellApply::from_slice(raw).map_err(error_to_string)?);
+        }
+        DataType::ConfigCellCharSet => {
+            entity = Box::new(ConfigCellApply::from_slice(raw).map_err(error_to_string)?);
+        }
+        DataType::ConfigCellIncome => {
+            entity = Box::new(ConfigCellIncome::from_slice(raw).map_err(error_to_string)?);
+        }
         DataType::ConfigCellMain => {
             entity = Box::new(ConfigCellMain::from_slice(raw).map_err(error_to_string)?);
         }
-        DataType::ConfigCellRegister => {
-            entity = Box::new(ConfigCellRegister::from_slice(raw).map_err(error_to_string)?);
+        DataType::ConfigCellProposal => {
+            entity = Box::new(ConfigCellProposal::from_slice(raw).map_err(error_to_string)?);
         }
-        DataType::ConfigCellMarket => {
-            entity = Box::new(ConfigCellMarket::from_slice(raw).map_err(error_to_string)?);
+        DataType::ConfigCellProfitRate => {
+            entity = Box::new(ConfigCellProfitRate::from_slice(raw).map_err(error_to_string)?);
+        }
+        DataType::ConfigCellPrice => {
+            entity = Box::new(ConfigCellPrice::from_slice(raw).map_err(error_to_string)?);
         }
         _ => return Err(format!("unsupported DataType {:?}", data_type).into()),
     }
