@@ -285,7 +285,8 @@ impl ::core::fmt::Debug for ConfigCellMain {
 impl ::core::fmt::Display for ConfigCellMain {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "type_id_table", self.type_id_table())?;
+        write!(f, "{}: {}", "status", self.status())?;
+        write!(f, ", {}: {}", "type_id_table", self.type_id_table())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -296,8 +297,8 @@ impl ::core::fmt::Display for ConfigCellMain {
 impl ::core::default::Default for ConfigCellMain {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            44, 1, 0, 0, 8, 0, 0, 0, 36, 1, 0, 0, 36, 0, 0, 0, 68, 0, 0, 0, 100, 0, 0, 0, 132, 0,
-            0, 0, 164, 0, 0, 0, 196, 0, 0, 0, 228, 0, 0, 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            13, 1, 0, 0, 12, 0, 0, 0, 13, 0, 0, 0, 0, 0, 1, 0, 0, 32, 0, 0, 0, 64, 0, 0, 0, 96, 0,
+            0, 0, 128, 0, 0, 0, 160, 0, 0, 0, 192, 0, 0, 0, 224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -305,14 +306,13 @@ impl ::core::default::Default for ConfigCellMain {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellMain::new_unchecked(v.into())
     }
 }
 impl ConfigCellMain {
-    pub const FIELD_COUNT: usize = 1;
+    pub const FIELD_COUNT: usize = 2;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -329,11 +329,17 @@ impl ConfigCellMain {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn type_id_table(&self) -> TypeIdTable {
+    pub fn status(&self) -> Uint8 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint8::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn type_id_table(&self) -> TypeIdTable {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[8..]) as usize;
+            let end = molecule::unpack_number(&slice[12..]) as usize;
             TypeIdTable::new_unchecked(self.0.slice(start..end))
         } else {
             TypeIdTable::new_unchecked(self.0.slice(start..))
@@ -365,7 +371,9 @@ impl molecule::prelude::Entity for ConfigCellMain {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder().type_id_table(self.type_id_table())
+        Self::new_builder()
+            .status(self.status())
+            .type_id_table(self.type_id_table())
     }
 }
 #[derive(Clone, Copy)]
@@ -387,7 +395,8 @@ impl<'r> ::core::fmt::Debug for ConfigCellMainReader<'r> {
 impl<'r> ::core::fmt::Display for ConfigCellMainReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "type_id_table", self.type_id_table())?;
+        write!(f, "{}: {}", "status", self.status())?;
+        write!(f, ", {}: {}", "type_id_table", self.type_id_table())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -396,7 +405,7 @@ impl<'r> ::core::fmt::Display for ConfigCellMainReader<'r> {
     }
 }
 impl<'r> ConfigCellMainReader<'r> {
-    pub const FIELD_COUNT: usize = 1;
+    pub const FIELD_COUNT: usize = 2;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -413,11 +422,17 @@ impl<'r> ConfigCellMainReader<'r> {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn type_id_table(&self) -> TypeIdTableReader<'r> {
+    pub fn status(&self) -> Uint8Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint8Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn type_id_table(&self) -> TypeIdTableReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[8..]) as usize;
+            let end = molecule::unpack_number(&slice[12..]) as usize;
             TypeIdTableReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             TypeIdTableReader::new_unchecked(&self.as_slice()[start..])
@@ -473,16 +488,22 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellMainReader<'r> {
         if offsets.windows(2).any(|i| i[0] > i[1]) {
             return ve!(Self, OffsetsNotMatch);
         }
-        TypeIdTableReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        Uint8Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        TypeIdTableReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct ConfigCellMainBuilder {
+    pub(crate) status: Uint8,
     pub(crate) type_id_table: TypeIdTable,
 }
 impl ConfigCellMainBuilder {
-    pub const FIELD_COUNT: usize = 1;
+    pub const FIELD_COUNT: usize = 2;
+    pub fn status(mut self, v: Uint8) -> Self {
+        self.status = v;
+        self
+    }
     pub fn type_id_table(mut self, v: TypeIdTable) -> Self {
         self.type_id_table = v;
         self
@@ -492,17 +513,22 @@ impl molecule::prelude::Builder for ConfigCellMainBuilder {
     type Entity = ConfigCellMain;
     const NAME: &'static str = "ConfigCellMainBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1) + self.type_id_table.as_slice().len()
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
+            + self.status.as_slice().len()
+            + self.type_id_table.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
+        offsets.push(total_size);
+        total_size += self.status.as_slice().len();
         offsets.push(total_size);
         total_size += self.type_id_table.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
+        writer.write_all(self.status.as_slice())?;
         writer.write_all(self.type_id_table.as_slice())?;
         Ok(())
     }
@@ -532,24 +558,18 @@ impl ::core::fmt::Debug for TypeIdTable {
 impl ::core::fmt::Display for TypeIdTable {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(
-            f,
-            "{}: {}",
-            "apply_register_cell",
-            self.apply_register_cell()
-        )?;
-        write!(f, ", {}: {}", "pre_account_cell", self.pre_account_cell())?;
-        write!(f, ", {}: {}", "proposal_cell", self.proposal_cell())?;
-        write!(f, ", {}: {}", "account_cell", self.account_cell())?;
-        write!(f, ", {}: {}", "on_sale_cell", self.on_sale_cell())?;
-        write!(f, ", {}: {}", "bidding_cell", self.bidding_cell())?;
+        write!(f, "{}: {}", "account_cell", self.account_cell())?;
         write!(
             f,
             ", {}: {}",
-            "primary_market_cell",
-            self.primary_market_cell()
+            "apply_register_cell",
+            self.apply_register_cell()
         )?;
-        write!(f, ", {}: {}", "wallet_cell", self.wallet_cell())?;
+        write!(f, ", {}: {}", "bidding_cell", self.bidding_cell())?;
+        write!(f, ", {}: {}", "income_cell", self.income_cell())?;
+        write!(f, ", {}: {}", "on_sale_cell", self.on_sale_cell())?;
+        write!(f, ", {}: {}", "pre_account_cell", self.pre_account_cell())?;
+        write!(f, ", {}: {}", "proposal_cell", self.proposal_cell())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -560,23 +580,21 @@ impl ::core::fmt::Display for TypeIdTable {
 impl ::core::default::Default for TypeIdTable {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            36, 1, 0, 0, 36, 0, 0, 0, 68, 0, 0, 0, 100, 0, 0, 0, 132, 0, 0, 0, 164, 0, 0, 0, 196,
-            0, 0, 0, 228, 0, 0, 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 1, 0, 0, 32, 0, 0, 0, 64, 0, 0, 0, 96, 0, 0, 0, 128, 0, 0, 0, 160, 0, 0, 0, 192, 0,
+            0, 0, 224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         TypeIdTable::new_unchecked(v.into())
     }
 }
 impl TypeIdTable {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 7;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -593,25 +611,25 @@ impl TypeIdTable {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn apply_register_cell(&self) -> Hash {
+    pub fn account_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
         Hash::new_unchecked(self.0.slice(start..end))
     }
-    pub fn pre_account_cell(&self) -> Hash {
+    pub fn apply_register_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Hash::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_cell(&self) -> Hash {
+    pub fn bidding_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Hash::new_unchecked(self.0.slice(start..end))
     }
-    pub fn account_cell(&self) -> Hash {
+    pub fn income_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
@@ -623,23 +641,17 @@ impl TypeIdTable {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         Hash::new_unchecked(self.0.slice(start..end))
     }
-    pub fn bidding_cell(&self) -> Hash {
+    pub fn pre_account_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Hash::new_unchecked(self.0.slice(start..end))
     }
-    pub fn primary_market_cell(&self) -> Hash {
+    pub fn proposal_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
-        let end = molecule::unpack_number(&slice[32..]) as usize;
-        Hash::new_unchecked(self.0.slice(start..end))
-    }
-    pub fn wallet_cell(&self) -> Hash {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[32..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[36..]) as usize;
+            let end = molecule::unpack_number(&slice[32..]) as usize;
             Hash::new_unchecked(self.0.slice(start..end))
         } else {
             Hash::new_unchecked(self.0.slice(start..))
@@ -672,14 +684,13 @@ impl molecule::prelude::Entity for TypeIdTable {
     }
     fn as_builder(self) -> Self::Builder {
         Self::new_builder()
+            .account_cell(self.account_cell())
             .apply_register_cell(self.apply_register_cell())
+            .bidding_cell(self.bidding_cell())
+            .income_cell(self.income_cell())
+            .on_sale_cell(self.on_sale_cell())
             .pre_account_cell(self.pre_account_cell())
             .proposal_cell(self.proposal_cell())
-            .account_cell(self.account_cell())
-            .on_sale_cell(self.on_sale_cell())
-            .bidding_cell(self.bidding_cell())
-            .primary_market_cell(self.primary_market_cell())
-            .wallet_cell(self.wallet_cell())
     }
 }
 #[derive(Clone, Copy)]
@@ -701,24 +712,18 @@ impl<'r> ::core::fmt::Debug for TypeIdTableReader<'r> {
 impl<'r> ::core::fmt::Display for TypeIdTableReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(
-            f,
-            "{}: {}",
-            "apply_register_cell",
-            self.apply_register_cell()
-        )?;
-        write!(f, ", {}: {}", "pre_account_cell", self.pre_account_cell())?;
-        write!(f, ", {}: {}", "proposal_cell", self.proposal_cell())?;
-        write!(f, ", {}: {}", "account_cell", self.account_cell())?;
-        write!(f, ", {}: {}", "on_sale_cell", self.on_sale_cell())?;
-        write!(f, ", {}: {}", "bidding_cell", self.bidding_cell())?;
+        write!(f, "{}: {}", "account_cell", self.account_cell())?;
         write!(
             f,
             ", {}: {}",
-            "primary_market_cell",
-            self.primary_market_cell()
+            "apply_register_cell",
+            self.apply_register_cell()
         )?;
-        write!(f, ", {}: {}", "wallet_cell", self.wallet_cell())?;
+        write!(f, ", {}: {}", "bidding_cell", self.bidding_cell())?;
+        write!(f, ", {}: {}", "income_cell", self.income_cell())?;
+        write!(f, ", {}: {}", "on_sale_cell", self.on_sale_cell())?;
+        write!(f, ", {}: {}", "pre_account_cell", self.pre_account_cell())?;
+        write!(f, ", {}: {}", "proposal_cell", self.proposal_cell())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -727,7 +732,7 @@ impl<'r> ::core::fmt::Display for TypeIdTableReader<'r> {
     }
 }
 impl<'r> TypeIdTableReader<'r> {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 7;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -744,25 +749,25 @@ impl<'r> TypeIdTableReader<'r> {
     pub fn has_extra_fields(&self) -> bool {
         Self::FIELD_COUNT != self.field_count()
     }
-    pub fn apply_register_cell(&self) -> HashReader<'r> {
+    pub fn account_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[4..]) as usize;
         let end = molecule::unpack_number(&slice[8..]) as usize;
         HashReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn pre_account_cell(&self) -> HashReader<'r> {
+    pub fn apply_register_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
         HashReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_cell(&self) -> HashReader<'r> {
+    pub fn bidding_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
         HashReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn account_cell(&self) -> HashReader<'r> {
+    pub fn income_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
@@ -774,23 +779,17 @@ impl<'r> TypeIdTableReader<'r> {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         HashReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn bidding_cell(&self) -> HashReader<'r> {
+    pub fn pre_account_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
         HashReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn primary_market_cell(&self) -> HashReader<'r> {
+    pub fn proposal_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
-        let end = molecule::unpack_number(&slice[32..]) as usize;
-        HashReader::new_unchecked(&self.as_slice()[start..end])
-    }
-    pub fn wallet_cell(&self) -> HashReader<'r> {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[32..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[36..]) as usize;
+            let end = molecule::unpack_number(&slice[32..]) as usize;
             HashReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             HashReader::new_unchecked(&self.as_slice()[start..])
@@ -853,25 +852,39 @@ impl<'r> molecule::prelude::Reader<'r> for TypeIdTableReader<'r> {
         HashReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         HashReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         HashReader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
-        HashReader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct TypeIdTableBuilder {
+    pub(crate) account_cell: Hash,
     pub(crate) apply_register_cell: Hash,
+    pub(crate) bidding_cell: Hash,
+    pub(crate) income_cell: Hash,
+    pub(crate) on_sale_cell: Hash,
     pub(crate) pre_account_cell: Hash,
     pub(crate) proposal_cell: Hash,
-    pub(crate) account_cell: Hash,
-    pub(crate) on_sale_cell: Hash,
-    pub(crate) bidding_cell: Hash,
-    pub(crate) primary_market_cell: Hash,
-    pub(crate) wallet_cell: Hash,
 }
 impl TypeIdTableBuilder {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 7;
+    pub fn account_cell(mut self, v: Hash) -> Self {
+        self.account_cell = v;
+        self
+    }
     pub fn apply_register_cell(mut self, v: Hash) -> Self {
         self.apply_register_cell = v;
+        self
+    }
+    pub fn bidding_cell(mut self, v: Hash) -> Self {
+        self.bidding_cell = v;
+        self
+    }
+    pub fn income_cell(mut self, v: Hash) -> Self {
+        self.income_cell = v;
+        self
+    }
+    pub fn on_sale_cell(mut self, v: Hash) -> Self {
+        self.on_sale_cell = v;
         self
     }
     pub fn pre_account_cell(mut self, v: Hash) -> Self {
@@ -882,72 +895,48 @@ impl TypeIdTableBuilder {
         self.proposal_cell = v;
         self
     }
-    pub fn account_cell(mut self, v: Hash) -> Self {
-        self.account_cell = v;
-        self
-    }
-    pub fn on_sale_cell(mut self, v: Hash) -> Self {
-        self.on_sale_cell = v;
-        self
-    }
-    pub fn bidding_cell(mut self, v: Hash) -> Self {
-        self.bidding_cell = v;
-        self
-    }
-    pub fn primary_market_cell(mut self, v: Hash) -> Self {
-        self.primary_market_cell = v;
-        self
-    }
-    pub fn wallet_cell(mut self, v: Hash) -> Self {
-        self.wallet_cell = v;
-        self
-    }
 }
 impl molecule::prelude::Builder for TypeIdTableBuilder {
     type Entity = TypeIdTable;
     const NAME: &'static str = "TypeIdTableBuilder";
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
+            + self.account_cell.as_slice().len()
             + self.apply_register_cell.as_slice().len()
+            + self.bidding_cell.as_slice().len()
+            + self.income_cell.as_slice().len()
+            + self.on_sale_cell.as_slice().len()
             + self.pre_account_cell.as_slice().len()
             + self.proposal_cell.as_slice().len()
-            + self.account_cell.as_slice().len()
-            + self.on_sale_cell.as_slice().len()
-            + self.bidding_cell.as_slice().len()
-            + self.primary_market_cell.as_slice().len()
-            + self.wallet_cell.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
         offsets.push(total_size);
+        total_size += self.account_cell.as_slice().len();
+        offsets.push(total_size);
         total_size += self.apply_register_cell.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.bidding_cell.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.income_cell.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.on_sale_cell.as_slice().len();
         offsets.push(total_size);
         total_size += self.pre_account_cell.as_slice().len();
         offsets.push(total_size);
         total_size += self.proposal_cell.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.account_cell.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.on_sale_cell.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.bidding_cell.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.primary_market_cell.as_slice().len();
-        offsets.push(total_size);
-        total_size += self.wallet_cell.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
+        writer.write_all(self.account_cell.as_slice())?;
         writer.write_all(self.apply_register_cell.as_slice())?;
+        writer.write_all(self.bidding_cell.as_slice())?;
+        writer.write_all(self.income_cell.as_slice())?;
+        writer.write_all(self.on_sale_cell.as_slice())?;
         writer.write_all(self.pre_account_cell.as_slice())?;
         writer.write_all(self.proposal_cell.as_slice())?;
-        writer.write_all(self.account_cell.as_slice())?;
-        writer.write_all(self.on_sale_cell.as_slice())?;
-        writer.write_all(self.bidding_cell.as_slice())?;
-        writer.write_all(self.primary_market_cell.as_slice())?;
-        writer.write_all(self.wallet_cell.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -8960,8 +8949,8 @@ impl ::core::fmt::Display for PreAccountCellData {
         )?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock_args", self.owner_lock_args())?;
-        write!(f, ", {}: {}", "inviter_wallet", self.inviter_wallet())?;
-        write!(f, ", {}: {}", "channel_wallet", self.channel_wallet())?;
+        write!(f, ", {}: {}", "inviter_lock", self.inviter_lock())?;
+        write!(f, ", {}: {}", "channel_lock", self.channel_lock())?;
         write!(f, ", {}: {}", "price", self.price())?;
         write!(f, ", {}: {}", "quote", self.quote())?;
         write!(f, ", {}: {}", "invited_discount", self.invited_discount())?;
@@ -8976,12 +8965,12 @@ impl ::core::fmt::Display for PreAccountCellData {
 impl ::core::default::Default for PreAccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            162, 0, 0, 0, 40, 0, 0, 0, 44, 0, 0, 0, 97, 0, 0, 0, 101, 0, 0, 0, 105, 0, 0, 0, 109,
-            0, 0, 0, 142, 0, 0, 0, 150, 0, 0, 0, 154, 0, 0, 0, 4, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0,
+            154, 0, 0, 0, 40, 0, 0, 0, 44, 0, 0, 0, 97, 0, 0, 0, 101, 0, 0, 0, 101, 0, 0, 0, 101,
+            0, 0, 0, 134, 0, 0, 0, 142, 0, 0, 0, 146, 0, 0, 0, 4, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0,
             0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0, 16, 0,
+            0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         PreAccountCellData::new_unchecked(v.into())
     }
@@ -9022,17 +9011,17 @@ impl PreAccountCellData {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn inviter_wallet(&self) -> Bytes {
+    pub fn inviter_lock(&self) -> ScriptOpt {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        Bytes::new_unchecked(self.0.slice(start..end))
+        ScriptOpt::new_unchecked(self.0.slice(start..end))
     }
-    pub fn channel_wallet(&self) -> Bytes {
+    pub fn channel_lock(&self) -> ScriptOpt {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        Bytes::new_unchecked(self.0.slice(start..end))
+        ScriptOpt::new_unchecked(self.0.slice(start..end))
     }
     pub fn price(&self) -> PriceConfig {
         let slice = self.as_slice();
@@ -9092,8 +9081,8 @@ impl molecule::prelude::Entity for PreAccountCellData {
             .account(self.account())
             .refund_lock(self.refund_lock())
             .owner_lock_args(self.owner_lock_args())
-            .inviter_wallet(self.inviter_wallet())
-            .channel_wallet(self.channel_wallet())
+            .inviter_lock(self.inviter_lock())
+            .channel_lock(self.channel_lock())
             .price(self.price())
             .quote(self.quote())
             .invited_discount(self.invited_discount())
@@ -9122,8 +9111,8 @@ impl<'r> ::core::fmt::Display for PreAccountCellDataReader<'r> {
         write!(f, "{}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock_args", self.owner_lock_args())?;
-        write!(f, ", {}: {}", "inviter_wallet", self.inviter_wallet())?;
-        write!(f, ", {}: {}", "channel_wallet", self.channel_wallet())?;
+        write!(f, ", {}: {}", "inviter_lock", self.inviter_lock())?;
+        write!(f, ", {}: {}", "channel_lock", self.channel_lock())?;
         write!(f, ", {}: {}", "price", self.price())?;
         write!(f, ", {}: {}", "quote", self.quote())?;
         write!(f, ", {}: {}", "invited_discount", self.invited_discount())?;
@@ -9171,17 +9160,17 @@ impl<'r> PreAccountCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn inviter_wallet(&self) -> BytesReader<'r> {
+    pub fn inviter_lock(&self) -> ScriptOptReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        BytesReader::new_unchecked(&self.as_slice()[start..end])
+        ScriptOptReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn channel_wallet(&self) -> BytesReader<'r> {
+    pub fn channel_lock(&self) -> ScriptOptReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
-        BytesReader::new_unchecked(&self.as_slice()[start..end])
+        ScriptOptReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn price(&self) -> PriceConfigReader<'r> {
         let slice = self.as_slice();
@@ -9264,8 +9253,8 @@ impl<'r> molecule::prelude::Reader<'r> for PreAccountCellDataReader<'r> {
         AccountCharsReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         ScriptReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         BytesReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        BytesReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        BytesReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        ScriptOptReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        ScriptOptReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         PriceConfigReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Uint64Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         Uint32Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
@@ -9278,8 +9267,8 @@ pub struct PreAccountCellDataBuilder {
     pub(crate) account: AccountChars,
     pub(crate) refund_lock: Script,
     pub(crate) owner_lock_args: Bytes,
-    pub(crate) inviter_wallet: Bytes,
-    pub(crate) channel_wallet: Bytes,
+    pub(crate) inviter_lock: ScriptOpt,
+    pub(crate) channel_lock: ScriptOpt,
     pub(crate) price: PriceConfig,
     pub(crate) quote: Uint64,
     pub(crate) invited_discount: Uint32,
@@ -9299,12 +9288,12 @@ impl PreAccountCellDataBuilder {
         self.owner_lock_args = v;
         self
     }
-    pub fn inviter_wallet(mut self, v: Bytes) -> Self {
-        self.inviter_wallet = v;
+    pub fn inviter_lock(mut self, v: ScriptOpt) -> Self {
+        self.inviter_lock = v;
         self
     }
-    pub fn channel_wallet(mut self, v: Bytes) -> Self {
-        self.channel_wallet = v;
+    pub fn channel_lock(mut self, v: ScriptOpt) -> Self {
+        self.channel_lock = v;
         self
     }
     pub fn price(mut self, v: PriceConfig) -> Self {
@@ -9332,8 +9321,8 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
             + self.account.as_slice().len()
             + self.refund_lock.as_slice().len()
             + self.owner_lock_args.as_slice().len()
-            + self.inviter_wallet.as_slice().len()
-            + self.channel_wallet.as_slice().len()
+            + self.inviter_lock.as_slice().len()
+            + self.channel_lock.as_slice().len()
             + self.price.as_slice().len()
             + self.quote.as_slice().len()
             + self.invited_discount.as_slice().len()
@@ -9349,9 +9338,9 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
         offsets.push(total_size);
         total_size += self.owner_lock_args.as_slice().len();
         offsets.push(total_size);
-        total_size += self.inviter_wallet.as_slice().len();
+        total_size += self.inviter_lock.as_slice().len();
         offsets.push(total_size);
-        total_size += self.channel_wallet.as_slice().len();
+        total_size += self.channel_lock.as_slice().len();
         offsets.push(total_size);
         total_size += self.price.as_slice().len();
         offsets.push(total_size);
@@ -9367,8 +9356,8 @@ impl molecule::prelude::Builder for PreAccountCellDataBuilder {
         writer.write_all(self.account.as_slice())?;
         writer.write_all(self.refund_lock.as_slice())?;
         writer.write_all(self.owner_lock_args.as_slice())?;
-        writer.write_all(self.inviter_wallet.as_slice())?;
-        writer.write_all(self.channel_wallet.as_slice())?;
+        writer.write_all(self.inviter_lock.as_slice())?;
+        writer.write_all(self.channel_lock.as_slice())?;
         writer.write_all(self.price.as_slice())?;
         writer.write_all(self.quote.as_slice())?;
         writer.write_all(self.invited_discount.as_slice())?;

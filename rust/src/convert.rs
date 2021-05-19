@@ -99,6 +99,12 @@ impl TryFrom<Bytes> for String {
     }
 }
 
+impl From<Script> for ScriptOpt {
+    fn from(v: Script) -> Self {
+        ScriptOpt::new_builder().set(Some(v)).build()
+    }
+}
+
 /// Convert &[u8] to schemas::basic::Hash
 ///
 /// The difference with from_slice is that it does not require a dynvec header.

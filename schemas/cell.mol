@@ -10,19 +10,20 @@ table ActionData {
 // ConfigCellData
 
 table ConfigCellMain {
+    // Global DAS system switch, 0x01 means system on, 0x00 means system off.
+    status: Uint8,
     // table of type ID of all kinds of cells
     type_id_table: TypeIdTable,
 }
 
 table TypeIdTable {
+    account_cell: Hash,
     apply_register_cell: Hash,
+    bidding_cell: Hash,
+    income_cell: Hash,
+    on_sale_cell: Hash,
     pre_account_cell: Hash,
     proposal_cell: Hash,
-    account_cell: Hash,
-    on_sale_cell: Hash,
-    bidding_cell: Hash,
-    primary_market_cell: Hash,
-    wallet_cell: Hash,
 }
 
 table ConfigCellAccount {
@@ -204,10 +205,10 @@ table PreAccountCellData {
     refund_lock: Script,
     // If the PreAccountCell is registered successfully, this field specifies to whom the account should be given.
     owner_lock_args: Bytes,
-    // The wallet ID of inviter,
-    inviter_wallet: Bytes,
-    // The wallet ID of channel,
-    channel_wallet: Bytes,
+    // The lock script of inviter,
+    inviter_lock: ScriptOpt,
+    // The lock script of channel,
+    channel_lock: ScriptOpt,
     // Price of the account at the moment of registration.
     price: PriceConfig,
     // The exchange rate between CKB and USD.

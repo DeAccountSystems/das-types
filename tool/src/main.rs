@@ -1,5 +1,6 @@
 use clap::Clap;
 use das_types::{constants::*, packed::*, prelude::*, VerificationError};
+use std::collections::HashMap;
 use std::convert::{TryFrom, TryInto};
 use std::error::Error;
 use std::fmt::Display;
@@ -56,6 +57,7 @@ fn main() {
                         .unwrap();
                 let raw = bytes.get(7..).unwrap();
 
+                println!("data_type = {:?}", data_type);
                 if let Err(e) = virtualize_witness(data_type, raw) {
                     println!(
                         "Parse witness to actual data type failed: {}",
@@ -156,8 +158,11 @@ pub fn virtualize_entity(
         DataType::PreAccountCellData => {
             entity = Box::new(PreAccountCellData::from_slice(raw).map_err(error_to_string)?);
         }
+        DataType::IncomeCellData => {
+            entity = Box::new(IncomeCellData::from_slice(raw).map_err(error_to_string)?);
+        }
         DataType::ConfigCellAccount => {
-            entity = Box::new(ConfigCellApply::from_slice(raw).map_err(error_to_string)?);
+            entity = Box::new(ConfigCellAccount::from_slice(raw).map_err(error_to_string)?);
         }
         DataType::ConfigCellApply => {
             entity = Box::new(ConfigCellApply::from_slice(raw).map_err(error_to_string)?);
