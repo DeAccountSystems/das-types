@@ -205,9 +205,11 @@ table PreAccountCellData {
     refund_lock: Script,
     // If the PreAccountCell is registered successfully, this field specifies to whom the account should be given.
     owner_lock_args: Bytes,
-    // The lock script of inviter,
+    // The account ID of inviter, it will not be used for any verification, just for front-end identification.
+    inviter_id: Bytes,
+    // The lock script of inviter.
     inviter_lock: ScriptOpt,
-    // The lock script of channel,
+    // The lock script of channel.
     channel_lock: ScriptOpt,
     // Price of the account at the moment of registration.
     price: PriceConfig,
