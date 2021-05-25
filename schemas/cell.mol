@@ -100,8 +100,6 @@ table ConfigCellProfitRate {
     inviter: Uint32,
     // The profit rate of channels who support people to create DAS accounts.
     channel: Uint32,
-    // The profit rate of DAS itself.
-    das: Uint32,
     // The profit rate for who created proposal
     proposal_create: Uint32,
     // The profit rate for who confirmed proposal
@@ -188,8 +186,8 @@ array AccountId [byte; 10];
 
 table Record {
     record_type: Bytes,
-    record_label: Bytes,
     record_key: Bytes,
+    record_label: Bytes,
     record_value: Bytes,
     record_ttl: Uint32,
 }

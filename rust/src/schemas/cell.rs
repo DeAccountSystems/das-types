@@ -4281,7 +4281,6 @@ impl ::core::fmt::Display for ConfigCellProfitRate {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "inviter", self.inviter())?;
         write!(f, ", {}: {}", "channel", self.channel())?;
-        write!(f, ", {}: {}", "das", self.das())?;
         write!(f, ", {}: {}", "proposal_create", self.proposal_create())?;
         write!(f, ", {}: {}", "proposal_confirm", self.proposal_confirm())?;
         write!(
@@ -4300,14 +4299,14 @@ impl ::core::fmt::Display for ConfigCellProfitRate {
 impl ::core::default::Default for ConfigCellProfitRate {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            52, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 44, 0, 0, 0, 48, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            44, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellProfitRate::new_unchecked(v.into())
     }
 }
 impl ConfigCellProfitRate {
-    pub const FIELD_COUNT: usize = 6;
+    pub const FIELD_COUNT: usize = 5;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -4336,29 +4335,23 @@ impl ConfigCellProfitRate {
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn das(&self) -> Uint32 {
+    pub fn proposal_create(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_create(&self) -> Uint32 {
+    pub fn proposal_confirm(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn proposal_confirm(&self) -> Uint32 {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[20..]) as usize;
-        let end = molecule::unpack_number(&slice[24..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
-    }
     pub fn income_consolidate(&self) -> Uint32 {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[24..]) as usize;
+        let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[28..]) as usize;
+            let end = molecule::unpack_number(&slice[24..]) as usize;
             Uint32::new_unchecked(self.0.slice(start..end))
         } else {
             Uint32::new_unchecked(self.0.slice(start..))
@@ -4393,7 +4386,6 @@ impl molecule::prelude::Entity for ConfigCellProfitRate {
         Self::new_builder()
             .inviter(self.inviter())
             .channel(self.channel())
-            .das(self.das())
             .proposal_create(self.proposal_create())
             .proposal_confirm(self.proposal_confirm())
             .income_consolidate(self.income_consolidate())
@@ -4420,7 +4412,6 @@ impl<'r> ::core::fmt::Display for ConfigCellProfitRateReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "inviter", self.inviter())?;
         write!(f, ", {}: {}", "channel", self.channel())?;
-        write!(f, ", {}: {}", "das", self.das())?;
         write!(f, ", {}: {}", "proposal_create", self.proposal_create())?;
         write!(f, ", {}: {}", "proposal_confirm", self.proposal_confirm())?;
         write!(
@@ -4437,7 +4428,7 @@ impl<'r> ::core::fmt::Display for ConfigCellProfitRateReader<'r> {
     }
 }
 impl<'r> ConfigCellProfitRateReader<'r> {
-    pub const FIELD_COUNT: usize = 6;
+    pub const FIELD_COUNT: usize = 5;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -4466,29 +4457,23 @@ impl<'r> ConfigCellProfitRateReader<'r> {
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn das(&self) -> Uint32Reader<'r> {
+    pub fn proposal_create(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_create(&self) -> Uint32Reader<'r> {
+    pub fn proposal_confirm(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn proposal_confirm(&self) -> Uint32Reader<'r> {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[20..]) as usize;
-        let end = molecule::unpack_number(&slice[24..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
-    }
     pub fn income_consolidate(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[24..]) as usize;
+        let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[28..]) as usize;
+            let end = molecule::unpack_number(&slice[24..]) as usize;
             Uint32Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint32Reader::new_unchecked(&self.as_slice()[start..])
@@ -4549,7 +4534,6 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellProfitRateReader<'r> {
         Uint32Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Uint32Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
         Uint32Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Ok(())
     }
 }
@@ -4557,23 +4541,18 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellProfitRateReader<'r> {
 pub struct ConfigCellProfitRateBuilder {
     pub(crate) inviter: Uint32,
     pub(crate) channel: Uint32,
-    pub(crate) das: Uint32,
     pub(crate) proposal_create: Uint32,
     pub(crate) proposal_confirm: Uint32,
     pub(crate) income_consolidate: Uint32,
 }
 impl ConfigCellProfitRateBuilder {
-    pub const FIELD_COUNT: usize = 6;
+    pub const FIELD_COUNT: usize = 5;
     pub fn inviter(mut self, v: Uint32) -> Self {
         self.inviter = v;
         self
     }
     pub fn channel(mut self, v: Uint32) -> Self {
         self.channel = v;
-        self
-    }
-    pub fn das(mut self, v: Uint32) -> Self {
-        self.das = v;
         self
     }
     pub fn proposal_create(mut self, v: Uint32) -> Self {
@@ -4596,7 +4575,6 @@ impl molecule::prelude::Builder for ConfigCellProfitRateBuilder {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.inviter.as_slice().len()
             + self.channel.as_slice().len()
-            + self.das.as_slice().len()
             + self.proposal_create.as_slice().len()
             + self.proposal_confirm.as_slice().len()
             + self.income_consolidate.as_slice().len()
@@ -4609,8 +4587,6 @@ impl molecule::prelude::Builder for ConfigCellProfitRateBuilder {
         offsets.push(total_size);
         total_size += self.channel.as_slice().len();
         offsets.push(total_size);
-        total_size += self.das.as_slice().len();
-        offsets.push(total_size);
         total_size += self.proposal_create.as_slice().len();
         offsets.push(total_size);
         total_size += self.proposal_confirm.as_slice().len();
@@ -4622,7 +4598,6 @@ impl molecule::prelude::Builder for ConfigCellProfitRateBuilder {
         }
         writer.write_all(self.inviter.as_slice())?;
         writer.write_all(self.channel.as_slice())?;
-        writer.write_all(self.das.as_slice())?;
         writer.write_all(self.proposal_create.as_slice())?;
         writer.write_all(self.proposal_confirm.as_slice())?;
         writer.write_all(self.income_consolidate.as_slice())?;
@@ -7766,9 +7741,15 @@ impl<'r> ::core::fmt::Debug for AccountCellDataReader<'r> {
 }
 impl<'r> ::core::fmt::Display for AccountCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "id", self.id())?;
-        write!(f, ", {}: {}", "account", self.account())?;
+        write!(
+            f,
+            ", {}: 0x{}",
+            "account",
+            hex_string(self.account().as_readable().as_slice())
+        )?;
         write!(f, ", {}: {}", "registered_at", self.registered_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "records", self.records())?;
@@ -8267,8 +8248,8 @@ impl ::core::fmt::Display for Record {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "record_type", self.record_type())?;
-        write!(f, ", {}: {}", "record_label", self.record_label())?;
         write!(f, ", {}: {}", "record_key", self.record_key())?;
+        write!(f, ", {}: {}", "record_label", self.record_label())?;
         write!(f, ", {}: {}", "record_value", self.record_value())?;
         write!(f, ", {}: {}", "record_ttl", self.record_ttl())?;
         let extra_count = self.count_extra_fields();
@@ -8311,13 +8292,13 @@ impl Record {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn record_label(&self) -> Bytes {
+    pub fn record_key(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn record_key(&self) -> Bytes {
+    pub fn record_label(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
@@ -8367,8 +8348,8 @@ impl molecule::prelude::Entity for Record {
     fn as_builder(self) -> Self::Builder {
         Self::new_builder()
             .record_type(self.record_type())
-            .record_label(self.record_label())
             .record_key(self.record_key())
+            .record_label(self.record_label())
             .record_value(self.record_value())
             .record_ttl(self.record_ttl())
     }
@@ -8393,8 +8374,8 @@ impl<'r> ::core::fmt::Display for RecordReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "record_type", self.record_type())?;
-        write!(f, ", {}: {}", "record_label", self.record_label())?;
         write!(f, ", {}: {}", "record_key", self.record_key())?;
+        write!(f, ", {}: {}", "record_label", self.record_label())?;
         write!(f, ", {}: {}", "record_value", self.record_value())?;
         write!(f, ", {}: {}", "record_ttl", self.record_ttl())?;
         let extra_count = self.count_extra_fields();
@@ -8428,13 +8409,13 @@ impl<'r> RecordReader<'r> {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn record_label(&self) -> BytesReader<'r> {
+    pub fn record_key(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn record_key(&self) -> BytesReader<'r> {
+    pub fn record_label(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
@@ -8517,8 +8498,8 @@ impl<'r> molecule::prelude::Reader<'r> for RecordReader<'r> {
 #[derive(Debug, Default)]
 pub struct RecordBuilder {
     pub(crate) record_type: Bytes,
-    pub(crate) record_label: Bytes,
     pub(crate) record_key: Bytes,
+    pub(crate) record_label: Bytes,
     pub(crate) record_value: Bytes,
     pub(crate) record_ttl: Uint32,
 }
@@ -8528,12 +8509,12 @@ impl RecordBuilder {
         self.record_type = v;
         self
     }
-    pub fn record_label(mut self, v: Bytes) -> Self {
-        self.record_label = v;
-        self
-    }
     pub fn record_key(mut self, v: Bytes) -> Self {
         self.record_key = v;
+        self
+    }
+    pub fn record_label(mut self, v: Bytes) -> Self {
+        self.record_label = v;
         self
     }
     pub fn record_value(mut self, v: Bytes) -> Self {
@@ -8551,8 +8532,8 @@ impl molecule::prelude::Builder for RecordBuilder {
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.record_type.as_slice().len()
-            + self.record_label.as_slice().len()
             + self.record_key.as_slice().len()
+            + self.record_label.as_slice().len()
             + self.record_value.as_slice().len()
             + self.record_ttl.as_slice().len()
     }
@@ -8562,9 +8543,9 @@ impl molecule::prelude::Builder for RecordBuilder {
         offsets.push(total_size);
         total_size += self.record_type.as_slice().len();
         offsets.push(total_size);
-        total_size += self.record_label.as_slice().len();
-        offsets.push(total_size);
         total_size += self.record_key.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.record_label.as_slice().len();
         offsets.push(total_size);
         total_size += self.record_value.as_slice().len();
         offsets.push(total_size);
@@ -8574,8 +8555,8 @@ impl molecule::prelude::Builder for RecordBuilder {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
         writer.write_all(self.record_type.as_slice())?;
-        writer.write_all(self.record_label.as_slice())?;
         writer.write_all(self.record_key.as_slice())?;
+        writer.write_all(self.record_label.as_slice())?;
         writer.write_all(self.record_value.as_slice())?;
         writer.write_all(self.record_ttl.as_slice())?;
         Ok(())
@@ -9115,8 +9096,14 @@ impl<'r> ::core::fmt::Debug for PreAccountCellDataReader<'r> {
 }
 impl<'r> ::core::fmt::Display for PreAccountCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "account", self.account())?;
+        write!(
+            f,
+            "{}: 0x{}",
+            "account",
+            hex_string(self.account().as_readable().as_slice())
+        )?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock_args", self.owner_lock_args())?;
         write!(f, ", {}: {}", "inviter_id", self.inviter_id())?;
