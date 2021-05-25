@@ -1,6 +1,13 @@
 use core::convert::TryFrom;
 
 #[derive(Debug, PartialEq, Copy, Clone)]
+#[repr(u8)]
+pub enum SystemStatus {
+    Off,
+    On,
+}
+
+#[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u32)]
 pub enum DataType {
     ActionData = 0,

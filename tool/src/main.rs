@@ -1,6 +1,5 @@
 use clap::Clap;
 use das_types::{constants::*, packed::*, prelude::*, VerificationError};
-use std::collections::HashMap;
 use std::convert::{TryFrom, TryInto};
 use std::error::Error;
 use std::fmt::Display;
