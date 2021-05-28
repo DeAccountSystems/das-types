@@ -26,6 +26,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 
 [[package]]
+name = "blake2b-ref"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "95916998c798756098a4eb1b3f2cd510659705a9817bf203d61abd30fbec3e7b"
+
+[[package]]
+name = "blake2b-rs"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6e35e362830ef90ecea16f09b21b75d22d33a8562a679c74ab4f4fa49b4fcb87"
+dependencies = [
+ "cc",
+]
+
+[[package]]
 name = "buddy-alloc"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -42,6 +57,16 @@ name = "cfg-if"
 version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
+
+[[package]]
+name = "ckb-hash"
+version = "0.40.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "11d4f751b424962da459cacc19b2da0597bf7ec6786ee49a20e145bd74240f9e"
+dependencies = [
+ "blake2b-ref",
+ "blake2b-rs",
+]
 
 [[package]]
 name = "ckb-standalone-types"
@@ -110,6 +135,8 @@ dependencies = [
 name = "das-types-tool"
 version = "0.1.0"
 dependencies = [
+ "ckb-hash",
+ "ckb-std",
  "clap",
  "das-types",
  "hex",

@@ -1,3 +1,5 @@
+use ckb_hash::blake2b_256;
+use ckb_std::ckb_types::prelude::Entity;
 use clap::Clap;
 use das_types::{constants::*, packed::*, prelude::*, VerificationError};
 use std::convert::{TryFrom, TryInto};
@@ -56,7 +58,7 @@ fn main() {
                         .unwrap();
                 let raw = bytes.get(7..).unwrap();
 
-                println!("data_type = {:?}", data_type);
+                println!("expected_data_type: {:?}", data_type);
                 if let Err(e) = virtualize_witness(data_type, raw) {
                     println!(
                         "Parse witness to actual data type failed: {}",
@@ -96,33 +98,43 @@ pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn
         | DataType::ConfigCellPrice
         | DataType::ConfigCellProposal
         | DataType::ConfigCellProfitRate => {
-            println!("{}", virtualize_entity(data_type, raw)?);
+            let (hash, entity) = virtualize_entity(data_type, raw)?;
+            println!("hash: 0x{}\nentity: {}", hex::encode(hash), entity);
         }
         _ => {
             let data = Data::from_slice(raw).map_err(error_to_string)?;
             println!("witness: {{");
             if let Some(dep_data_entity) = data.dep().to_opt() {
+                let (hash, entity) =
+                    virtualize_entity(data_type, dep_data_entity.entity().as_reader().raw_data())?;
                 println!(
-                    "  dep {{\n    version: {}\n    index: {}\n    entity: {} \n  }}",
+                    "  dep: {{\n    version: {}\n    index: {}\n    entity(0x{}): {} \n  }}",
                     dep_data_entity.version(),
                     dep_data_entity.index(),
-                    virtualize_entity(data_type, dep_data_entity.entity().as_reader().raw_data())?
+                    hex::encode(hash),
+                    entity,
                 );
             }
             if let Some(old_data_entity) = data.old().to_opt() {
+                let (hash, entity) =
+                    virtualize_entity(data_type, old_data_entity.entity().as_reader().raw_data())?;
                 println!(
-                    "  old {{\n    version: {}\n    index: {}\n    entity: {} \n  }}",
+                    "  old: {{\n    version: {}\n    index: {}\n    entity(0x{}): {} \n  }}",
                     old_data_entity.version(),
                     old_data_entity.index(),
-                    virtualize_entity(data_type, old_data_entity.entity().as_reader().raw_data())?
+                    hex::encode(hash),
+                    entity
                 );
             }
             if let Some(new_data_entity) = data.new().to_opt() {
+                let (hash, entity) =
+                    virtualize_entity(data_type, new_data_entity.entity().as_reader().raw_data())?;
                 println!(
-                    "  new {{\n    version: {}\n    index: {}\n    entity: {} \n  }}",
+                    "  new: {{\n    version: {}\n    index: {}\n    entity(0x{}): {} \n  }}",
                     new_data_entity.version(),
                     new_data_entity.index(),
-                    virtualize_entity(data_type, new_data_entity.entity().as_reader().raw_data())?
+                    hex::encode(hash),
+                    entity
                 );
             }
             println!("}}");
@@ -135,7 +147,7 @@ pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn
 pub fn virtualize_entity(
     data_type: DataType,
     raw: &[u8],
-) -> Result<Box<dyn Display>, Box<dyn Error>> {
+) -> Result<([u8; 32], Box<dyn Display>), Box<dyn Error>> {
     let entity: Box<dyn Display>;
 
     match data_type {
@@ -187,7 +199,7 @@ pub fn virtualize_entity(
         _ => return Err(format!("unsupported DataType {:?}", data_type).into()),
     }
 
-    Ok(entity)
+    Ok((blake2b_256(raw), entity))
 }
 
 pub fn virtualize_data(data_type: &str, raw: &[u8]) -> Result<(), Box<dyn Error>> {

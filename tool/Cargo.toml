@@ -9,3 +9,5 @@ license = "LGPL-3.0-or-later"
 clap = "3.0.0-beta.2"
 hex = "0.4"
 das-types = { path = "../rust" }
+ckb-std = "=0.7.1"
+ckb-hash = "0.40.0"
