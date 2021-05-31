@@ -1,5 +1,6 @@
-use super::constants::{DataType, WITNESS_HEADER};
+use super::constants::*;
 use super::schemas::packed::*;
+use core::convert::TryFrom;
 use molecule::prelude::*;
 
 pub use molecule::hex_string;
@@ -84,4 +85,12 @@ pub fn wrap_data_witness<T: Entity>(
     let builder = Data::new_builder().dep(dep).new(new).old(old);
 
     wrap_entity_witness(data_type, builder.build())
+}
+
+pub fn data_type_to_char_set(data_type: DataType) -> CharSetType {
+    CharSetType::try_from(data_type as u32 - 100000).unwrap()
+}
+
+pub fn char_set_to_data_type(char_set: CharSetType) -> DataType {
+    DataType::try_from(char_set as u32 + 100000).unwrap()
 }

@@ -1,3 +1,4 @@
+use super::schemas::packed::{Uint32, Uint32Reader};
 use core::convert::TryFrom;
 
 #[derive(Debug, PartialEq, Copy, Clone)]
@@ -75,6 +76,22 @@ impl TryFrom<u32> for DataType {
     }
 }
 
+impl TryFrom<Uint32> for DataType {
+    type Error = ();
+
+    fn try_from(v: Uint32) -> Result<Self, Self::Error> {
+        Self::try_from(u32::from(v))
+    }
+}
+
+impl<'r> TryFrom<Uint32Reader<'r>> for DataType {
+    type Error = ();
+
+    fn try_from(v: Uint32Reader) -> Result<Self, Self::Error> {
+        Self::try_from(u32::from(v))
+    }
+}
+
 #[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u32)]
 pub enum CharSetType {
@@ -82,6 +99,36 @@ pub enum CharSetType {
     Digit,
     En,
     ZhCn,
+}
+
+impl TryFrom<u32> for CharSetType {
+    type Error = ();
+
+    fn try_from(v: u32) -> Result<Self, Self::Error> {
+        match v {
+            x if x == CharSetType::Emoji as u32 => Ok(CharSetType::Emoji),
+            x if x == CharSetType::Digit as u32 => Ok(CharSetType::Digit),
+            x if x == CharSetType::En as u32 => Ok(CharSetType::En),
+            x if x == CharSetType::ZhCn as u32 => Ok(CharSetType::ZhCn),
+            _ => Err(()),
+        }
+    }
+}
+
+impl TryFrom<Uint32> for CharSetType {
+    type Error = ();
+
+    fn try_from(v: Uint32) -> Result<Self, Self::Error> {
+        Self::try_from(u32::from(v))
+    }
+}
+
+impl<'r> TryFrom<Uint32Reader<'r>> for CharSetType {
+    type Error = ();
+
+    fn try_from(v: Uint32Reader) -> Result<Self, Self::Error> {
+        Self::try_from(u32::from(v))
+    }
 }
 
 #[derive(Debug, PartialEq, Copy, Clone)]
