@@ -18,9 +18,8 @@ pub enum DataType {
     PreAccountCellData,
     IncomeCellData,
     ConfigCellAccount = 100,
-    ConfigCellApply,
-    ConfigCellCharSet,
-    ConfigCellIncome,
+    ConfigCellApply = 101,
+    ConfigCellIncome = 102,
     ConfigCellMain,
     ConfigCellPrice,
     ConfigCellProposal,
@@ -34,6 +33,9 @@ pub enum DataType {
     // ConfigCellPreservedAccount05,
     // ConfigCellPreservedAccount06,
     // ConfigCellPreservedAccount07,
+    ConfigCellCharSetEmoji = 100000,
+    ConfigCellCharSetDigit = 100001,
+    ConfigCellCharSetEn = 100002,
 }
 
 impl TryFrom<u32> for DataType {
@@ -50,7 +52,6 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::IncomeCellData as u32 => Ok(DataType::IncomeCellData),
             x if x == DataType::ConfigCellAccount as u32 => Ok(DataType::ConfigCellAccount),
             x if x == DataType::ConfigCellApply as u32 => Ok(DataType::ConfigCellApply),
-            x if x == DataType::ConfigCellCharSet as u32 => Ok(DataType::ConfigCellCharSet),
             x if x == DataType::ConfigCellIncome as u32 => Ok(DataType::ConfigCellIncome),
             x if x == DataType::ConfigCellMain as u32 => Ok(DataType::ConfigCellMain),
             x if x == DataType::ConfigCellPrice as u32 => Ok(DataType::ConfigCellPrice),
@@ -62,6 +63,13 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::ConfigCellPreservedAccount00 as u32 => {
                 Ok(DataType::ConfigCellPreservedAccount00)
             }
+            x if x == DataType::ConfigCellCharSetEmoji as u32 => {
+                Ok(DataType::ConfigCellCharSetEmoji)
+            }
+            x if x == DataType::ConfigCellCharSetDigit as u32 => {
+                Ok(DataType::ConfigCellCharSetDigit)
+            }
+            x if x == DataType::ConfigCellCharSetEn as u32 => Ok(DataType::ConfigCellCharSetEn),
             _ => Err(()),
         }
     }

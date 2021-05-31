@@ -92,7 +92,6 @@ pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn
         DataType::ActionData
         | DataType::ConfigCellApply
         | DataType::ConfigCellAccount
-        | DataType::ConfigCellCharSet
         | DataType::ConfigCellIncome
         | DataType::ConfigCellMain
         | DataType::ConfigCellPrice
@@ -176,9 +175,6 @@ pub fn virtualize_entity(
             entity = Box::new(ConfigCellAccount::from_slice(raw).map_err(error_to_string)?);
         }
         DataType::ConfigCellApply => {
-            entity = Box::new(ConfigCellApply::from_slice(raw).map_err(error_to_string)?);
-        }
-        DataType::ConfigCellCharSet => {
             entity = Box::new(ConfigCellApply::from_slice(raw).map_err(error_to_string)?);
         }
         DataType::ConfigCellIncome => {

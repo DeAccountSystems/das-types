@@ -44,19 +44,6 @@ table ConfigCellApply {
     apply_max_waiting_block_number: Uint32,
 }
 
-table ConfigCellCharSet {
-    // available char sets for account
-    char_sets: CharSetList,
-}
-
-vector CharSetList <CharSet>;
-
-table CharSet {
-    name: Uint32,
-    global: Uint8,
-    chars: Chars,
-}
-
 vector Chars <Bytes>;
 
 table ConfigCellPrice {
