@@ -92,7 +92,10 @@ impl<'r> TryFrom<Uint32Reader<'r>> for DataType {
     }
 }
 
-#[derive(Debug, PartialEq, Copy, Clone)]
+// The length of CharSetType
+pub const CHAR_SET_LENGTH: usize = 4;
+
+#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(u32)]
 pub enum CharSetType {
     Emoji,
