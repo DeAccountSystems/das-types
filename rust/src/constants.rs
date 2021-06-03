@@ -20,7 +20,7 @@ pub enum DataType {
     IncomeCellData,
     ConfigCellAccount = 100,
     ConfigCellApply = 101,
-    ConfigCellIncome = 102,
+    ConfigCellIncome = 103,
     ConfigCellMain,
     ConfigCellPrice,
     ConfigCellProposal,
