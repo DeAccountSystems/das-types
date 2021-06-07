@@ -35,6 +35,10 @@ table ConfigCellAccount {
     expiration_grace_period: Uint32,
     // The minimum ttl of record in seconds
     record_min_ttl: Uint32,
+    // The maximum size of all records in molecule encoding
+    record_size_limit: Uint32,
+    // The frequency limit of operating accounts
+    operate_throttle: Uint32,
 }
 
 table ConfigCellApply {
@@ -169,7 +173,7 @@ table AccountCellData {
     records: Records,
 }
 
-array AccountId [byte; 10];
+array AccountId [byte; 20];
 
 table Record {
     record_type: Bytes,

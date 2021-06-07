@@ -205,14 +205,14 @@ impl<'r> Into<ckb_packed::ScriptReader<'r>> for ScriptReader<'r> {
 impl TryFrom<&[u8]> for AccountId {
     type Error = VerificationError;
     fn try_from(v: &[u8]) -> Result<Self, VerificationError> {
-        if v.len() != 10 {
+        if v.len() != 20 {
             return Err(VerificationError::TotalSizeNotMatch(
                 "AccountId".to_owned(),
                 10,
                 v.len(),
             ));
         }
-        let mut inner = [Byte::new(0); 10];
+        let mut inner = [Byte::new(0); 20];
         let v = v.to_owned().into_iter().map(Byte::new).collect::<Vec<_>>();
         inner.copy_from_slice(&v);
         Ok(Self::new_builder().set(inner).build())
