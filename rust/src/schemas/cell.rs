@@ -6801,9 +6801,15 @@ impl ::core::fmt::Debug for AccountCellData {
 }
 impl ::core::fmt::Display for AccountCellData {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "id", self.id())?;
-        write!(f, ", {}: {}", "account", self.account())?;
+        write!(
+            f,
+            ", {}: 0x{}",
+            "account",
+            hex_string(self.account().as_readable().as_slice())
+        )?;
         write!(f, ", {}: {}", "registered_at", self.registered_at())?;
         write!(f, ", {}: {}", "updated_at", self.updated_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
@@ -6936,9 +6942,15 @@ impl<'r> ::core::fmt::Debug for AccountCellDataReader<'r> {
 }
 impl<'r> ::core::fmt::Display for AccountCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "id", self.id())?;
-        write!(f, ", {}: {}", "account", self.account())?;
+        write!(
+            f,
+            ", {}: 0x{}",
+            "account",
+            hex_string(self.account().as_readable().as_slice())
+        )?;
         write!(f, ", {}: {}", "registered_at", self.registered_at())?;
         write!(f, ", {}: {}", "updated_at", self.updated_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
@@ -8256,8 +8268,14 @@ impl ::core::fmt::Debug for PreAccountCellData {
 }
 impl ::core::fmt::Display for PreAccountCellData {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "account", self.account())?;
+        write!(
+            f,
+            "{}: 0x{}",
+            "account",
+            hex_string(self.account().as_readable().as_slice())
+        )?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock_args", self.owner_lock_args())?;
         write!(f, ", {}: {}", "inviter_id", self.inviter_id())?;
@@ -8426,8 +8444,14 @@ impl<'r> ::core::fmt::Debug for PreAccountCellDataReader<'r> {
 }
 impl<'r> ::core::fmt::Display for PreAccountCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(f, "{}: {}", "account", self.account())?;
+        write!(
+            f,
+            "{}: 0x{}",
+            "account",
+            hex_string(self.account().as_readable().as_slice())
+        )?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock_args", self.owner_lock_args())?;
         write!(f, ", {}: {}", "inviter_id", self.inviter_id())?;
