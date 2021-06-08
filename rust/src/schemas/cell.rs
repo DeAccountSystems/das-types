@@ -6805,6 +6805,7 @@ impl ::core::fmt::Display for AccountCellData {
         write!(f, "{}: {}", "id", self.id())?;
         write!(f, ", {}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "registered_at", self.registered_at())?;
+        write!(f, ", {}: {}", "updated_at", self.updated_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "records", self.records())?;
         let extra_count = self.count_extra_fields();
@@ -6817,15 +6818,15 @@ impl ::core::fmt::Display for AccountCellData {
 impl ::core::default::Default for AccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            61, 0, 0, 0, 24, 0, 0, 0, 44, 0, 0, 0, 48, 0, 0, 0, 56, 0, 0, 0, 57, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 4, 0, 0, 0,
+            73, 0, 0, 0, 28, 0, 0, 0, 48, 0, 0, 0, 52, 0, 0, 0, 60, 0, 0, 0, 68, 0, 0, 0, 69, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
         ];
         AccountCellData::new_unchecked(v.into())
     }
 }
 impl AccountCellData {
-    pub const FIELD_COUNT: usize = 5;
+    pub const FIELD_COUNT: usize = 6;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -6860,17 +6861,23 @@ impl AccountCellData {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn status(&self) -> Uint8 {
+    pub fn updated_at(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
+        Uint64::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn status(&self) -> Uint8 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint8::new_unchecked(self.0.slice(start..end))
     }
     pub fn records(&self) -> Records {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let start = molecule::unpack_number(&slice[24..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[24..]) as usize;
+            let end = molecule::unpack_number(&slice[28..]) as usize;
             Records::new_unchecked(self.0.slice(start..end))
         } else {
             Records::new_unchecked(self.0.slice(start..))
@@ -6906,6 +6913,7 @@ impl molecule::prelude::Entity for AccountCellData {
             .id(self.id())
             .account(self.account())
             .registered_at(self.registered_at())
+            .updated_at(self.updated_at())
             .status(self.status())
             .records(self.records())
     }
@@ -6932,6 +6940,7 @@ impl<'r> ::core::fmt::Display for AccountCellDataReader<'r> {
         write!(f, "{}: {}", "id", self.id())?;
         write!(f, ", {}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "registered_at", self.registered_at())?;
+        write!(f, ", {}: {}", "updated_at", self.updated_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "records", self.records())?;
         let extra_count = self.count_extra_fields();
@@ -6942,7 +6951,7 @@ impl<'r> ::core::fmt::Display for AccountCellDataReader<'r> {
     }
 }
 impl<'r> AccountCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 5;
+    pub const FIELD_COUNT: usize = 6;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -6977,17 +6986,23 @@ impl<'r> AccountCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn status(&self) -> Uint8Reader<'r> {
+    pub fn updated_at(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn status(&self) -> Uint8Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint8Reader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn records(&self) -> RecordsReader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let start = molecule::unpack_number(&slice[24..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[24..]) as usize;
+            let end = molecule::unpack_number(&slice[28..]) as usize;
             RecordsReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             RecordsReader::new_unchecked(&self.as_slice()[start..])
@@ -7046,8 +7061,9 @@ impl<'r> molecule::prelude::Reader<'r> for AccountCellDataReader<'r> {
         AccountIdReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         AccountCharsReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        Uint8Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        RecordsReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        Uint8Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        RecordsReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Ok(())
     }
 }
@@ -7056,11 +7072,12 @@ pub struct AccountCellDataBuilder {
     pub(crate) id: AccountId,
     pub(crate) account: AccountChars,
     pub(crate) registered_at: Uint64,
+    pub(crate) updated_at: Uint64,
     pub(crate) status: Uint8,
     pub(crate) records: Records,
 }
 impl AccountCellDataBuilder {
-    pub const FIELD_COUNT: usize = 5;
+    pub const FIELD_COUNT: usize = 6;
     pub fn id(mut self, v: AccountId) -> Self {
         self.id = v;
         self
@@ -7071,6 +7088,10 @@ impl AccountCellDataBuilder {
     }
     pub fn registered_at(mut self, v: Uint64) -> Self {
         self.registered_at = v;
+        self
+    }
+    pub fn updated_at(mut self, v: Uint64) -> Self {
+        self.updated_at = v;
         self
     }
     pub fn status(mut self, v: Uint8) -> Self {
@@ -7090,6 +7111,7 @@ impl molecule::prelude::Builder for AccountCellDataBuilder {
             + self.id.as_slice().len()
             + self.account.as_slice().len()
             + self.registered_at.as_slice().len()
+            + self.updated_at.as_slice().len()
             + self.status.as_slice().len()
             + self.records.as_slice().len()
     }
@@ -7103,6 +7125,8 @@ impl molecule::prelude::Builder for AccountCellDataBuilder {
         offsets.push(total_size);
         total_size += self.registered_at.as_slice().len();
         offsets.push(total_size);
+        total_size += self.updated_at.as_slice().len();
+        offsets.push(total_size);
         total_size += self.status.as_slice().len();
         offsets.push(total_size);
         total_size += self.records.as_slice().len();
@@ -7113,6 +7137,7 @@ impl molecule::prelude::Builder for AccountCellDataBuilder {
         writer.write_all(self.id.as_slice())?;
         writer.write_all(self.account.as_slice())?;
         writer.write_all(self.registered_at.as_slice())?;
+        writer.write_all(self.updated_at.as_slice())?;
         writer.write_all(self.status.as_slice())?;
         writer.write_all(self.records.as_slice())?;
         Ok(())
