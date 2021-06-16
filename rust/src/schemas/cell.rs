@@ -975,7 +975,32 @@ impl ::core::fmt::Display for ConfigCellAccount {
         )?;
         write!(f, ", {}: {}", "record_min_ttl", self.record_min_ttl())?;
         write!(f, ", {}: {}", "record_size_limit", self.record_size_limit())?;
-        write!(f, ", {}: {}", "operate_throttle", self.operate_throttle())?;
+        write!(
+            f,
+            ", {}: {}",
+            "transfer_account_fee",
+            self.transfer_account_fee()
+        )?;
+        write!(f, ", {}: {}", "edit_manager_fee", self.edit_manager_fee())?;
+        write!(f, ", {}: {}", "edit_records_fee", self.edit_records_fee())?;
+        write!(
+            f,
+            ", {}: {}",
+            "transfer_account_throttle",
+            self.transfer_account_throttle()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "edit_manager_throttle",
+            self.edit_manager_throttle()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "edit_records_throttle",
+            self.edit_records_throttle()
+        )?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -986,14 +1011,16 @@ impl ::core::fmt::Display for ConfigCellAccount {
 impl ::core::default::Default for ConfigCellAccount {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            56, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 40, 0, 0, 0, 44, 0, 0, 0, 48, 0, 0, 0, 52, 0, 0,
+            96, 0, 0, 0, 48, 0, 0, 0, 52, 0, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 68, 0, 0, 0, 72, 0, 0,
+            0, 76, 0, 0, 0, 80, 0, 0, 0, 84, 0, 0, 0, 88, 0, 0, 0, 92, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellAccount::new_unchecked(v.into())
     }
 }
 impl ConfigCellAccount {
-    pub const FIELD_COUNT: usize = 6;
+    pub const FIELD_COUNT: usize = 11;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1040,11 +1067,41 @@ impl ConfigCellAccount {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn operate_throttle(&self) -> Uint32 {
+    pub fn transfer_account_fee(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
+        let end = molecule::unpack_number(&slice[28..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn edit_manager_fee(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[28..]) as usize;
+        let end = molecule::unpack_number(&slice[32..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn edit_records_fee(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[32..]) as usize;
+        let end = molecule::unpack_number(&slice[36..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn transfer_account_throttle(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[36..]) as usize;
+        let end = molecule::unpack_number(&slice[40..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn edit_manager_throttle(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[40..]) as usize;
+        let end = molecule::unpack_number(&slice[44..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn edit_records_throttle(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[44..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[28..]) as usize;
+            let end = molecule::unpack_number(&slice[48..]) as usize;
             Uint32::new_unchecked(self.0.slice(start..end))
         } else {
             Uint32::new_unchecked(self.0.slice(start..))
@@ -1082,7 +1139,12 @@ impl molecule::prelude::Entity for ConfigCellAccount {
             .expiration_grace_period(self.expiration_grace_period())
             .record_min_ttl(self.record_min_ttl())
             .record_size_limit(self.record_size_limit())
-            .operate_throttle(self.operate_throttle())
+            .transfer_account_fee(self.transfer_account_fee())
+            .edit_manager_fee(self.edit_manager_fee())
+            .edit_records_fee(self.edit_records_fee())
+            .transfer_account_throttle(self.transfer_account_throttle())
+            .edit_manager_throttle(self.edit_manager_throttle())
+            .edit_records_throttle(self.edit_records_throttle())
     }
 }
 #[derive(Clone, Copy)]
@@ -1114,7 +1176,32 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
         )?;
         write!(f, ", {}: {}", "record_min_ttl", self.record_min_ttl())?;
         write!(f, ", {}: {}", "record_size_limit", self.record_size_limit())?;
-        write!(f, ", {}: {}", "operate_throttle", self.operate_throttle())?;
+        write!(
+            f,
+            ", {}: {}",
+            "transfer_account_fee",
+            self.transfer_account_fee()
+        )?;
+        write!(f, ", {}: {}", "edit_manager_fee", self.edit_manager_fee())?;
+        write!(f, ", {}: {}", "edit_records_fee", self.edit_records_fee())?;
+        write!(
+            f,
+            ", {}: {}",
+            "transfer_account_throttle",
+            self.transfer_account_throttle()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "edit_manager_throttle",
+            self.edit_manager_throttle()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
+            "edit_records_throttle",
+            self.edit_records_throttle()
+        )?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1123,7 +1210,7 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
     }
 }
 impl<'r> ConfigCellAccountReader<'r> {
-    pub const FIELD_COUNT: usize = 6;
+    pub const FIELD_COUNT: usize = 11;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1170,11 +1257,41 @@ impl<'r> ConfigCellAccountReader<'r> {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn operate_throttle(&self) -> Uint32Reader<'r> {
+    pub fn transfer_account_fee(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
+        let end = molecule::unpack_number(&slice[28..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn edit_manager_fee(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[28..]) as usize;
+        let end = molecule::unpack_number(&slice[32..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn edit_records_fee(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[32..]) as usize;
+        let end = molecule::unpack_number(&slice[36..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn transfer_account_throttle(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[36..]) as usize;
+        let end = molecule::unpack_number(&slice[40..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn edit_manager_throttle(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[40..]) as usize;
+        let end = molecule::unpack_number(&slice[44..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn edit_records_throttle(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[44..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[28..]) as usize;
+            let end = molecule::unpack_number(&slice[48..]) as usize;
             Uint32Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint32Reader::new_unchecked(&self.as_slice()[start..])
@@ -1236,6 +1353,11 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellAccountReader<'r> {
         Uint32Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
         Uint32Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Uint32Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
         Ok(())
     }
 }
@@ -1246,10 +1368,15 @@ pub struct ConfigCellAccountBuilder {
     pub(crate) expiration_grace_period: Uint32,
     pub(crate) record_min_ttl: Uint32,
     pub(crate) record_size_limit: Uint32,
-    pub(crate) operate_throttle: Uint32,
+    pub(crate) transfer_account_fee: Uint32,
+    pub(crate) edit_manager_fee: Uint32,
+    pub(crate) edit_records_fee: Uint32,
+    pub(crate) transfer_account_throttle: Uint32,
+    pub(crate) edit_manager_throttle: Uint32,
+    pub(crate) edit_records_throttle: Uint32,
 }
 impl ConfigCellAccountBuilder {
-    pub const FIELD_COUNT: usize = 6;
+    pub const FIELD_COUNT: usize = 11;
     pub fn max_length(mut self, v: Uint32) -> Self {
         self.max_length = v;
         self
@@ -1270,8 +1397,28 @@ impl ConfigCellAccountBuilder {
         self.record_size_limit = v;
         self
     }
-    pub fn operate_throttle(mut self, v: Uint32) -> Self {
-        self.operate_throttle = v;
+    pub fn transfer_account_fee(mut self, v: Uint32) -> Self {
+        self.transfer_account_fee = v;
+        self
+    }
+    pub fn edit_manager_fee(mut self, v: Uint32) -> Self {
+        self.edit_manager_fee = v;
+        self
+    }
+    pub fn edit_records_fee(mut self, v: Uint32) -> Self {
+        self.edit_records_fee = v;
+        self
+    }
+    pub fn transfer_account_throttle(mut self, v: Uint32) -> Self {
+        self.transfer_account_throttle = v;
+        self
+    }
+    pub fn edit_manager_throttle(mut self, v: Uint32) -> Self {
+        self.edit_manager_throttle = v;
+        self
+    }
+    pub fn edit_records_throttle(mut self, v: Uint32) -> Self {
+        self.edit_records_throttle = v;
         self
     }
 }
@@ -1285,7 +1432,12 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
             + self.expiration_grace_period.as_slice().len()
             + self.record_min_ttl.as_slice().len()
             + self.record_size_limit.as_slice().len()
-            + self.operate_throttle.as_slice().len()
+            + self.transfer_account_fee.as_slice().len()
+            + self.edit_manager_fee.as_slice().len()
+            + self.edit_records_fee.as_slice().len()
+            + self.transfer_account_throttle.as_slice().len()
+            + self.edit_manager_throttle.as_slice().len()
+            + self.edit_records_throttle.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -1301,7 +1453,17 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
         offsets.push(total_size);
         total_size += self.record_size_limit.as_slice().len();
         offsets.push(total_size);
-        total_size += self.operate_throttle.as_slice().len();
+        total_size += self.transfer_account_fee.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.edit_manager_fee.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.edit_records_fee.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.transfer_account_throttle.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.edit_manager_throttle.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.edit_records_throttle.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -1311,7 +1473,12 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
         writer.write_all(self.expiration_grace_period.as_slice())?;
         writer.write_all(self.record_min_ttl.as_slice())?;
         writer.write_all(self.record_size_limit.as_slice())?;
-        writer.write_all(self.operate_throttle.as_slice())?;
+        writer.write_all(self.transfer_account_fee.as_slice())?;
+        writer.write_all(self.edit_manager_fee.as_slice())?;
+        writer.write_all(self.edit_records_fee.as_slice())?;
+        writer.write_all(self.transfer_account_throttle.as_slice())?;
+        writer.write_all(self.edit_manager_throttle.as_slice())?;
+        writer.write_all(self.edit_records_throttle.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -3823,6 +3990,12 @@ impl ::core::fmt::Display for ConfigCellIncome {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "basic_capacity", self.basic_capacity())?;
         write!(f, ", {}: {}", "max_records", self.max_records())?;
+        write!(
+            f,
+            ", {}: {}",
+            "min_transfer_capacity",
+            self.min_transfer_capacity()
+        )?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -3833,13 +4006,14 @@ impl ::core::fmt::Display for ConfigCellIncome {
 impl ::core::default::Default for ConfigCellIncome {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            24, 0, 0, 0, 12, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            32, 0, 0, 0, 16, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0,
         ];
         ConfigCellIncome::new_unchecked(v.into())
     }
 }
 impl ConfigCellIncome {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -3865,8 +4039,14 @@ impl ConfigCellIncome {
     pub fn max_records(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn min_transfer_capacity(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[12..]) as usize;
+            let end = molecule::unpack_number(&slice[16..]) as usize;
             Uint32::new_unchecked(self.0.slice(start..end))
         } else {
             Uint32::new_unchecked(self.0.slice(start..))
@@ -3901,6 +4081,7 @@ impl molecule::prelude::Entity for ConfigCellIncome {
         Self::new_builder()
             .basic_capacity(self.basic_capacity())
             .max_records(self.max_records())
+            .min_transfer_capacity(self.min_transfer_capacity())
     }
 }
 #[derive(Clone, Copy)]
@@ -3924,6 +4105,12 @@ impl<'r> ::core::fmt::Display for ConfigCellIncomeReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "basic_capacity", self.basic_capacity())?;
         write!(f, ", {}: {}", "max_records", self.max_records())?;
+        write!(
+            f,
+            ", {}: {}",
+            "min_transfer_capacity",
+            self.min_transfer_capacity()
+        )?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -3932,7 +4119,7 @@ impl<'r> ::core::fmt::Display for ConfigCellIncomeReader<'r> {
     }
 }
 impl<'r> ConfigCellIncomeReader<'r> {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -3958,8 +4145,14 @@ impl<'r> ConfigCellIncomeReader<'r> {
     pub fn max_records(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn min_transfer_capacity(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[12..]) as usize;
+            let end = molecule::unpack_number(&slice[16..]) as usize;
             Uint32Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint32Reader::new_unchecked(&self.as_slice()[start..])
@@ -4017,6 +4210,7 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellIncomeReader<'r> {
         }
         Uint64Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         Uint32Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Ok(())
     }
 }
@@ -4024,15 +4218,20 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellIncomeReader<'r> {
 pub struct ConfigCellIncomeBuilder {
     pub(crate) basic_capacity: Uint64,
     pub(crate) max_records: Uint32,
+    pub(crate) min_transfer_capacity: Uint32,
 }
 impl ConfigCellIncomeBuilder {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn basic_capacity(mut self, v: Uint64) -> Self {
         self.basic_capacity = v;
         self
     }
     pub fn max_records(mut self, v: Uint32) -> Self {
         self.max_records = v;
+        self
+    }
+    pub fn min_transfer_capacity(mut self, v: Uint32) -> Self {
+        self.min_transfer_capacity = v;
         self
     }
 }
@@ -4043,6 +4242,7 @@ impl molecule::prelude::Builder for ConfigCellIncomeBuilder {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.basic_capacity.as_slice().len()
             + self.max_records.as_slice().len()
+            + self.min_transfer_capacity.as_slice().len()
     }
     fn write<W: ::molecule::io::Write>(&self, writer: &mut W) -> ::molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -4051,12 +4251,15 @@ impl molecule::prelude::Builder for ConfigCellIncomeBuilder {
         total_size += self.basic_capacity.as_slice().len();
         offsets.push(total_size);
         total_size += self.max_records.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.min_transfer_capacity.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
         writer.write_all(self.basic_capacity.as_slice())?;
         writer.write_all(self.max_records.as_slice())?;
+        writer.write_all(self.min_transfer_capacity.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {

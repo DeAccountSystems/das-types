@@ -37,8 +37,14 @@ table ConfigCellAccount {
     record_min_ttl: Uint32,
     // The maximum size of all records in molecule encoding
     record_size_limit: Uint32,
-    // The frequency limit of operating accounts
-    operate_throttle: Uint32,
+    // The fee of each action
+    transfer_account_fee: Uint32,
+    edit_manager_fee: Uint32,
+    edit_records_fee: Uint32,
+    // The frequency limit of actions which manipulating account
+    transfer_account_throttle: Uint32,
+    edit_manager_throttle: Uint32,
+    edit_records_throttle: Uint32,
 }
 
 table ConfigCellApply {
@@ -95,7 +101,7 @@ table ConfigCellProfitRate {
     proposal_create: Uint32,
     // The profit rate for who confirmed proposal
     proposal_confirm: Uint32,
-    // The profit rate for consolidate IncomeCells
+    // The profit rate for consolidating IncomeCells
     income_consolidate: Uint32,
 }
 
@@ -104,6 +110,8 @@ table ConfigCellIncome {
     basic_capacity: Uint64,
     // The maximum records one IncomeCell can hold.
     max_records: Uint32,
+    // The minimum capacity which determines whether a record should be transferred.
+    min_transfer_capacity: Uint32,
 }
 
 table ConfigCellMarket {
