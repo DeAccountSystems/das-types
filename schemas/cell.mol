@@ -38,9 +38,9 @@ table ConfigCellAccount {
     // The maximum size of all records in molecule encoding
     record_size_limit: Uint32,
     // The fee of each action
-    transfer_account_fee: Uint32,
-    edit_manager_fee: Uint32,
-    edit_records_fee: Uint32,
+    transfer_account_fee: Uint64,
+    edit_manager_fee: Uint64,
+    edit_records_fee: Uint64,
     // The frequency limit of actions which manipulating account
     transfer_account_throttle: Uint32,
     edit_manager_throttle: Uint32,
@@ -111,7 +111,7 @@ table ConfigCellIncome {
     // The maximum records one IncomeCell can hold.
     max_records: Uint32,
     // The minimum capacity which determines whether a record should be transferred.
-    min_transfer_capacity: Uint32,
+    min_transfer_capacity: Uint64,
 }
 
 table ConfigCellMarket {
