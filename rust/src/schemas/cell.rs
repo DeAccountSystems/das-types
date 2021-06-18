@@ -970,6 +970,12 @@ impl ::core::fmt::Display for ConfigCellAccount {
         write!(
             f,
             ", {}: {}",
+            "prepared_fee_capacity",
+            self.prepared_fee_capacity()
+        )?;
+        write!(
+            f,
+            ", {}: {}",
             "expiration_grace_period",
             self.expiration_grace_period()
         )?;
@@ -1011,16 +1017,17 @@ impl ::core::fmt::Display for ConfigCellAccount {
 impl ::core::default::Default for ConfigCellAccount {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            108, 0, 0, 0, 48, 0, 0, 0, 52, 0, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 68, 0, 0, 0, 72, 0,
-            0, 0, 80, 0, 0, 0, 88, 0, 0, 0, 96, 0, 0, 0, 100, 0, 0, 0, 104, 0, 0, 0, 0, 0, 0, 0, 0,
+            120, 0, 0, 0, 52, 0, 0, 0, 56, 0, 0, 0, 64, 0, 0, 0, 72, 0, 0, 0, 76, 0, 0, 0, 80, 0,
+            0, 0, 84, 0, 0, 0, 92, 0, 0, 0, 100, 0, 0, 0, 108, 0, 0, 0, 112, 0, 0, 0, 116, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellAccount::new_unchecked(v.into())
     }
 }
 impl ConfigCellAccount {
-    pub const FIELD_COUNT: usize = 11;
+    pub const FIELD_COUNT: usize = 12;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1049,59 +1056,65 @@ impl ConfigCellAccount {
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn expiration_grace_period(&self) -> Uint32 {
+    pub fn prepared_fee_capacity(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn record_min_ttl(&self) -> Uint32 {
+    pub fn expiration_grace_period(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn record_size_limit(&self) -> Uint32 {
+    pub fn record_min_ttl(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn transfer_account_fee(&self) -> Uint64 {
+    pub fn record_size_limit(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
-        Uint64::new_unchecked(self.0.slice(start..end))
+        Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn edit_manager_fee(&self) -> Uint64 {
+    pub fn transfer_account_fee(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn edit_records_fee(&self) -> Uint64 {
+    pub fn edit_manager_fee(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
         let end = molecule::unpack_number(&slice[36..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn transfer_account_throttle(&self) -> Uint32 {
+    pub fn edit_records_fee(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[36..]) as usize;
         let end = molecule::unpack_number(&slice[40..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn edit_manager_throttle(&self) -> Uint32 {
+    pub fn transfer_account_throttle(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn edit_records_throttle(&self) -> Uint32 {
+    pub fn edit_manager_throttle(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[44..]) as usize;
+        let end = molecule::unpack_number(&slice[48..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn edit_records_throttle(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[48..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[48..]) as usize;
+            let end = molecule::unpack_number(&slice[52..]) as usize;
             Uint32::new_unchecked(self.0.slice(start..end))
         } else {
             Uint32::new_unchecked(self.0.slice(start..))
@@ -1136,6 +1149,7 @@ impl molecule::prelude::Entity for ConfigCellAccount {
         Self::new_builder()
             .max_length(self.max_length())
             .basic_capacity(self.basic_capacity())
+            .prepared_fee_capacity(self.prepared_fee_capacity())
             .expiration_grace_period(self.expiration_grace_period())
             .record_min_ttl(self.record_min_ttl())
             .record_size_limit(self.record_size_limit())
@@ -1168,6 +1182,12 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "max_length", self.max_length())?;
         write!(f, ", {}: {}", "basic_capacity", self.basic_capacity())?;
+        write!(
+            f,
+            ", {}: {}",
+            "prepared_fee_capacity",
+            self.prepared_fee_capacity()
+        )?;
         write!(
             f,
             ", {}: {}",
@@ -1210,7 +1230,7 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
     }
 }
 impl<'r> ConfigCellAccountReader<'r> {
-    pub const FIELD_COUNT: usize = 11;
+    pub const FIELD_COUNT: usize = 12;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1239,59 +1259,65 @@ impl<'r> ConfigCellAccountReader<'r> {
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn expiration_grace_period(&self) -> Uint32Reader<'r> {
+    pub fn prepared_fee_capacity(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn record_min_ttl(&self) -> Uint32Reader<'r> {
+    pub fn expiration_grace_period(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn record_size_limit(&self) -> Uint32Reader<'r> {
+    pub fn record_min_ttl(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn transfer_account_fee(&self) -> Uint64Reader<'r> {
+    pub fn record_size_limit(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
-        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn edit_manager_fee(&self) -> Uint64Reader<'r> {
+    pub fn transfer_account_fee(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn edit_records_fee(&self) -> Uint64Reader<'r> {
+    pub fn edit_manager_fee(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
         let end = molecule::unpack_number(&slice[36..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn transfer_account_throttle(&self) -> Uint32Reader<'r> {
+    pub fn edit_records_fee(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[36..]) as usize;
         let end = molecule::unpack_number(&slice[40..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn edit_manager_throttle(&self) -> Uint32Reader<'r> {
+    pub fn transfer_account_throttle(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn edit_records_throttle(&self) -> Uint32Reader<'r> {
+    pub fn edit_manager_throttle(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[44..]) as usize;
+        let end = molecule::unpack_number(&slice[48..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn edit_records_throttle(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[48..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[48..]) as usize;
+            let end = molecule::unpack_number(&slice[52..]) as usize;
             Uint32Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint32Reader::new_unchecked(&self.as_slice()[start..])
@@ -1349,15 +1375,16 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellAccountReader<'r> {
         }
         Uint32Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         Uint64Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Uint32Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
         Uint32Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
-        Uint64Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Uint64Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         Uint64Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
         Uint32Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
         Uint32Reader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
         Ok(())
     }
 }
@@ -1365,6 +1392,7 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellAccountReader<'r> {
 pub struct ConfigCellAccountBuilder {
     pub(crate) max_length: Uint32,
     pub(crate) basic_capacity: Uint64,
+    pub(crate) prepared_fee_capacity: Uint64,
     pub(crate) expiration_grace_period: Uint32,
     pub(crate) record_min_ttl: Uint32,
     pub(crate) record_size_limit: Uint32,
@@ -1376,13 +1404,17 @@ pub struct ConfigCellAccountBuilder {
     pub(crate) edit_records_throttle: Uint32,
 }
 impl ConfigCellAccountBuilder {
-    pub const FIELD_COUNT: usize = 11;
+    pub const FIELD_COUNT: usize = 12;
     pub fn max_length(mut self, v: Uint32) -> Self {
         self.max_length = v;
         self
     }
     pub fn basic_capacity(mut self, v: Uint64) -> Self {
         self.basic_capacity = v;
+        self
+    }
+    pub fn prepared_fee_capacity(mut self, v: Uint64) -> Self {
+        self.prepared_fee_capacity = v;
         self
     }
     pub fn expiration_grace_period(mut self, v: Uint32) -> Self {
@@ -1429,6 +1461,7 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.max_length.as_slice().len()
             + self.basic_capacity.as_slice().len()
+            + self.prepared_fee_capacity.as_slice().len()
             + self.expiration_grace_period.as_slice().len()
             + self.record_min_ttl.as_slice().len()
             + self.record_size_limit.as_slice().len()
@@ -1446,6 +1479,8 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
         total_size += self.max_length.as_slice().len();
         offsets.push(total_size);
         total_size += self.basic_capacity.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.prepared_fee_capacity.as_slice().len();
         offsets.push(total_size);
         total_size += self.expiration_grace_period.as_slice().len();
         offsets.push(total_size);
@@ -1470,6 +1505,7 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
         }
         writer.write_all(self.max_length.as_slice())?;
         writer.write_all(self.basic_capacity.as_slice())?;
+        writer.write_all(self.prepared_fee_capacity.as_slice())?;
         writer.write_all(self.expiration_grace_period.as_slice())?;
         writer.write_all(self.record_min_ttl.as_slice())?;
         writer.write_all(self.record_size_limit.as_slice())?;

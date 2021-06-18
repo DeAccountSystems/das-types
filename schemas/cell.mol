@@ -31,6 +31,8 @@ table ConfigCellAccount {
     max_length: Uint32,
     // The basic capacity AccountCell required, it is bigger than or equal to AccountCell occupied capacity.
     basic_capacity: Uint64,
+    // The fees prepared for various transactions for operating an account.
+    prepared_fee_capacity: Uint64,
     // The grace period for account expiration in seconds
     expiration_grace_period: Uint32,
     // The minimum ttl of record in seconds
