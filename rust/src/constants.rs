@@ -37,6 +37,8 @@ pub enum DataType {
     ConfigCellCharSetEmoji = 100000,
     ConfigCellCharSetDigit = 100001,
     ConfigCellCharSetEn = 100002,
+    ConfigCellCharSetZhHans = 100003,
+    ConfigCellCharSetZhHant = 100004,
 }
 
 impl TryFrom<u32> for DataType {
@@ -71,6 +73,12 @@ impl TryFrom<u32> for DataType {
                 Ok(DataType::ConfigCellCharSetDigit)
             }
             x if x == DataType::ConfigCellCharSetEn as u32 => Ok(DataType::ConfigCellCharSetEn),
+            x if x == DataType::ConfigCellCharSetZhHans as u32 => {
+                Ok(DataType::ConfigCellCharSetZhHans)
+            }
+            x if x == DataType::ConfigCellCharSetZhHant as u32 => {
+                Ok(DataType::ConfigCellCharSetZhHant)
+            }
             _ => Err(()),
         }
     }
@@ -101,7 +109,8 @@ pub enum CharSetType {
     Emoji,
     Digit,
     En,
-    ZhCn,
+    ZhHans,
+    ZhHant,
 }
 
 impl TryFrom<u32> for CharSetType {
@@ -112,7 +121,8 @@ impl TryFrom<u32> for CharSetType {
             x if x == CharSetType::Emoji as u32 => Ok(CharSetType::Emoji),
             x if x == CharSetType::Digit as u32 => Ok(CharSetType::Digit),
             x if x == CharSetType::En as u32 => Ok(CharSetType::En),
-            x if x == CharSetType::ZhCn as u32 => Ok(CharSetType::ZhCn),
+            x if x == CharSetType::ZhHans as u32 => Ok(CharSetType::ZhHans),
+            x if x == CharSetType::ZhHant as u32 => Ok(CharSetType::ZhHant),
             _ => Err(()),
         }
     }
