@@ -173,13 +173,16 @@ fn test_wrap_entity_witness() {
 
 #[test]
 fn test_wrap_data_witness() {
-    let entity = AccountCellData::default();
+    let old_entity = AccountCellDataV1::default();
     // println!("entity = {:#?}", entity);
 
-    let witness = util::wrap_data_witness(
+    let new_entity = AccountCellData::default();
+    // println!("entity = {:#?}", entity);
+
+    let witness = util::wrap_data_witness::<AccountCellData, AccountCellDataV1, AccountCellData>(
         DataType::AccountCellData,
-        Some((1, 0, entity.clone())),
-        None,
+        Some((2, 0, new_entity.clone())),
+        Some((1, 0, old_entity.clone())),
         None,
     );
     // println!("witness = {:#?}", witness);

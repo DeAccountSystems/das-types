@@ -61,11 +61,11 @@ pub fn wrap_action_witness(action: &str, params_opt: Option<Bytes>) -> Bytes {
     wrap_entity_witness(DataType::ActionData, builder.build())
 }
 
-pub fn wrap_data_witness<T: Entity>(
+pub fn wrap_data_witness<A: Entity, B: Entity, C: Entity>(
     data_type: DataType,
-    output_opt: Option<(u32, u32, T)>,
-    input_opt: Option<(u32, u32, T)>,
-    dep_opt: Option<(u32, u32, T)>,
+    output_opt: Option<(u32, u32, A)>,
+    input_opt: Option<(u32, u32, B)>,
+    dep_opt: Option<(u32, u32, C)>,
 ) -> Bytes {
     let mut new = DataEntityOpt::default();
     if let Some((version, index, output)) = output_opt {
