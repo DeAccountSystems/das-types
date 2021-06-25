@@ -97,15 +97,18 @@ pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn
         | DataType::ConfigCellPrice
         | DataType::ConfigCellProposal
         | DataType::ConfigCellProfitRate => {
-            let (hash, entity) = virtualize_entity(data_type, raw)?;
+            let (hash, entity) = virtualize_entity(data_type, 1, raw)?;
             println!("hash: 0x{}\nentity: {}", hex::encode(hash), entity);
         }
         _ => {
             let data = Data::from_slice(raw).map_err(error_to_string)?;
             println!("witness: {{");
             if let Some(dep_data_entity) = data.dep().to_opt() {
-                let (hash, entity) =
-                    virtualize_entity(data_type, dep_data_entity.entity().as_reader().raw_data())?;
+                let (hash, entity) = virtualize_entity(
+                    data_type,
+                    u32::from(dep_data_entity.version()),
+                    dep_data_entity.entity().as_reader().raw_data(),
+                )?;
                 println!(
                     "  dep: {{\n    version: {}\n    index: {}\n    entity(0x{}): {} \n  }}",
                     dep_data_entity.version(),
@@ -115,8 +118,11 @@ pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn
                 );
             }
             if let Some(old_data_entity) = data.old().to_opt() {
-                let (hash, entity) =
-                    virtualize_entity(data_type, old_data_entity.entity().as_reader().raw_data())?;
+                let (hash, entity) = virtualize_entity(
+                    data_type,
+                    u32::from(old_data_entity.version()),
+                    old_data_entity.entity().as_reader().raw_data(),
+                )?;
                 println!(
                     "  old: {{\n    version: {}\n    index: {}\n    entity(0x{}): {} \n  }}",
                     old_data_entity.version(),
@@ -126,8 +132,11 @@ pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn
                 );
             }
             if let Some(new_data_entity) = data.new().to_opt() {
-                let (hash, entity) =
-                    virtualize_entity(data_type, new_data_entity.entity().as_reader().raw_data())?;
+                let (hash, entity) = virtualize_entity(
+                    data_type,
+                    u32::from(new_data_entity.version()),
+                    new_data_entity.entity().as_reader().raw_data(),
+                )?;
                 println!(
                     "  new: {{\n    version: {}\n    index: {}\n    entity(0x{}): {} \n  }}",
                     new_data_entity.version(),
@@ -145,6 +154,7 @@ pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn
 
 pub fn virtualize_entity(
     data_type: DataType,
+    version: u32,
     raw: &[u8],
 ) -> Result<([u8; 32], Box<dyn Display>), Box<dyn Error>> {
     let entity: Box<dyn Display>;
@@ -154,7 +164,11 @@ pub fn virtualize_entity(
             entity = Box::new(ActionData::from_slice(raw).map_err(error_to_string)?);
         }
         DataType::AccountCellData => {
-            entity = Box::new(AccountCellData::from_slice(raw).map_err(error_to_string)?);
+            if version == 1 {
+                entity = Box::new(AccountCellDataV1::from_slice(raw).map_err(error_to_string)?);
+            } else {
+                entity = Box::new(AccountCellData::from_slice(raw).map_err(error_to_string)?);
+            }
         }
         DataType::OnSaleCellData => {
             entity = Box::new(OnSaleCellData::from_slice(raw).map_err(error_to_string)?);
