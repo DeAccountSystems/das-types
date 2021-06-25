@@ -287,6 +287,12 @@ impl ::core::fmt::Display for ConfigCellMain {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "type_id_table", self.type_id_table())?;
+        write!(
+            f,
+            ", {}: {}",
+            "das_lock_code_hash_table",
+            self.das_lock_code_hash_table()
+        )?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -297,8 +303,8 @@ impl ::core::fmt::Display for ConfigCellMain {
 impl ::core::default::Default for ConfigCellMain {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            13, 1, 0, 0, 12, 0, 0, 0, 13, 0, 0, 0, 0, 0, 1, 0, 0, 32, 0, 0, 0, 64, 0, 0, 0, 96, 0,
-            0, 0, 128, 0, 0, 0, 160, 0, 0, 0, 192, 0, 0, 0, 224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            201, 1, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 17, 1, 0, 0, 0, 0, 1, 0, 0, 32, 0, 0, 0, 64, 0,
+            0, 0, 96, 0, 0, 0, 128, 0, 0, 0, 160, 0, 0, 0, 192, 0, 0, 0, 224, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -306,13 +312,20 @@ impl ::core::default::Default for ConfigCellMain {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 184, 0, 0, 0, 24, 0, 0, 0, 56, 0, 0,
+            0, 88, 0, 0, 0, 120, 0, 0, 0, 152, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0,
         ];
         ConfigCellMain::new_unchecked(v.into())
     }
 }
 impl ConfigCellMain {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -338,11 +351,17 @@ impl ConfigCellMain {
     pub fn type_id_table(&self) -> TypeIdTable {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        TypeIdTable::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn das_lock_code_hash_table(&self) -> DasLockCodeHashTable {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[12..]) as usize;
-            TypeIdTable::new_unchecked(self.0.slice(start..end))
+            let end = molecule::unpack_number(&slice[16..]) as usize;
+            DasLockCodeHashTable::new_unchecked(self.0.slice(start..end))
         } else {
-            TypeIdTable::new_unchecked(self.0.slice(start..))
+            DasLockCodeHashTable::new_unchecked(self.0.slice(start..))
         }
     }
     pub fn as_reader<'r>(&'r self) -> ConfigCellMainReader<'r> {
@@ -374,6 +393,7 @@ impl molecule::prelude::Entity for ConfigCellMain {
         Self::new_builder()
             .status(self.status())
             .type_id_table(self.type_id_table())
+            .das_lock_code_hash_table(self.das_lock_code_hash_table())
     }
 }
 #[derive(Clone, Copy)]
@@ -397,6 +417,12 @@ impl<'r> ::core::fmt::Display for ConfigCellMainReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "type_id_table", self.type_id_table())?;
+        write!(
+            f,
+            ", {}: {}",
+            "das_lock_code_hash_table",
+            self.das_lock_code_hash_table()
+        )?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -405,7 +431,7 @@ impl<'r> ::core::fmt::Display for ConfigCellMainReader<'r> {
     }
 }
 impl<'r> ConfigCellMainReader<'r> {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -431,11 +457,17 @@ impl<'r> ConfigCellMainReader<'r> {
     pub fn type_id_table(&self) -> TypeIdTableReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        TypeIdTableReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn das_lock_code_hash_table(&self) -> DasLockCodeHashTableReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[12..]) as usize;
-            TypeIdTableReader::new_unchecked(&self.as_slice()[start..end])
+            let end = molecule::unpack_number(&slice[16..]) as usize;
+            DasLockCodeHashTableReader::new_unchecked(&self.as_slice()[start..end])
         } else {
-            TypeIdTableReader::new_unchecked(&self.as_slice()[start..])
+            DasLockCodeHashTableReader::new_unchecked(&self.as_slice()[start..])
         }
     }
 }
@@ -490,6 +522,7 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellMainReader<'r> {
         }
         Uint8Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         TypeIdTableReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        DasLockCodeHashTableReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Ok(())
     }
 }
@@ -497,15 +530,20 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellMainReader<'r> {
 pub struct ConfigCellMainBuilder {
     pub(crate) status: Uint8,
     pub(crate) type_id_table: TypeIdTable,
+    pub(crate) das_lock_code_hash_table: DasLockCodeHashTable,
 }
 impl ConfigCellMainBuilder {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn status(mut self, v: Uint8) -> Self {
         self.status = v;
         self
     }
     pub fn type_id_table(mut self, v: TypeIdTable) -> Self {
         self.type_id_table = v;
+        self
+    }
+    pub fn das_lock_code_hash_table(mut self, v: DasLockCodeHashTable) -> Self {
+        self.das_lock_code_hash_table = v;
         self
     }
 }
@@ -516,6 +554,7 @@ impl molecule::prelude::Builder for ConfigCellMainBuilder {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.status.as_slice().len()
             + self.type_id_table.as_slice().len()
+            + self.das_lock_code_hash_table.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -524,12 +563,15 @@ impl molecule::prelude::Builder for ConfigCellMainBuilder {
         total_size += self.status.as_slice().len();
         offsets.push(total_size);
         total_size += self.type_id_table.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.das_lock_code_hash_table.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
         writer.write_all(self.status.as_slice())?;
         writer.write_all(self.type_id_table.as_slice())?;
+        writer.write_all(self.das_lock_code_hash_table.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -944,6 +986,361 @@ impl molecule::prelude::Builder for TypeIdTableBuilder {
         self.write(&mut inner)
             .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
         TypeIdTable::new_unchecked(inner.into())
+    }
+}
+#[derive(Clone)]
+pub struct DasLockCodeHashTable(molecule::bytes::Bytes);
+impl ::core::fmt::LowerHex for DasLockCodeHashTable {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl ::core::fmt::Debug for DasLockCodeHashTable {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl ::core::fmt::Display for DasLockCodeHashTable {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} {{ ", Self::NAME)?;
+        write!(f, "{}: {}", "ckb_signall", self.ckb_signall())?;
+        write!(f, ", {}: {}", "ckb_multisign", self.ckb_multisign())?;
+        write!(
+            f,
+            ", {}: {}",
+            "ckb_anyone_can_pay",
+            self.ckb_anyone_can_pay()
+        )?;
+        write!(f, ", {}: {}", "eth", self.eth())?;
+        write!(f, ", {}: {}", "tron", self.tron())?;
+        let extra_count = self.count_extra_fields();
+        if extra_count != 0 {
+            write!(f, ", .. ({} fields)", extra_count)?;
+        }
+        write!(f, " }}")
+    }
+}
+impl ::core::default::Default for DasLockCodeHashTable {
+    fn default() -> Self {
+        let v: Vec<u8> = vec![
+            184, 0, 0, 0, 24, 0, 0, 0, 56, 0, 0, 0, 88, 0, 0, 0, 120, 0, 0, 0, 152, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ];
+        DasLockCodeHashTable::new_unchecked(v.into())
+    }
+}
+impl DasLockCodeHashTable {
+    pub const FIELD_COUNT: usize = 5;
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn field_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn count_extra_fields(&self) -> usize {
+        self.field_count() - Self::FIELD_COUNT
+    }
+    pub fn has_extra_fields(&self) -> bool {
+        Self::FIELD_COUNT != self.field_count()
+    }
+    pub fn ckb_signall(&self) -> Hash {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Hash::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn ckb_multisign(&self) -> Hash {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Hash::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn ckb_anyone_can_pay(&self) -> Hash {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        let end = molecule::unpack_number(&slice[16..]) as usize;
+        Hash::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn eth(&self) -> Hash {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
+        Hash::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn tron(&self) -> Hash {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        if self.has_extra_fields() {
+            let end = molecule::unpack_number(&slice[24..]) as usize;
+            Hash::new_unchecked(self.0.slice(start..end))
+        } else {
+            Hash::new_unchecked(self.0.slice(start..))
+        }
+    }
+    pub fn as_reader<'r>(&'r self) -> DasLockCodeHashTableReader<'r> {
+        DasLockCodeHashTableReader::new_unchecked(self.as_slice())
+    }
+}
+impl molecule::prelude::Entity for DasLockCodeHashTable {
+    type Builder = DasLockCodeHashTableBuilder;
+    const NAME: &'static str = "DasLockCodeHashTable";
+    fn new_unchecked(data: molecule::bytes::Bytes) -> Self {
+        DasLockCodeHashTable(data)
+    }
+    fn as_bytes(&self) -> molecule::bytes::Bytes {
+        self.0.clone()
+    }
+    fn as_slice(&self) -> &[u8] {
+        &self.0[..]
+    }
+    fn from_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        DasLockCodeHashTableReader::from_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn from_compatible_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        DasLockCodeHashTableReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn new_builder() -> Self::Builder {
+        ::core::default::Default::default()
+    }
+    fn as_builder(self) -> Self::Builder {
+        Self::new_builder()
+            .ckb_signall(self.ckb_signall())
+            .ckb_multisign(self.ckb_multisign())
+            .ckb_anyone_can_pay(self.ckb_anyone_can_pay())
+            .eth(self.eth())
+            .tron(self.tron())
+    }
+}
+#[derive(Clone, Copy)]
+pub struct DasLockCodeHashTableReader<'r>(&'r [u8]);
+impl<'r> ::core::fmt::LowerHex for DasLockCodeHashTableReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl<'r> ::core::fmt::Debug for DasLockCodeHashTableReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl<'r> ::core::fmt::Display for DasLockCodeHashTableReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} {{ ", Self::NAME)?;
+        write!(f, "{}: {}", "ckb_signall", self.ckb_signall())?;
+        write!(f, ", {}: {}", "ckb_multisign", self.ckb_multisign())?;
+        write!(
+            f,
+            ", {}: {}",
+            "ckb_anyone_can_pay",
+            self.ckb_anyone_can_pay()
+        )?;
+        write!(f, ", {}: {}", "eth", self.eth())?;
+        write!(f, ", {}: {}", "tron", self.tron())?;
+        let extra_count = self.count_extra_fields();
+        if extra_count != 0 {
+            write!(f, ", .. ({} fields)", extra_count)?;
+        }
+        write!(f, " }}")
+    }
+}
+impl<'r> DasLockCodeHashTableReader<'r> {
+    pub const FIELD_COUNT: usize = 5;
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn field_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn count_extra_fields(&self) -> usize {
+        self.field_count() - Self::FIELD_COUNT
+    }
+    pub fn has_extra_fields(&self) -> bool {
+        Self::FIELD_COUNT != self.field_count()
+    }
+    pub fn ckb_signall(&self) -> HashReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        HashReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn ckb_multisign(&self) -> HashReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        HashReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn ckb_anyone_can_pay(&self) -> HashReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        let end = molecule::unpack_number(&slice[16..]) as usize;
+        HashReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn eth(&self) -> HashReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
+        HashReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn tron(&self) -> HashReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        if self.has_extra_fields() {
+            let end = molecule::unpack_number(&slice[24..]) as usize;
+            HashReader::new_unchecked(&self.as_slice()[start..end])
+        } else {
+            HashReader::new_unchecked(&self.as_slice()[start..])
+        }
+    }
+}
+impl<'r> molecule::prelude::Reader<'r> for DasLockCodeHashTableReader<'r> {
+    type Entity = DasLockCodeHashTable;
+    const NAME: &'static str = "DasLockCodeHashTableReader";
+    fn to_entity(&self) -> Self::Entity {
+        Self::Entity::new_unchecked(self.as_slice().to_owned().into())
+    }
+    fn new_unchecked(slice: &'r [u8]) -> Self {
+        DasLockCodeHashTableReader(slice)
+    }
+    fn as_slice(&self) -> &'r [u8] {
+        self.0
+    }
+    fn verify(slice: &[u8], compatible: bool) -> molecule::error::VerificationResult<()> {
+        use molecule::verification_error as ve;
+        let slice_len = slice.len();
+        if slice_len < molecule::NUMBER_SIZE {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE, slice_len);
+        }
+        let total_size = molecule::unpack_number(slice) as usize;
+        if slice_len != total_size {
+            return ve!(Self, TotalSizeNotMatch, total_size, slice_len);
+        }
+        if slice_len == molecule::NUMBER_SIZE && Self::FIELD_COUNT == 0 {
+            return Ok(());
+        }
+        if slice_len < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE * 2, slice_len);
+        }
+        let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
+        if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        if slice_len < offset_first {
+            return ve!(Self, HeaderIsBroken, offset_first, slice_len);
+        }
+        let field_count = offset_first / molecule::NUMBER_SIZE - 1;
+        if field_count < Self::FIELD_COUNT {
+            return ve!(Self, FieldCountNotMatch, Self::FIELD_COUNT, field_count);
+        } else if !compatible && field_count > Self::FIELD_COUNT {
+            return ve!(Self, FieldCountNotMatch, Self::FIELD_COUNT, field_count);
+        };
+        let mut offsets: Vec<usize> = slice[molecule::NUMBER_SIZE..offset_first]
+            .chunks_exact(molecule::NUMBER_SIZE)
+            .map(|x| molecule::unpack_number(x) as usize)
+            .collect();
+        offsets.push(total_size);
+        if offsets.windows(2).any(|i| i[0] > i[1]) {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        HashReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        HashReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        HashReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        HashReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        HashReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        Ok(())
+    }
+}
+#[derive(Debug, Default)]
+pub struct DasLockCodeHashTableBuilder {
+    pub(crate) ckb_signall: Hash,
+    pub(crate) ckb_multisign: Hash,
+    pub(crate) ckb_anyone_can_pay: Hash,
+    pub(crate) eth: Hash,
+    pub(crate) tron: Hash,
+}
+impl DasLockCodeHashTableBuilder {
+    pub const FIELD_COUNT: usize = 5;
+    pub fn ckb_signall(mut self, v: Hash) -> Self {
+        self.ckb_signall = v;
+        self
+    }
+    pub fn ckb_multisign(mut self, v: Hash) -> Self {
+        self.ckb_multisign = v;
+        self
+    }
+    pub fn ckb_anyone_can_pay(mut self, v: Hash) -> Self {
+        self.ckb_anyone_can_pay = v;
+        self
+    }
+    pub fn eth(mut self, v: Hash) -> Self {
+        self.eth = v;
+        self
+    }
+    pub fn tron(mut self, v: Hash) -> Self {
+        self.tron = v;
+        self
+    }
+}
+impl molecule::prelude::Builder for DasLockCodeHashTableBuilder {
+    type Entity = DasLockCodeHashTable;
+    const NAME: &'static str = "DasLockCodeHashTableBuilder";
+    fn expected_length(&self) -> usize {
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
+            + self.ckb_signall.as_slice().len()
+            + self.ckb_multisign.as_slice().len()
+            + self.ckb_anyone_can_pay.as_slice().len()
+            + self.eth.as_slice().len()
+            + self.tron.as_slice().len()
+    }
+    fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
+        let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
+        let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
+        offsets.push(total_size);
+        total_size += self.ckb_signall.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.ckb_multisign.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.ckb_anyone_can_pay.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.eth.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.tron.as_slice().len();
+        writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
+        for offset in offsets.into_iter() {
+            writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
+        }
+        writer.write_all(self.ckb_signall.as_slice())?;
+        writer.write_all(self.ckb_multisign.as_slice())?;
+        writer.write_all(self.ckb_anyone_can_pay.as_slice())?;
+        writer.write_all(self.eth.as_slice())?;
+        writer.write_all(self.tron.as_slice())?;
+        Ok(())
+    }
+    fn build(&self) -> Self::Entity {
+        let mut inner = Vec::with_capacity(self.expected_length());
+        self.write(&mut inner)
+            .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
+        DasLockCodeHashTable::new_unchecked(inner.into())
     }
 }
 #[derive(Clone)]

@@ -14,6 +14,8 @@ table ConfigCellMain {
     status: Uint8,
     // table of type ID of all kinds of cells
     type_id_table: TypeIdTable,
+    // table code_hash of dynamic libs of das-lock
+    das_lock_code_hash_table: DasLockCodeHashTable,
 }
 
 table TypeIdTable {
@@ -24,6 +26,14 @@ table TypeIdTable {
     on_sale_cell: Hash,
     pre_account_cell: Hash,
     proposal_cell: Hash,
+}
+
+table DasLockCodeHashTable {
+    ckb_signall: Hash,
+    ckb_multisign: Hash,
+    ckb_anyone_can_pay: Hash,
+    eth: Hash,
+    tron: Hash,
 }
 
 table ConfigCellAccount {
