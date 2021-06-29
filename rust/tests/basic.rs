@@ -2,6 +2,7 @@ use ckb_std::ckb_types::packed as ckb_packed;
 use core::convert::TryFrom;
 use das_types::{packed::*, util::*};
 use hex;
+use molecule::prelude::{Builder, Entity};
 
 #[test]
 fn should_support_u8() {
@@ -96,4 +97,9 @@ fn should_support_hash() {
     let data = Hash::default();
 
     assert!(is_entity_eq(&ckb_byte32, &data.into()));
+
+    let a = Script::new_builder()
+        .hash_type(Byte::new(0u8))
+        .args(Bytes::from())
+        .build();
 }
