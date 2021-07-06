@@ -8,6 +8,8 @@ pub enum SystemStatus {
     On,
 }
 
+pub const PRESERVED_ACCOUNT_CELL_COUNT: u8 = 10;
+
 #[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u32)]
 pub enum DataType {
@@ -26,14 +28,16 @@ pub enum DataType {
     ConfigCellProposal,
     ConfigCellProfitRate,
     ConfigCellRecordKeyNamespace,
-    ConfigCellPreservedAccount00 = 150,
-    // ConfigCellPreservedAccount01,
-    // ConfigCellPreservedAccount02,
-    // ConfigCellPreservedAccount03,
-    // ConfigCellPreservedAccount04,
-    // ConfigCellPreservedAccount05,
-    // ConfigCellPreservedAccount06,
-    // ConfigCellPreservedAccount07,
+    ConfigCellPreservedAccount00 = 10000,
+    ConfigCellPreservedAccount01,
+    ConfigCellPreservedAccount02,
+    ConfigCellPreservedAccount03,
+    ConfigCellPreservedAccount04,
+    ConfigCellPreservedAccount05,
+    ConfigCellPreservedAccount06,
+    ConfigCellPreservedAccount07,
+    ConfigCellPreservedAccount08,
+    ConfigCellPreservedAccount09,
     ConfigCellCharSetEmoji = 100000,
     ConfigCellCharSetDigit = 100001,
     ConfigCellCharSetEn = 100002,
@@ -65,6 +69,33 @@ impl TryFrom<u32> for DataType {
             }
             x if x == DataType::ConfigCellPreservedAccount00 as u32 => {
                 Ok(DataType::ConfigCellPreservedAccount00)
+            }
+            x if x == DataType::ConfigCellPreservedAccount01 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount01)
+            }
+            x if x == DataType::ConfigCellPreservedAccount02 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount02)
+            }
+            x if x == DataType::ConfigCellPreservedAccount03 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount03)
+            }
+            x if x == DataType::ConfigCellPreservedAccount04 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount04)
+            }
+            x if x == DataType::ConfigCellPreservedAccount05 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount05)
+            }
+            x if x == DataType::ConfigCellPreservedAccount06 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount06)
+            }
+            x if x == DataType::ConfigCellPreservedAccount07 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount07)
+            }
+            x if x == DataType::ConfigCellPreservedAccount08 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount08)
+            }
+            x if x == DataType::ConfigCellPreservedAccount09 as u32 => {
+                Ok(DataType::ConfigCellPreservedAccount09)
             }
             x if x == DataType::ConfigCellCharSetEmoji as u32 => {
                 Ok(DataType::ConfigCellCharSetEmoji)
