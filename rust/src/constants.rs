@@ -27,6 +27,7 @@ pub enum DataType {
     ConfigCellPrice,
     ConfigCellProposal,
     ConfigCellProfitRate,
+    ConfigCellRelease,
     ConfigCellRecordKeyNamespace,
     ConfigCellPreservedAccount00 = 10000,
     ConfigCellPreservedAccount01,
@@ -74,6 +75,7 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::ConfigCellPrice as u32 => Ok(DataType::ConfigCellPrice),
             x if x == DataType::ConfigCellProposal as u32 => Ok(DataType::ConfigCellProposal),
             x if x == DataType::ConfigCellProfitRate as u32 => Ok(DataType::ConfigCellProfitRate),
+            x if x == DataType::ConfigCellRelease as u32 => Ok(DataType::ConfigCellRelease),
             x if x == DataType::ConfigCellRecordKeyNamespace as u32 => {
                 Ok(DataType::ConfigCellRecordKeyNamespace)
             }

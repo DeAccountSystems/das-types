@@ -126,6 +126,19 @@ table ConfigCellIncome {
     min_transfer_capacity: Uint64,
 }
 
+table ConfigCellRelease {
+    // Release datetime for accounts of different length.
+    release_rules: ReleaseRules,
+}
+
+vector ReleaseRules <ReleaseRule>;
+
+table ReleaseRule {
+    length: Uint32,
+    release_start: Timestamp,
+    release_end: Timestamp,
+}
+
 table ConfigCellMarket {
     // primary market configurations
     primary_market: MarketConfig,
