@@ -174,7 +174,7 @@ impl<'r> TryFrom<Uint32Reader<'r>> for DataType {
 }
 
 // The length of CharSetType
-pub const CHAR_SET_LENGTH: usize = 4;
+pub const CHAR_SET_LENGTH: usize = 5;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(u32)]
@@ -184,6 +184,7 @@ pub enum CharSetType {
     En,
     ZhHans,
     ZhHant,
+    // ⚠️ DO NOT Forget to update CHAR_SET_LENGTH at the same time.
 }
 
 impl TryFrom<u32> for CharSetType {
