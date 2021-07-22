@@ -1,0 +1,13 @@
+[package]
+name = "das-types-tool"
+version = "1.0.0"
+authors = ["Link <link@blockabc.com>"]
+edition = "2018"
+license = "LGPL-3.0-or-later"
+
+[dependencies]
+clap = "3.0.0-beta.2"
+hex = "0.4"
+das-types = { path = "../rust" }
+ckb-std = "=0.7.1"
+ckb-hash = "0.40.0"

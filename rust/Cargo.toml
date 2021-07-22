@@ -1,12 +1,19 @@
 [package]
 name = "das-types"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Link <link@blockabc.com>"]
 edition = "2018"
+license = "LGPL-3.0-or-later"
 
 [features]
-default = ["std"]
-std = ["molecule/std"]
+default = ["no_std"]
+std = ["no-std-compat/std"]
+no_std = []
 
 [dependencies]
-molecule = { version = "0.6.1", default-features = false }
+molecule = { version = "=0.6.0", default-features = false }
+ckb-std = "=0.7.1"
+no-std-compat = { version = "=0.4", features = [ "alloc", "compat_macros" ] }
+
+[dev-dependencies]
+hex = "0.4"
