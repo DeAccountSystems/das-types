@@ -52,6 +52,7 @@ table ConfigCellAccount {
     transfer_account_fee: Uint64,
     edit_manager_fee: Uint64,
     edit_records_fee: Uint64,
+    force_recover_fee: Uint64,
     // The frequency limit of actions which manipulating account
     transfer_account_throttle: Uint32,
     edit_manager_throttle: Uint32,
@@ -138,22 +139,9 @@ table ReleaseRule {
     release_end: Timestamp,
 }
 
-table ConfigCellMarket {
-    // primary market configurations
-    primary_market: MarketConfig,
-    // primary market configurations
-    secondary_market: MarketConfig,
-}
-
-table MarketConfig {
-    // The maximum time, in seconds, that an account in a sale can exist in the market.
-    max_selling_time: Uint32,
-    // The maximum time, in seconds, that an account in an auction can exist in the market.
-    max_auction_time: Uint32,
-    // The maximum time, in seconds, that an account in an auction waits before it closes.
-    max_auction_waiting: Uint32,
-    // The minimum percentage of raise at each bid in the auction.
-    min_auction_raise_rate: Uint32,
+table ConfigCellSecondaryMarket {
+    // Minimum price for selling an account.
+    min_sale_price: Uint64,
 }
 
 // ProposalCellData
@@ -234,6 +222,14 @@ table Record {
 }
 
 vector Records <Record>;
+
+// AccountSaleCellData
+
+table AccountSaleCellData {
+    account_id: AccountId,
+    price: Uint64,
+    description: Bytes,
+}
 
 // PreAccountCellData
 
