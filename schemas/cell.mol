@@ -53,7 +53,6 @@ table ConfigCellAccount {
     transfer_account_fee: Uint64,
     edit_manager_fee: Uint64,
     edit_records_fee: Uint64,
-    force_recover_fee: Uint64,
     // The frequency limit of actions which manipulating account
     transfer_account_throttle: Uint32,
     edit_manager_throttle: Uint32,
@@ -278,6 +277,15 @@ table AccountChar {
     char_set_name: Uint32,
     // Bytes of the char.
     bytes: Bytes,
+}
+
+// OnSaleCellData
+
+table OnSaleCellData {
+    // the price of account
+    price: Uint64,
+    // the timestamp when sale starting
+    started_at: Uint64,
 }
 
 // BiddingCellData
