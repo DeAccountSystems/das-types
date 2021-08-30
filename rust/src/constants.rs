@@ -29,6 +29,7 @@ pub enum DataType {
     ConfigCellProfitRate,
     ConfigCellRecordKeyNamespace,
     ConfigCellRelease,
+    ConfigCellSecondaryMarket,
     ConfigCellPreservedAccount00 = 10000,
     ConfigCellPreservedAccount01,
     ConfigCellPreservedAccount02,
