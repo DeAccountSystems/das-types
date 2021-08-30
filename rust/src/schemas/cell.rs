@@ -32,9 +32,7 @@ impl ::core::fmt::Display for ActionData {
 }
 impl ::core::default::Default for ActionData {
     fn default() -> Self {
-        let v: Vec<u8> = vec![
-            20, 0, 0, 0, 12, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ];
+        let v: Vec<u8> = vec![20, 0, 0, 0, 12, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         ActionData::new_unchecked(v.into())
     }
 }
@@ -98,9 +96,7 @@ impl molecule::prelude::Entity for ActionData {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder()
-            .action(self.action())
-            .params(self.params())
+        Self::new_builder().action(self.action()).params(self.params())
     }
 }
 #[derive(Clone, Copy)]
@@ -240,9 +236,7 @@ impl molecule::prelude::Builder for ActionDataBuilder {
     type Entity = ActionData;
     const NAME: &'static str = "ActionDataBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
-            + self.action.as_slice().len()
-            + self.params.as_slice().len()
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1) + self.action.as_slice().len() + self.params.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -303,23 +297,20 @@ impl ::core::fmt::Display for ConfigCellMain {
 impl ::core::default::Default for ConfigCellMain {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            221, 1, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 17, 1, 0, 0, 0, 0, 1, 0, 0, 32, 0, 0, 0, 64, 0,
-            0, 0, 96, 0, 0, 0, 128, 0, 0, 0, 160, 0, 0, 0, 192, 0, 0, 0, 224, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 204, 0, 0, 0, 24, 0, 0, 0, 60, 0, 0,
-            0, 96, 0, 0, 0, 132, 0, 0, 0, 168, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            221, 1, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 17, 1, 0, 0, 0, 0, 1, 0, 0, 32, 0, 0, 0, 64, 0, 0, 0, 96, 0, 0, 0,
+            128, 0, 0, 0, 160, 0, 0, 0, 192, 0, 0, 0, 224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 204, 0, 0, 0, 24, 0, 0, 0,
+            60, 0, 0, 0, 96, 0, 0, 0, 132, 0, 0, 0, 168, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellMain::new_unchecked(v.into())
     }
@@ -601,12 +592,7 @@ impl ::core::fmt::Display for TypeIdTable {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "account_cell", self.account_cell())?;
-        write!(
-            f,
-            ", {}: {}",
-            "apply_register_cell",
-            self.apply_register_cell()
-        )?;
+        write!(f, ", {}: {}", "apply_register_cell", self.apply_register_cell())?;
         write!(f, ", {}: {}", "bidding_cell", self.bidding_cell())?;
         write!(f, ", {}: {}", "income_cell", self.income_cell())?;
         write!(f, ", {}: {}", "on_sale_cell", self.on_sale_cell())?;
@@ -622,15 +608,14 @@ impl ::core::fmt::Display for TypeIdTable {
 impl ::core::default::Default for TypeIdTable {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            0, 1, 0, 0, 32, 0, 0, 0, 64, 0, 0, 0, 96, 0, 0, 0, 128, 0, 0, 0, 160, 0, 0, 0, 192, 0,
-            0, 0, 224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 1, 0, 0, 32, 0, 0, 0, 64, 0, 0, 0, 96, 0, 0, 0, 128, 0, 0, 0, 160, 0, 0, 0, 192, 0, 0, 0, 224, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
         ];
         TypeIdTable::new_unchecked(v.into())
     }
@@ -755,12 +740,7 @@ impl<'r> ::core::fmt::Display for TypeIdTableReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "account_cell", self.account_cell())?;
-        write!(
-            f,
-            ", {}: {}",
-            "apply_register_cell",
-            self.apply_register_cell()
-        )?;
+        write!(f, ", {}: {}", "apply_register_cell", self.apply_register_cell())?;
         write!(f, ", {}: {}", "bidding_cell", self.bidding_cell())?;
         write!(f, ", {}: {}", "income_cell", self.income_cell())?;
         write!(f, ", {}: {}", "on_sale_cell", self.on_sale_cell())?;
@@ -1009,12 +989,7 @@ impl ::core::fmt::Display for DasLockOutPointTable {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "ckb_signall", self.ckb_signall())?;
         write!(f, ", {}: {}", "ckb_multisign", self.ckb_multisign())?;
-        write!(
-            f,
-            ", {}: {}",
-            "ckb_anyone_can_pay",
-            self.ckb_anyone_can_pay()
-        )?;
+        write!(f, ", {}: {}", "ckb_anyone_can_pay", self.ckb_anyone_can_pay())?;
         write!(f, ", {}: {}", "eth", self.eth())?;
         write!(f, ", {}: {}", "tron", self.tron())?;
         let extra_count = self.count_extra_fields();
@@ -1027,14 +1002,12 @@ impl ::core::fmt::Display for DasLockOutPointTable {
 impl ::core::default::Default for DasLockOutPointTable {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            204, 0, 0, 0, 24, 0, 0, 0, 60, 0, 0, 0, 96, 0, 0, 0, 132, 0, 0, 0, 168, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0,
+            204, 0, 0, 0, 24, 0, 0, 0, 60, 0, 0, 0, 96, 0, 0, 0, 132, 0, 0, 0, 168, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         DasLockOutPointTable::new_unchecked(v.into())
     }
@@ -1146,12 +1119,7 @@ impl<'r> ::core::fmt::Display for DasLockOutPointTableReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "ckb_signall", self.ckb_signall())?;
         write!(f, ", {}: {}", "ckb_multisign", self.ckb_multisign())?;
-        write!(
-            f,
-            ", {}: {}",
-            "ckb_anyone_can_pay",
-            self.ckb_anyone_can_pay()
-        )?;
+        write!(f, ", {}: {}", "ckb_anyone_can_pay", self.ckb_anyone_can_pay())?;
         write!(f, ", {}: {}", "eth", self.eth())?;
         write!(f, ", {}: {}", "tron", self.tron())?;
         let extra_count = self.count_extra_fields();
@@ -1365,26 +1333,11 @@ impl ::core::fmt::Display for ConfigCellAccount {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "max_length", self.max_length())?;
         write!(f, ", {}: {}", "basic_capacity", self.basic_capacity())?;
-        write!(
-            f,
-            ", {}: {}",
-            "prepared_fee_capacity",
-            self.prepared_fee_capacity()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "expiration_grace_period",
-            self.expiration_grace_period()
-        )?;
+        write!(f, ", {}: {}", "prepared_fee_capacity", self.prepared_fee_capacity())?;
+        write!(f, ", {}: {}", "expiration_grace_period", self.expiration_grace_period())?;
         write!(f, ", {}: {}", "record_min_ttl", self.record_min_ttl())?;
         write!(f, ", {}: {}", "record_size_limit", self.record_size_limit())?;
-        write!(
-            f,
-            ", {}: {}",
-            "transfer_account_fee",
-            self.transfer_account_fee()
-        )?;
+        write!(f, ", {}: {}", "transfer_account_fee", self.transfer_account_fee())?;
         write!(f, ", {}: {}", "edit_manager_fee", self.edit_manager_fee())?;
         write!(f, ", {}: {}", "edit_records_fee", self.edit_records_fee())?;
         write!(
@@ -1393,18 +1346,8 @@ impl ::core::fmt::Display for ConfigCellAccount {
             "transfer_account_throttle",
             self.transfer_account_throttle()
         )?;
-        write!(
-            f,
-            ", {}: {}",
-            "edit_manager_throttle",
-            self.edit_manager_throttle()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "edit_records_throttle",
-            self.edit_records_throttle()
-        )?;
+        write!(f, ", {}: {}", "edit_manager_throttle", self.edit_manager_throttle())?;
+        write!(f, ", {}: {}", "edit_records_throttle", self.edit_records_throttle())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1415,11 +1358,10 @@ impl ::core::fmt::Display for ConfigCellAccount {
 impl ::core::default::Default for ConfigCellAccount {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            120, 0, 0, 0, 52, 0, 0, 0, 56, 0, 0, 0, 64, 0, 0, 0, 72, 0, 0, 0, 76, 0, 0, 0, 80, 0,
-            0, 0, 84, 0, 0, 0, 92, 0, 0, 0, 100, 0, 0, 0, 108, 0, 0, 0, 112, 0, 0, 0, 116, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            120, 0, 0, 0, 52, 0, 0, 0, 56, 0, 0, 0, 64, 0, 0, 0, 72, 0, 0, 0, 76, 0, 0, 0, 80, 0, 0, 0, 84, 0, 0, 0,
+            92, 0, 0, 0, 100, 0, 0, 0, 108, 0, 0, 0, 112, 0, 0, 0, 116, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellAccount::new_unchecked(v.into())
     }
@@ -1580,26 +1522,11 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "max_length", self.max_length())?;
         write!(f, ", {}: {}", "basic_capacity", self.basic_capacity())?;
-        write!(
-            f,
-            ", {}: {}",
-            "prepared_fee_capacity",
-            self.prepared_fee_capacity()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "expiration_grace_period",
-            self.expiration_grace_period()
-        )?;
+        write!(f, ", {}: {}", "prepared_fee_capacity", self.prepared_fee_capacity())?;
+        write!(f, ", {}: {}", "expiration_grace_period", self.expiration_grace_period())?;
         write!(f, ", {}: {}", "record_min_ttl", self.record_min_ttl())?;
         write!(f, ", {}: {}", "record_size_limit", self.record_size_limit())?;
-        write!(
-            f,
-            ", {}: {}",
-            "transfer_account_fee",
-            self.transfer_account_fee()
-        )?;
+        write!(f, ", {}: {}", "transfer_account_fee", self.transfer_account_fee())?;
         write!(f, ", {}: {}", "edit_manager_fee", self.edit_manager_fee())?;
         write!(f, ", {}: {}", "edit_records_fee", self.edit_records_fee())?;
         write!(
@@ -1608,18 +1535,8 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
             "transfer_account_throttle",
             self.transfer_account_throttle()
         )?;
-        write!(
-            f,
-            ", {}: {}",
-            "edit_manager_throttle",
-            self.edit_manager_throttle()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "edit_records_throttle",
-            self.edit_records_throttle()
-        )?;
+        write!(f, ", {}: {}", "edit_manager_throttle", self.edit_manager_throttle())?;
+        write!(f, ", {}: {}", "edit_records_throttle", self.edit_records_throttle())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1962,9 +1879,7 @@ impl ::core::fmt::Display for ConfigCellApply {
 }
 impl ::core::default::Default for ConfigCellApply {
     fn default() -> Self {
-        let v: Vec<u8> = vec![
-            20, 0, 0, 0, 12, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ];
+        let v: Vec<u8> = vec![20, 0, 0, 0, 12, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         ConfigCellApply::new_unchecked(v.into())
     }
 }
@@ -2398,12 +2313,7 @@ impl<'r> molecule::prelude::Reader<'r> for CharsReader<'r> {
             return Ok(());
         }
         if slice_len < molecule::NUMBER_SIZE * 2 {
-            return ve!(
-                Self,
-                TotalSizeNotMatch,
-                molecule::NUMBER_SIZE * 2,
-                slice_len
-            );
+            return ve!(Self, TotalSizeNotMatch, molecule::NUMBER_SIZE * 2, slice_len);
         }
         let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
         if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
@@ -2450,25 +2360,15 @@ impl molecule::prelude::Builder for CharsBuilder {
     type Entity = Chars;
     const NAME: &'static str = "CharsBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (self.0.len() + 1)
-            + self
-                .0
-                .iter()
-                .map(|inner| inner.as_slice().len())
-                .sum::<usize>()
+        molecule::NUMBER_SIZE * (self.0.len() + 1) + self.0.iter().map(|inner| inner.as_slice().len()).sum::<usize>()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let item_count = self.0.len();
         if item_count == 0 {
-            writer.write_all(&molecule::pack_number(
-                molecule::NUMBER_SIZE as molecule::Number,
-            ))?;
+            writer.write_all(&molecule::pack_number(molecule::NUMBER_SIZE as molecule::Number))?;
         } else {
             let (total_size, offsets) = self.0.iter().fold(
-                (
-                    molecule::NUMBER_SIZE * (item_count + 1),
-                    Vec::with_capacity(item_count),
-                ),
+                (molecule::NUMBER_SIZE * (item_count + 1), Vec::with_capacity(item_count)),
                 |(start, mut offsets), inner| {
                     offsets.push(start);
                     (start + inner.as_slice().len(), offsets)
@@ -2636,9 +2536,7 @@ impl molecule::prelude::Entity for ConfigCellPrice {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder()
-            .discount(self.discount())
-            .prices(self.prices())
+        Self::new_builder().discount(self.discount()).prices(self.prices())
     }
 }
 #[derive(Clone, Copy)]
@@ -2778,9 +2676,7 @@ impl molecule::prelude::Builder for ConfigCellPriceBuilder {
     type Entity = ConfigCellPrice;
     const NAME: &'static str = "ConfigCellPriceBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
-            + self.discount.as_slice().len()
-            + self.prices.as_slice().len()
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1) + self.discount.as_slice().len() + self.prices.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -3231,12 +3127,7 @@ impl<'r> molecule::prelude::Reader<'r> for PriceConfigListReader<'r> {
             return Ok(());
         }
         if slice_len < molecule::NUMBER_SIZE * 2 {
-            return ve!(
-                Self,
-                TotalSizeNotMatch,
-                molecule::NUMBER_SIZE * 2,
-                slice_len
-            );
+            return ve!(Self, TotalSizeNotMatch, molecule::NUMBER_SIZE * 2, slice_len);
         }
         let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
         if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
@@ -3283,25 +3174,15 @@ impl molecule::prelude::Builder for PriceConfigListBuilder {
     type Entity = PriceConfigList;
     const NAME: &'static str = "PriceConfigListBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (self.0.len() + 1)
-            + self
-                .0
-                .iter()
-                .map(|inner| inner.as_slice().len())
-                .sum::<usize>()
+        molecule::NUMBER_SIZE * (self.0.len() + 1) + self.0.iter().map(|inner| inner.as_slice().len()).sum::<usize>()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let item_count = self.0.len();
         if item_count == 0 {
-            writer.write_all(&molecule::pack_number(
-                molecule::NUMBER_SIZE as molecule::Number,
-            ))?;
+            writer.write_all(&molecule::pack_number(molecule::NUMBER_SIZE as molecule::Number))?;
         } else {
             let (total_size, offsets) = self.0.iter().fold(
-                (
-                    molecule::NUMBER_SIZE * (item_count + 1),
-                    Vec::with_capacity(item_count),
-                ),
+                (molecule::NUMBER_SIZE * (item_count + 1), Vec::with_capacity(item_count)),
                 |(start, mut offsets), inner| {
                     offsets.push(start);
                     (start + inner.as_slice().len(), offsets)
@@ -3405,8 +3286,7 @@ impl ::core::fmt::Display for PriceConfig {
 impl ::core::default::Default for PriceConfig {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
+            33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         PriceConfig::new_unchecked(v.into())
     }
@@ -3722,8 +3602,8 @@ impl ::core::fmt::Display for ConfigCellProposal {
 impl ::core::default::Default for ConfigCellProposal {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            35, 0, 0, 0, 24, 0, 0, 0, 25, 0, 0, 0, 26, 0, 0, 0, 27, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0,
+            35, 0, 0, 0, 24, 0, 0, 0, 25, 0, 0, 0, 26, 0, 0, 0, 27, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0,
         ];
         ConfigCellProposal::new_unchecked(v.into())
     }
@@ -4076,12 +3956,7 @@ impl ::core::fmt::Display for ConfigCellProfitRate {
         write!(f, ", {}: {}", "channel", self.channel())?;
         write!(f, ", {}: {}", "proposal_create", self.proposal_create())?;
         write!(f, ", {}: {}", "proposal_confirm", self.proposal_confirm())?;
-        write!(
-            f,
-            ", {}: {}",
-            "income_consolidate",
-            self.income_consolidate()
-        )?;
+        write!(f, ", {}: {}", "income_consolidate", self.income_consolidate())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -4092,8 +3967,8 @@ impl ::core::fmt::Display for ConfigCellProfitRate {
 impl ::core::default::Default for ConfigCellProfitRate {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            44, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            44, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellProfitRate::new_unchecked(v.into())
     }
@@ -4207,12 +4082,7 @@ impl<'r> ::core::fmt::Display for ConfigCellProfitRateReader<'r> {
         write!(f, ", {}: {}", "channel", self.channel())?;
         write!(f, ", {}: {}", "proposal_create", self.proposal_create())?;
         write!(f, ", {}: {}", "proposal_confirm", self.proposal_confirm())?;
-        write!(
-            f,
-            ", {}: {}",
-            "income_consolidate",
-            self.income_consolidate()
-        )?;
+        write!(f, ", {}: {}", "income_consolidate", self.income_consolidate())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -4424,12 +4294,7 @@ impl ::core::fmt::Display for ConfigCellIncome {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "basic_capacity", self.basic_capacity())?;
         write!(f, ", {}: {}", "max_records", self.max_records())?;
-        write!(
-            f,
-            ", {}: {}",
-            "min_transfer_capacity",
-            self.min_transfer_capacity()
-        )?;
+        write!(f, ", {}: {}", "min_transfer_capacity", self.min_transfer_capacity())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -4440,8 +4305,8 @@ impl ::core::fmt::Display for ConfigCellIncome {
 impl ::core::default::Default for ConfigCellIncome {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            36, 0, 0, 0, 16, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0,
+            36, 0, 0, 0, 16, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0,
         ];
         ConfigCellIncome::new_unchecked(v.into())
     }
@@ -4539,12 +4404,7 @@ impl<'r> ::core::fmt::Display for ConfigCellIncomeReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "basic_capacity", self.basic_capacity())?;
         write!(f, ", {}: {}", "max_records", self.max_records())?;
-        write!(
-            f,
-            ", {}: {}",
-            "min_transfer_capacity",
-            self.min_transfer_capacity()
-        )?;
+        write!(f, ", {}: {}", "min_transfer_capacity", self.min_transfer_capacity())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -5130,12 +4990,7 @@ impl<'r> molecule::prelude::Reader<'r> for ReleaseRulesReader<'r> {
             return Ok(());
         }
         if slice_len < molecule::NUMBER_SIZE * 2 {
-            return ve!(
-                Self,
-                TotalSizeNotMatch,
-                molecule::NUMBER_SIZE * 2,
-                slice_len
-            );
+            return ve!(Self, TotalSizeNotMatch, molecule::NUMBER_SIZE * 2, slice_len);
         }
         let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
         if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
@@ -5182,25 +5037,15 @@ impl molecule::prelude::Builder for ReleaseRulesBuilder {
     type Entity = ReleaseRules;
     const NAME: &'static str = "ReleaseRulesBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (self.0.len() + 1)
-            + self
-                .0
-                .iter()
-                .map(|inner| inner.as_slice().len())
-                .sum::<usize>()
+        molecule::NUMBER_SIZE * (self.0.len() + 1) + self.0.iter().map(|inner| inner.as_slice().len()).sum::<usize>()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let item_count = self.0.len();
         if item_count == 0 {
-            writer.write_all(&molecule::pack_number(
-                molecule::NUMBER_SIZE as molecule::Number,
-            ))?;
+            writer.write_all(&molecule::pack_number(molecule::NUMBER_SIZE as molecule::Number))?;
         } else {
             let (total_size, offsets) = self.0.iter().fold(
-                (
-                    molecule::NUMBER_SIZE * (item_count + 1),
-                    Vec::with_capacity(item_count),
-                ),
+                (molecule::NUMBER_SIZE * (item_count + 1), Vec::with_capacity(item_count)),
                 |(start, mut offsets), inner| {
                     offsets.push(start);
                     (start + inner.as_slice().len(), offsets)
@@ -5304,8 +5149,8 @@ impl ::core::fmt::Display for ReleaseRule {
 impl ::core::default::Default for ReleaseRule {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            36, 0, 0, 0, 16, 0, 0, 0, 20, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0,
+            36, 0, 0, 0, 16, 0, 0, 0, 20, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0,
         ];
         ReleaseRule::new_unchecked(v.into())
     }
@@ -5593,10 +5438,9 @@ impl ::core::fmt::Display for ConfigCellMarket {
 impl ::core::default::Default for ConfigCellMarket {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            84, 0, 0, 0, 12, 0, 0, 0, 48, 0, 0, 0, 36, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0,
-            0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 20, 0, 0,
-            0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0,
+            84, 0, 0, 0, 12, 0, 0, 0, 48, 0, 0, 0, 36, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellMarket::new_unchecked(v.into())
     }
@@ -5850,18 +5694,8 @@ impl ::core::fmt::Display for MarketConfig {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "max_selling_time", self.max_selling_time())?;
         write!(f, ", {}: {}", "max_auction_time", self.max_auction_time())?;
-        write!(
-            f,
-            ", {}: {}",
-            "max_auction_waiting",
-            self.max_auction_waiting()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "min_auction_raise_rate",
-            self.min_auction_raise_rate()
-        )?;
+        write!(f, ", {}: {}", "max_auction_waiting", self.max_auction_waiting())?;
+        write!(f, ", {}: {}", "min_auction_raise_rate", self.min_auction_raise_rate())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -5872,8 +5706,8 @@ impl ::core::fmt::Display for MarketConfig {
 impl ::core::default::Default for MarketConfig {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            36, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            36, 0, 0, 0, 20, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0,
         ];
         MarketConfig::new_unchecked(v.into())
     }
@@ -5978,18 +5812,8 @@ impl<'r> ::core::fmt::Display for MarketConfigReader<'r> {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "max_selling_time", self.max_selling_time())?;
         write!(f, ", {}: {}", "max_auction_time", self.max_auction_time())?;
-        write!(
-            f,
-            ", {}: {}",
-            "max_auction_waiting",
-            self.max_auction_waiting()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "min_auction_raise_rate",
-            self.min_auction_raise_rate()
-        )?;
+        write!(f, ", {}: {}", "max_auction_waiting", self.max_auction_waiting())?;
+        write!(f, ", {}: {}", "min_auction_raise_rate", self.min_auction_raise_rate())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -6196,9 +6020,9 @@ impl ::core::fmt::Display for ProposalCellData {
 impl ::core::default::Default for ProposalCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            81, 0, 0, 0, 16, 0, 0, 0, 69, 0, 0, 0, 77, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0,
-            0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
+            81, 0, 0, 0, 16, 0, 0, 0, 69, 0, 0, 0, 77, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
         ];
         ProposalCellData::new_unchecked(v.into())
     }
@@ -6647,12 +6471,7 @@ impl<'r> molecule::prelude::Reader<'r> for SliceListReader<'r> {
             return Ok(());
         }
         if slice_len < molecule::NUMBER_SIZE * 2 {
-            return ve!(
-                Self,
-                TotalSizeNotMatch,
-                molecule::NUMBER_SIZE * 2,
-                slice_len
-            );
+            return ve!(Self, TotalSizeNotMatch, molecule::NUMBER_SIZE * 2, slice_len);
         }
         let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
         if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
@@ -6699,25 +6518,15 @@ impl molecule::prelude::Builder for SliceListBuilder {
     type Entity = SliceList;
     const NAME: &'static str = "SliceListBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (self.0.len() + 1)
-            + self
-                .0
-                .iter()
-                .map(|inner| inner.as_slice().len())
-                .sum::<usize>()
+        molecule::NUMBER_SIZE * (self.0.len() + 1) + self.0.iter().map(|inner| inner.as_slice().len()).sum::<usize>()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let item_count = self.0.len();
         if item_count == 0 {
-            writer.write_all(&molecule::pack_number(
-                molecule::NUMBER_SIZE as molecule::Number,
-            ))?;
+            writer.write_all(&molecule::pack_number(molecule::NUMBER_SIZE as molecule::Number))?;
         } else {
             let (total_size, offsets) = self.0.iter().fold(
-                (
-                    molecule::NUMBER_SIZE * (item_count + 1),
-                    Vec::with_capacity(item_count),
-                ),
+                (molecule::NUMBER_SIZE * (item_count + 1), Vec::with_capacity(item_count)),
                 |(start, mut offsets), inner| {
                     offsets.push(start);
                     (start + inner.as_slice().len(), offsets)
@@ -6981,12 +6790,7 @@ impl<'r> molecule::prelude::Reader<'r> for SLReader<'r> {
             return Ok(());
         }
         if slice_len < molecule::NUMBER_SIZE * 2 {
-            return ve!(
-                Self,
-                TotalSizeNotMatch,
-                molecule::NUMBER_SIZE * 2,
-                slice_len
-            );
+            return ve!(Self, TotalSizeNotMatch, molecule::NUMBER_SIZE * 2, slice_len);
         }
         let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
         if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
@@ -7033,25 +6837,15 @@ impl molecule::prelude::Builder for SLBuilder {
     type Entity = SL;
     const NAME: &'static str = "SLBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (self.0.len() + 1)
-            + self
-                .0
-                .iter()
-                .map(|inner| inner.as_slice().len())
-                .sum::<usize>()
+        molecule::NUMBER_SIZE * (self.0.len() + 1) + self.0.iter().map(|inner| inner.as_slice().len()).sum::<usize>()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let item_count = self.0.len();
         if item_count == 0 {
-            writer.write_all(&molecule::pack_number(
-                molecule::NUMBER_SIZE as molecule::Number,
-            ))?;
+            writer.write_all(&molecule::pack_number(molecule::NUMBER_SIZE as molecule::Number))?;
         } else {
             let (total_size, offsets) = self.0.iter().fold(
-                (
-                    molecule::NUMBER_SIZE * (item_count + 1),
-                    Vec::with_capacity(item_count),
-                ),
+                (molecule::NUMBER_SIZE * (item_count + 1), Vec::with_capacity(item_count)),
                 |(start, mut offsets), inner| {
                     offsets.push(start);
                     (start + inner.as_slice().len(), offsets)
@@ -7155,8 +6949,8 @@ impl ::core::fmt::Display for ProposalItem {
 impl ::core::default::Default for ProposalItem {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            57, 0, 0, 0, 16, 0, 0, 0, 36, 0, 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            57, 0, 0, 0, 16, 0, 0, 0, 36, 0, 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ProposalItem::new_unchecked(v.into())
     }
@@ -7444,9 +7238,8 @@ impl ::core::fmt::Display for IncomeCellData {
 impl ::core::default::Default for IncomeCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            69, 0, 0, 0, 12, 0, 0, 0, 65, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
+            69, 0, 0, 0, 12, 0, 0, 0, 65, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
         ];
         IncomeCellData::new_unchecked(v.into())
     }
@@ -7511,9 +7304,7 @@ impl molecule::prelude::Entity for IncomeCellData {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder()
-            .creator(self.creator())
-            .records(self.records())
+        Self::new_builder().creator(self.creator()).records(self.records())
     }
 }
 #[derive(Clone, Copy)]
@@ -7653,9 +7444,7 @@ impl molecule::prelude::Builder for IncomeCellDataBuilder {
     type Entity = IncomeCellData;
     const NAME: &'static str = "IncomeCellDataBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
-            + self.creator.as_slice().len()
-            + self.records.as_slice().len()
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1) + self.creator.as_slice().len() + self.records.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -7871,12 +7660,7 @@ impl<'r> molecule::prelude::Reader<'r> for IncomeRecordsReader<'r> {
             return Ok(());
         }
         if slice_len < molecule::NUMBER_SIZE * 2 {
-            return ve!(
-                Self,
-                TotalSizeNotMatch,
-                molecule::NUMBER_SIZE * 2,
-                slice_len
-            );
+            return ve!(Self, TotalSizeNotMatch, molecule::NUMBER_SIZE * 2, slice_len);
         }
         let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
         if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
@@ -7923,25 +7707,15 @@ impl molecule::prelude::Builder for IncomeRecordsBuilder {
     type Entity = IncomeRecords;
     const NAME: &'static str = "IncomeRecordsBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (self.0.len() + 1)
-            + self
-                .0
-                .iter()
-                .map(|inner| inner.as_slice().len())
-                .sum::<usize>()
+        molecule::NUMBER_SIZE * (self.0.len() + 1) + self.0.iter().map(|inner| inner.as_slice().len()).sum::<usize>()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let item_count = self.0.len();
         if item_count == 0 {
-            writer.write_all(&molecule::pack_number(
-                molecule::NUMBER_SIZE as molecule::Number,
-            ))?;
+            writer.write_all(&molecule::pack_number(molecule::NUMBER_SIZE as molecule::Number))?;
         } else {
             let (total_size, offsets) = self.0.iter().fold(
-                (
-                    molecule::NUMBER_SIZE * (item_count + 1),
-                    Vec::with_capacity(item_count),
-                ),
+                (molecule::NUMBER_SIZE * (item_count + 1), Vec::with_capacity(item_count)),
                 |(start, mut offsets), inner| {
                     offsets.push(start);
                     (start + inner.as_slice().len(), offsets)
@@ -8044,9 +7818,9 @@ impl ::core::fmt::Display for IncomeRecord {
 impl ::core::default::Default for IncomeRecord {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            73, 0, 0, 0, 12, 0, 0, 0, 65, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            73, 0, 0, 0, 12, 0, 0, 0, 65, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0,
         ];
         IncomeRecord::new_unchecked(v.into())
     }
@@ -8314,9 +8088,9 @@ impl ::core::fmt::Display for AccountCellDataV1 {
 impl ::core::default::Default for AccountCellDataV1 {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            73, 0, 0, 0, 28, 0, 0, 0, 48, 0, 0, 0, 52, 0, 0, 0, 60, 0, 0, 0, 68, 0, 0, 0, 69, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
+            73, 0, 0, 0, 28, 0, 0, 0, 48, 0, 0, 0, 52, 0, 0, 0, 60, 0, 0, 0, 68, 0, 0, 0, 69, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            4, 0, 0, 0,
         ];
         AccountCellDataV1::new_unchecked(v.into())
     }
@@ -8673,18 +8447,8 @@ impl ::core::fmt::Display for AccountCellData {
             "last_transfer_account_at",
             self.last_transfer_account_at()
         )?;
-        write!(
-            f,
-            ", {}: {}",
-            "last_edit_manager_at",
-            self.last_edit_manager_at()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "last_edit_records_at",
-            self.last_edit_records_at()
-        )?;
+        write!(f, ", {}: {}", "last_edit_manager_at", self.last_edit_manager_at())?;
+        write!(f, ", {}: {}", "last_edit_records_at", self.last_edit_records_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "records", self.records())?;
         let extra_count = self.count_extra_fields();
@@ -8697,10 +8461,9 @@ impl ::core::fmt::Display for AccountCellData {
 impl ::core::default::Default for AccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            97, 0, 0, 0, 36, 0, 0, 0, 56, 0, 0, 0, 60, 0, 0, 0, 68, 0, 0, 0, 76, 0, 0, 0, 84, 0, 0,
-            0, 92, 0, 0, 0, 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
+            97, 0, 0, 0, 36, 0, 0, 0, 56, 0, 0, 0, 60, 0, 0, 0, 68, 0, 0, 0, 76, 0, 0, 0, 84, 0, 0, 0, 92, 0, 0, 0, 93,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0,
         ];
         AccountCellData::new_unchecked(v.into())
     }
@@ -8840,18 +8603,8 @@ impl<'r> ::core::fmt::Display for AccountCellDataReader<'r> {
             "last_transfer_account_at",
             self.last_transfer_account_at()
         )?;
-        write!(
-            f,
-            ", {}: {}",
-            "last_edit_manager_at",
-            self.last_edit_manager_at()
-        )?;
-        write!(
-            f,
-            ", {}: {}",
-            "last_edit_records_at",
-            self.last_edit_records_at()
-        )?;
+        write!(f, ", {}: {}", "last_edit_manager_at", self.last_edit_manager_at())?;
+        write!(f, ", {}: {}", "last_edit_records_at", self.last_edit_records_at())?;
         write!(f, ", {}: {}", "status", self.status())?;
         write!(f, ", {}: {}", "records", self.records())?;
         let extra_count = self.count_extra_fields();
@@ -9541,8 +9294,8 @@ impl ::core::fmt::Display for Record {
 impl ::core::default::Default for Record {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            44, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            44, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 32, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         Record::new_unchecked(v.into())
     }
@@ -10039,12 +9792,7 @@ impl<'r> molecule::prelude::Reader<'r> for RecordsReader<'r> {
             return Ok(());
         }
         if slice_len < molecule::NUMBER_SIZE * 2 {
-            return ve!(
-                Self,
-                TotalSizeNotMatch,
-                molecule::NUMBER_SIZE * 2,
-                slice_len
-            );
+            return ve!(Self, TotalSizeNotMatch, molecule::NUMBER_SIZE * 2, slice_len);
         }
         let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
         if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
@@ -10091,25 +9839,15 @@ impl molecule::prelude::Builder for RecordsBuilder {
     type Entity = Records;
     const NAME: &'static str = "RecordsBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (self.0.len() + 1)
-            + self
-                .0
-                .iter()
-                .map(|inner| inner.as_slice().len())
-                .sum::<usize>()
+        molecule::NUMBER_SIZE * (self.0.len() + 1) + self.0.iter().map(|inner| inner.as_slice().len()).sum::<usize>()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let item_count = self.0.len();
         if item_count == 0 {
-            writer.write_all(&molecule::pack_number(
-                molecule::NUMBER_SIZE as molecule::Number,
-            ))?;
+            writer.write_all(&molecule::pack_number(molecule::NUMBER_SIZE as molecule::Number))?;
         } else {
             let (total_size, offsets) = self.0.iter().fold(
-                (
-                    molecule::NUMBER_SIZE * (item_count + 1),
-                    Vec::with_capacity(item_count),
-                ),
+                (molecule::NUMBER_SIZE * (item_count + 1), Vec::with_capacity(item_count)),
                 |(start, mut offsets), inner| {
                     offsets.push(start);
                     (start + inner.as_slice().len(), offsets)
@@ -10220,12 +9958,11 @@ impl ::core::fmt::Display for PreAccountCellData {
 impl ::core::default::Default for PreAccountCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            162, 0, 0, 0, 44, 0, 0, 0, 48, 0, 0, 0, 101, 0, 0, 0, 105, 0, 0, 0, 109, 0, 0, 0, 109,
-            0, 0, 0, 109, 0, 0, 0, 142, 0, 0, 0, 150, 0, 0, 0, 154, 0, 0, 0, 4, 0, 0, 0, 53, 0, 0,
-            0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            162, 0, 0, 0, 44, 0, 0, 0, 48, 0, 0, 0, 101, 0, 0, 0, 105, 0, 0, 0, 109, 0, 0, 0, 109, 0, 0, 0, 109, 0, 0,
+            0, 142, 0, 0, 0, 150, 0, 0, 0, 154, 0, 0, 0, 4, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 33, 0, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         PreAccountCellData::new_unchecked(v.into())
     }
@@ -10842,12 +10579,7 @@ impl<'r> molecule::prelude::Reader<'r> for AccountCharsReader<'r> {
             return Ok(());
         }
         if slice_len < molecule::NUMBER_SIZE * 2 {
-            return ve!(
-                Self,
-                TotalSizeNotMatch,
-                molecule::NUMBER_SIZE * 2,
-                slice_len
-            );
+            return ve!(Self, TotalSizeNotMatch, molecule::NUMBER_SIZE * 2, slice_len);
         }
         let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
         if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
@@ -10894,25 +10626,15 @@ impl molecule::prelude::Builder for AccountCharsBuilder {
     type Entity = AccountChars;
     const NAME: &'static str = "AccountCharsBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (self.0.len() + 1)
-            + self
-                .0
-                .iter()
-                .map(|inner| inner.as_slice().len())
-                .sum::<usize>()
+        molecule::NUMBER_SIZE * (self.0.len() + 1) + self.0.iter().map(|inner| inner.as_slice().len()).sum::<usize>()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let item_count = self.0.len();
         if item_count == 0 {
-            writer.write_all(&molecule::pack_number(
-                molecule::NUMBER_SIZE as molecule::Number,
-            ))?;
+            writer.write_all(&molecule::pack_number(molecule::NUMBER_SIZE as molecule::Number))?;
         } else {
             let (total_size, offsets) = self.0.iter().fold(
-                (
-                    molecule::NUMBER_SIZE * (item_count + 1),
-                    Vec::with_capacity(item_count),
-                ),
+                (molecule::NUMBER_SIZE * (item_count + 1), Vec::with_capacity(item_count)),
                 |(start, mut offsets), inner| {
                     offsets.push(start);
                     (start + inner.as_slice().len(), offsets)
@@ -11014,9 +10736,7 @@ impl ::core::fmt::Display for AccountChar {
 }
 impl ::core::default::Default for AccountChar {
     fn default() -> Self {
-        let v: Vec<u8> = vec![
-            20, 0, 0, 0, 12, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ];
+        let v: Vec<u8> = vec![20, 0, 0, 0, 12, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         AccountChar::new_unchecked(v.into())
     }
 }
@@ -11344,9 +11064,7 @@ impl molecule::prelude::Entity for OnSaleCellData {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder()
-            .price(self.price())
-            .started_at(self.started_at())
+        Self::new_builder().price(self.price()).started_at(self.started_at())
     }
 }
 #[derive(Clone, Copy)]
@@ -11486,9 +11204,7 @@ impl molecule::prelude::Builder for OnSaleCellDataBuilder {
     type Entity = OnSaleCellData;
     const NAME: &'static str = "OnSaleCellDataBuilder";
     fn expected_length(&self) -> usize {
-        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
-            + self.price.as_slice().len()
-            + self.started_at.as_slice().len()
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1) + self.price.as_slice().len() + self.started_at.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -11546,8 +11262,8 @@ impl ::core::fmt::Display for BiddingCellData {
 impl ::core::default::Default for BiddingCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            49, 0, 0, 0, 24, 0, 0, 0, 25, 0, 0, 0, 33, 0, 0, 0, 41, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            49, 0, 0, 0, 24, 0, 0, 0, 25, 0, 0, 0, 33, 0, 0, 0, 41, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         BiddingCellData::new_unchecked(v.into())
     }

@@ -21,8 +21,5 @@ fn test_account_chars_support_as_readable() {
         .build();
 
     assert_eq!(account_chars.as_readable().as_slice(), expected.as_bytes());
-    assert_eq!(
-        account_chars.as_reader().as_readable().as_slice(),
-        expected.as_bytes()
-    );
+    assert_eq!(account_chars.as_reader().as_readable().as_slice(), expected.as_bytes());
 }

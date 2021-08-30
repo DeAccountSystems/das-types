@@ -12,17 +12,9 @@ use std::process;
 struct Options {
     #[clap(short = 'd', long = "data", about = "Hex data to virtualize.")]
     data: Option<String>,
-    #[clap(
-        short = 't',
-        long = "data-type",
-        about = "A file path to the configuration file."
-    )]
+    #[clap(short = 't', long = "data-type", about = "A file path to the configuration file.")]
     data_type: Option<String>,
-    #[clap(
-        short = 'w',
-        long = "witness",
-        about = "Hex witness data to virtualize."
-    )]
+    #[clap(short = 'w', long = "witness", about = "Hex witness data to virtualize.")]
     witness: Option<String>,
 }
 
@@ -53,17 +45,12 @@ fn main() {
         match hex_to_bytes(&options.witness.unwrap()) {
             Ok(bytes) => {
                 let raw_data_type = bytes.get(3..7).unwrap();
-                let data_type =
-                    DataType::try_from(u32::from_le_bytes(raw_data_type.try_into().unwrap()))
-                        .unwrap();
+                let data_type = DataType::try_from(u32::from_le_bytes(raw_data_type.try_into().unwrap())).unwrap();
                 let raw = bytes.get(7..).unwrap();
 
                 println!("expected_data_type: {:?}", data_type);
                 if let Err(e) = virtualize_witness(data_type, raw) {
-                    println!(
-                        "Parse witness to actual data type failed: {}",
-                        e.to_string()
-                    );
+                    println!("Parse witness to actual data type failed: {}", e.to_string());
                     process::exit(1);
                 }
             }
@@ -89,9 +76,7 @@ pub fn hex_to_bytes(input: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 
 pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn Error>> {
     match data_type as u32 {
-        data_type_in_int
-            if data_type_in_int == 0 || (data_type_in_int >= 100 && data_type_in_int < 1000) =>
-        {
+        data_type_in_int if data_type_in_int == 0 || (data_type_in_int >= 100 && data_type_in_int < 1000) => {
             let (hash, entity) = virtualize_entity(data_type, 1, raw)?;
             println!("hash: 0x{}\nentity: {}", hex::encode(hash), entity);
         }
@@ -214,9 +199,7 @@ pub fn virtualize_entity(
         DataType::ConfigCellPrice => {
             entity = Box::new(ConfigCellPrice::from_slice(raw).map_err(error_to_string)?);
         }
-        _ => {
-            return Err(format!("unsupported DataType for virtualization: {:?}", data_type).into())
-        }
+        _ => return Err(format!("unsupported DataType for virtualization: {:?}", data_type).into()),
     }
 
     Ok((blake2b_256(raw), entity))

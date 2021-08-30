@@ -44,10 +44,9 @@ fn test_is_reader_eq() {
 
 #[test]
 fn test_wrap_as_data_entity() {
-    let code_hash = Hash::try_from(
-        hex::decode("e683b04139344768348499c23eb1326d5a52d6db006c0d2fece00a831f3660d7").unwrap(),
-    )
-    .unwrap();
+    let code_hash =
+        Hash::try_from(hex::decode("e683b04139344768348499c23eb1326d5a52d6db006c0d2fece00a831f3660d7").unwrap())
+            .unwrap();
     let raw = Script::new_builder()
         .code_hash(code_hash)
         .hash_type(Byte::new(0))
@@ -56,18 +55,14 @@ fn test_wrap_as_data_entity() {
 
     assert!(util::is_entity_eq(&data.version(), &Uint32::from(1)));
     assert!(util::is_entity_eq(&data.index(), &Uint32::from(0)));
-    assert!(util::is_entity_eq(
-        &data.entity(),
-        &Bytes::from(raw.as_slice())
-    ));
+    assert!(util::is_entity_eq(&data.entity(), &Bytes::from(raw.as_slice())));
 }
 
 #[test]
 fn test_wrap_as_data_entity_opt() {
-    let code_hash = Hash::try_from(
-        hex::decode("e683b04139344768348499c23eb1326d5a52d6db006c0d2fece00a831f3660d7").unwrap(),
-    )
-    .unwrap();
+    let code_hash =
+        Hash::try_from(hex::decode("e683b04139344768348499c23eb1326d5a52d6db006c0d2fece00a831f3660d7").unwrap())
+            .unwrap();
     let raw = Script::new_builder()
         .code_hash(code_hash)
         .hash_type(Byte::new(0))
@@ -80,10 +75,7 @@ fn test_wrap_as_data_entity_opt() {
 
     assert!(util::is_entity_eq(&data.version(), &Uint32::from(1)));
     assert!(util::is_entity_eq(&data.index(), &Uint32::from(0)));
-    assert!(util::is_entity_eq(
-        &data.entity(),
-        &Bytes::from(raw.as_slice())
-    ));
+    assert!(util::is_entity_eq(&data.entity(), &Bytes::from(raw.as_slice())));
 }
 
 #[test]
@@ -93,10 +85,7 @@ fn test_wrap_action_witness() {
     // eprintln!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
-    assert_eq!(
-        header, &WITNESS_HEADER,
-        "The wrapped bytes should have DAS header."
-    );
+    assert_eq!(header, &WITNESS_HEADER, "The wrapped bytes should have DAS header.");
 
     let raw = witness.as_slice().get(7..11).unwrap();
     let data_type = u32::from(Uint32::new_unchecked(raw.to_vec().into()));
@@ -127,10 +116,7 @@ fn test_wrap_raw_witness() {
     // println!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
-    assert_eq!(
-        header, &WITNESS_HEADER,
-        "The wrapped bytes should have DAS header."
-    );
+    assert_eq!(header, &WITNESS_HEADER, "The wrapped bytes should have DAS header.");
 
     let raw = witness.as_slice().get(7..11).unwrap();
     let data_type = u32::from_le_bytes(raw.try_into().unwrap());
@@ -153,10 +139,7 @@ fn test_wrap_entity_witness() {
     // println!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
-    assert_eq!(
-        header, &WITNESS_HEADER,
-        "The wrapped bytes should have DAS header."
-    );
+    assert_eq!(header, &WITNESS_HEADER, "The wrapped bytes should have DAS header.");
 
     let raw = witness.as_slice().get(7..11).unwrap();
     let data_type = u32::from_le_bytes(raw.try_into().unwrap());
@@ -188,10 +171,7 @@ fn test_wrap_data_witness() {
     // println!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
-    assert_eq!(
-        header, &WITNESS_HEADER,
-        "The wrapped bytes should have DAS header."
-    );
+    assert_eq!(header, &WITNESS_HEADER, "The wrapped bytes should have DAS header.");
 
     let raw = witness.as_slice().get(7..11).unwrap();
     let data_type = u32::from_le_bytes(raw.try_into().unwrap());
@@ -203,8 +183,5 @@ fn test_wrap_data_witness() {
 
     let raw = witness.as_slice().get(11..).unwrap();
     let ret = Data::from_slice(raw);
-    assert!(
-        ret.is_ok(),
-        "The wrapped bytes should have original entity data."
-    );
+    assert!(ret.is_ok(), "The wrapped bytes should have original entity data.");
 }
