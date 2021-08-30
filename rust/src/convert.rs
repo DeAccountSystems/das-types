@@ -112,11 +112,7 @@ impl TryFrom<&[u8]> for Hash {
     type Error = VerificationError;
     fn try_from(v: &[u8]) -> Result<Self, VerificationError> {
         if v.len() != 32 {
-            return Err(VerificationError::TotalSizeNotMatch(
-                "Hash".to_owned(),
-                32,
-                v.len(),
-            ));
+            return Err(VerificationError::TotalSizeNotMatch("Hash".to_owned(), 32, v.len()));
         }
         let mut inner = [Byte::new(0); 32];
         let v = v.to_owned().into_iter().map(Byte::new).collect::<Vec<_>>();

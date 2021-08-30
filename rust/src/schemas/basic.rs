@@ -314,12 +314,7 @@ impl ::core::fmt::Debug for Uint32Builder {
 }
 impl ::core::default::Default for Uint32Builder {
     fn default() -> Self {
-        Uint32Builder([
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-            Byte::default(),
-        ])
+        Uint32Builder([Byte::default(), Byte::default(), Byte::default(), Byte::default()])
     }
 }
 impl Uint32Builder {
@@ -1148,8 +1143,7 @@ impl ::core::fmt::Display for Hash {
 impl ::core::default::Default for Hash {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         Hash::new_unchecked(v.into())
     }
@@ -1841,10 +1835,7 @@ impl molecule::prelude::Builder for HashOptBuilder {
     type Entity = HashOpt;
     const NAME: &'static str = "HashOptBuilder";
     fn expected_length(&self) -> usize {
-        self.0
-            .as_ref()
-            .map(|ref inner| inner.as_slice().len())
-            .unwrap_or(0)
+        self.0.as_ref().map(|ref inner| inner.as_slice().len()).unwrap_or(0)
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         self.0
@@ -1891,8 +1882,8 @@ impl ::core::fmt::Display for Script {
 impl ::core::default::Default for Script {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         Script::new_unchecked(v.into())
     }
@@ -2294,10 +2285,7 @@ impl molecule::prelude::Builder for ScriptOptBuilder {
     type Entity = ScriptOpt;
     const NAME: &'static str = "ScriptOptBuilder";
     fn expected_length(&self) -> usize {
-        self.0
-            .as_ref()
-            .map(|ref inner| inner.as_slice().len())
-            .unwrap_or(0)
+        self.0.as_ref().map(|ref inner| inner.as_slice().len()).unwrap_or(0)
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         self.0
@@ -2339,8 +2327,7 @@ impl ::core::fmt::Display for OutPoint {
 impl ::core::default::Default for OutPoint {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         OutPoint::new_unchecked(v.into())
     }
@@ -2381,9 +2368,7 @@ impl molecule::prelude::Entity for OutPoint {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder()
-            .tx_hash(self.tx_hash())
-            .index(self.index())
+        Self::new_builder().tx_hash(self.tx_hash()).index(self.index())
     }
 }
 #[derive(Clone, Copy)]
@@ -2579,10 +2564,7 @@ impl molecule::prelude::Entity for Data {
         ::core::default::Default::default()
     }
     fn as_builder(self) -> Self::Builder {
-        Self::new_builder()
-            .dep(self.dep())
-            .old(self.old())
-            .new(self.new())
+        Self::new_builder().dep(self.dep()).old(self.old()).new(self.new())
     }
 }
 #[derive(Clone, Copy)]
@@ -3199,10 +3181,7 @@ impl molecule::prelude::Builder for DataEntityOptBuilder {
     type Entity = DataEntityOpt;
     const NAME: &'static str = "DataEntityOptBuilder";
     fn expected_length(&self) -> usize {
-        self.0
-            .as_ref()
-            .map(|ref inner| inner.as_slice().len())
-            .unwrap_or(0)
+        self.0.as_ref().map(|ref inner| inner.as_slice().len()).unwrap_or(0)
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         self.0

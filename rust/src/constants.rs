@@ -77,82 +77,32 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::ConfigCellProposal as u32 => Ok(DataType::ConfigCellProposal),
             x if x == DataType::ConfigCellProfitRate as u32 => Ok(DataType::ConfigCellProfitRate),
             x if x == DataType::ConfigCellRelease as u32 => Ok(DataType::ConfigCellRelease),
-            x if x == DataType::ConfigCellRecordKeyNamespace as u32 => {
-                Ok(DataType::ConfigCellRecordKeyNamespace)
-            }
-            x if x == DataType::ConfigCellPreservedAccount00 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount00)
-            }
-            x if x == DataType::ConfigCellPreservedAccount01 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount01)
-            }
-            x if x == DataType::ConfigCellPreservedAccount02 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount02)
-            }
-            x if x == DataType::ConfigCellPreservedAccount03 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount03)
-            }
-            x if x == DataType::ConfigCellPreservedAccount04 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount04)
-            }
-            x if x == DataType::ConfigCellPreservedAccount05 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount05)
-            }
-            x if x == DataType::ConfigCellPreservedAccount06 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount06)
-            }
-            x if x == DataType::ConfigCellPreservedAccount07 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount07)
-            }
-            x if x == DataType::ConfigCellPreservedAccount08 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount08)
-            }
-            x if x == DataType::ConfigCellPreservedAccount09 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount09)
-            }
-            x if x == DataType::ConfigCellPreservedAccount10 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount10)
-            }
-            x if x == DataType::ConfigCellPreservedAccount11 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount11)
-            }
-            x if x == DataType::ConfigCellPreservedAccount12 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount12)
-            }
-            x if x == DataType::ConfigCellPreservedAccount13 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount13)
-            }
-            x if x == DataType::ConfigCellPreservedAccount14 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount14)
-            }
-            x if x == DataType::ConfigCellPreservedAccount15 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount15)
-            }
-            x if x == DataType::ConfigCellPreservedAccount16 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount16)
-            }
-            x if x == DataType::ConfigCellPreservedAccount17 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount17)
-            }
-            x if x == DataType::ConfigCellPreservedAccount18 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount18)
-            }
-            x if x == DataType::ConfigCellPreservedAccount19 as u32 => {
-                Ok(DataType::ConfigCellPreservedAccount19)
-            }
-            x if x == DataType::ConfigCellCharSetEmoji as u32 => {
-                Ok(DataType::ConfigCellCharSetEmoji)
-            }
-            x if x == DataType::ConfigCellCharSetDigit as u32 => {
-                Ok(DataType::ConfigCellCharSetDigit)
-            }
+            x if x == DataType::ConfigCellRecordKeyNamespace as u32 => Ok(DataType::ConfigCellRecordKeyNamespace),
+            x if x == DataType::ConfigCellPreservedAccount00 as u32 => Ok(DataType::ConfigCellPreservedAccount00),
+            x if x == DataType::ConfigCellPreservedAccount01 as u32 => Ok(DataType::ConfigCellPreservedAccount01),
+            x if x == DataType::ConfigCellPreservedAccount02 as u32 => Ok(DataType::ConfigCellPreservedAccount02),
+            x if x == DataType::ConfigCellPreservedAccount03 as u32 => Ok(DataType::ConfigCellPreservedAccount03),
+            x if x == DataType::ConfigCellPreservedAccount04 as u32 => Ok(DataType::ConfigCellPreservedAccount04),
+            x if x == DataType::ConfigCellPreservedAccount05 as u32 => Ok(DataType::ConfigCellPreservedAccount05),
+            x if x == DataType::ConfigCellPreservedAccount06 as u32 => Ok(DataType::ConfigCellPreservedAccount06),
+            x if x == DataType::ConfigCellPreservedAccount07 as u32 => Ok(DataType::ConfigCellPreservedAccount07),
+            x if x == DataType::ConfigCellPreservedAccount08 as u32 => Ok(DataType::ConfigCellPreservedAccount08),
+            x if x == DataType::ConfigCellPreservedAccount09 as u32 => Ok(DataType::ConfigCellPreservedAccount09),
+            x if x == DataType::ConfigCellPreservedAccount10 as u32 => Ok(DataType::ConfigCellPreservedAccount10),
+            x if x == DataType::ConfigCellPreservedAccount11 as u32 => Ok(DataType::ConfigCellPreservedAccount11),
+            x if x == DataType::ConfigCellPreservedAccount12 as u32 => Ok(DataType::ConfigCellPreservedAccount12),
+            x if x == DataType::ConfigCellPreservedAccount13 as u32 => Ok(DataType::ConfigCellPreservedAccount13),
+            x if x == DataType::ConfigCellPreservedAccount14 as u32 => Ok(DataType::ConfigCellPreservedAccount14),
+            x if x == DataType::ConfigCellPreservedAccount15 as u32 => Ok(DataType::ConfigCellPreservedAccount15),
+            x if x == DataType::ConfigCellPreservedAccount16 as u32 => Ok(DataType::ConfigCellPreservedAccount16),
+            x if x == DataType::ConfigCellPreservedAccount17 as u32 => Ok(DataType::ConfigCellPreservedAccount17),
+            x if x == DataType::ConfigCellPreservedAccount18 as u32 => Ok(DataType::ConfigCellPreservedAccount18),
+            x if x == DataType::ConfigCellPreservedAccount19 as u32 => Ok(DataType::ConfigCellPreservedAccount19),
+            x if x == DataType::ConfigCellCharSetEmoji as u32 => Ok(DataType::ConfigCellCharSetEmoji),
+            x if x == DataType::ConfigCellCharSetDigit as u32 => Ok(DataType::ConfigCellCharSetDigit),
             x if x == DataType::ConfigCellCharSetEn as u32 => Ok(DataType::ConfigCellCharSetEn),
-            x if x == DataType::ConfigCellCharSetZhHans as u32 => {
-                Ok(DataType::ConfigCellCharSetZhHans)
-            }
-            x if x == DataType::ConfigCellCharSetZhHant as u32 => {
-                Ok(DataType::ConfigCellCharSetZhHant)
-            }
+            x if x == DataType::ConfigCellCharSetZhHans as u32 => Ok(DataType::ConfigCellCharSetZhHans),
+            x if x == DataType::ConfigCellCharSetZhHant as u32 => Ok(DataType::ConfigCellCharSetZhHant),
             _ => Err(()),
         }
     }
