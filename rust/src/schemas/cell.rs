@@ -5689,6 +5689,12 @@ impl ::core::fmt::Display for ConfigCellSecondaryMarket {
             "sale_expiration_limit",
             self.sale_expiration_limit()
         )?;
+        write!(
+            f,
+            ", {}: {}",
+            "sale_description_bytes_limit",
+            self.sale_description_bytes_limit()
+        )?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -5699,13 +5705,14 @@ impl ::core::fmt::Display for ConfigCellSecondaryMarket {
 impl ::core::default::Default for ConfigCellSecondaryMarket {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            28, 0, 0, 0, 12, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            40, 0, 0, 0, 16, 0, 0, 0, 24, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellSecondaryMarket::new_unchecked(v.into())
     }
 }
 impl ConfigCellSecondaryMarket {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -5731,8 +5738,14 @@ impl ConfigCellSecondaryMarket {
     pub fn sale_expiration_limit(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint64::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn sale_description_bytes_limit(&self) -> Uint64 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[12..]) as usize;
+            let end = molecule::unpack_number(&slice[16..]) as usize;
             Uint64::new_unchecked(self.0.slice(start..end))
         } else {
             Uint64::new_unchecked(self.0.slice(start..))
@@ -5768,6 +5781,7 @@ impl molecule::prelude::Entity for ConfigCellSecondaryMarket {
         Self::new_builder()
             .min_sale_price(self.min_sale_price())
             .sale_expiration_limit(self.sale_expiration_limit())
+            .sale_description_bytes_limit(self.sale_description_bytes_limit())
     }
 }
 #[derive(Clone, Copy)]
@@ -5796,6 +5810,12 @@ impl<'r> ::core::fmt::Display for ConfigCellSecondaryMarketReader<'r> {
             "sale_expiration_limit",
             self.sale_expiration_limit()
         )?;
+        write!(
+            f,
+            ", {}: {}",
+            "sale_description_bytes_limit",
+            self.sale_description_bytes_limit()
+        )?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -5804,7 +5824,7 @@ impl<'r> ::core::fmt::Display for ConfigCellSecondaryMarketReader<'r> {
     }
 }
 impl<'r> ConfigCellSecondaryMarketReader<'r> {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -5830,8 +5850,14 @@ impl<'r> ConfigCellSecondaryMarketReader<'r> {
     pub fn sale_expiration_limit(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn sale_description_bytes_limit(&self) -> Uint64Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[12..]) as usize;
+            let end = molecule::unpack_number(&slice[16..]) as usize;
             Uint64Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint64Reader::new_unchecked(&self.as_slice()[start..])
@@ -5889,6 +5915,7 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellSecondaryMarketReader<'r> {
         }
         Uint64Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         Uint64Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         Ok(())
     }
 }
@@ -5896,15 +5923,20 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellSecondaryMarketReader<'r> {
 pub struct ConfigCellSecondaryMarketBuilder {
     pub(crate) min_sale_price: Uint64,
     pub(crate) sale_expiration_limit: Uint64,
+    pub(crate) sale_description_bytes_limit: Uint64,
 }
 impl ConfigCellSecondaryMarketBuilder {
-    pub const FIELD_COUNT: usize = 2;
+    pub const FIELD_COUNT: usize = 3;
     pub fn min_sale_price(mut self, v: Uint64) -> Self {
         self.min_sale_price = v;
         self
     }
     pub fn sale_expiration_limit(mut self, v: Uint64) -> Self {
         self.sale_expiration_limit = v;
+        self
+    }
+    pub fn sale_description_bytes_limit(mut self, v: Uint64) -> Self {
+        self.sale_description_bytes_limit = v;
         self
     }
 }
@@ -5915,6 +5947,7 @@ impl molecule::prelude::Builder for ConfigCellSecondaryMarketBuilder {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.min_sale_price.as_slice().len()
             + self.sale_expiration_limit.as_slice().len()
+            + self.sale_description_bytes_limit.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -5923,12 +5956,15 @@ impl molecule::prelude::Builder for ConfigCellSecondaryMarketBuilder {
         total_size += self.min_sale_price.as_slice().len();
         offsets.push(total_size);
         total_size += self.sale_expiration_limit.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.sale_description_bytes_limit.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
         writer.write_all(self.min_sale_price.as_slice())?;
         writer.write_all(self.sale_expiration_limit.as_slice())?;
+        writer.write_all(self.sale_description_bytes_limit.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -9977,7 +10013,7 @@ impl ::core::fmt::Display for AccountSaleCellData {
         write!(f, "{}: {}", "account_id", self.account_id())?;
         write!(f, ", {}: {}", "price", self.price())?;
         write!(f, ", {}: {}", "description", self.description())?;
-        write!(f, ", {}: {}", "expired_at", self.expired_at())?;
+        write!(f, ", {}: {}", "started_at", self.started_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -10031,7 +10067,7 @@ impl AccountSaleCellData {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn expired_at(&self) -> Uint64 {
+    pub fn started_at(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         if self.has_extra_fields() {
@@ -10071,7 +10107,7 @@ impl molecule::prelude::Entity for AccountSaleCellData {
             .account_id(self.account_id())
             .price(self.price())
             .description(self.description())
-            .expired_at(self.expired_at())
+            .started_at(self.started_at())
     }
 }
 #[derive(Clone, Copy)]
@@ -10096,7 +10132,7 @@ impl<'r> ::core::fmt::Display for AccountSaleCellDataReader<'r> {
         write!(f, "{}: {}", "account_id", self.account_id())?;
         write!(f, ", {}: {}", "price", self.price())?;
         write!(f, ", {}: {}", "description", self.description())?;
-        write!(f, ", {}: {}", "expired_at", self.expired_at())?;
+        write!(f, ", {}: {}", "started_at", self.started_at())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -10140,7 +10176,7 @@ impl<'r> AccountSaleCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn expired_at(&self) -> Uint64Reader<'r> {
+    pub fn started_at(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         if self.has_extra_fields() {
@@ -10212,7 +10248,7 @@ pub struct AccountSaleCellDataBuilder {
     pub(crate) account_id: AccountId,
     pub(crate) price: Uint64,
     pub(crate) description: Bytes,
-    pub(crate) expired_at: Uint64,
+    pub(crate) started_at: Uint64,
 }
 impl AccountSaleCellDataBuilder {
     pub const FIELD_COUNT: usize = 4;
@@ -10228,8 +10264,8 @@ impl AccountSaleCellDataBuilder {
         self.description = v;
         self
     }
-    pub fn expired_at(mut self, v: Uint64) -> Self {
-        self.expired_at = v;
+    pub fn started_at(mut self, v: Uint64) -> Self {
+        self.started_at = v;
         self
     }
 }
@@ -10241,7 +10277,7 @@ impl molecule::prelude::Builder for AccountSaleCellDataBuilder {
             + self.account_id.as_slice().len()
             + self.price.as_slice().len()
             + self.description.as_slice().len()
-            + self.expired_at.as_slice().len()
+            + self.started_at.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -10253,7 +10289,7 @@ impl molecule::prelude::Builder for AccountSaleCellDataBuilder {
         offsets.push(total_size);
         total_size += self.description.as_slice().len();
         offsets.push(total_size);
-        total_size += self.expired_at.as_slice().len();
+        total_size += self.started_at.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -10261,7 +10297,7 @@ impl molecule::prelude::Builder for AccountSaleCellDataBuilder {
         writer.write_all(self.account_id.as_slice())?;
         writer.write_all(self.price.as_slice())?;
         writer.write_all(self.description.as_slice())?;
-        writer.write_all(self.expired_at.as_slice())?;
+        writer.write_all(self.started_at.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {

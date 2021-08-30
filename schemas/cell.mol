@@ -279,15 +279,6 @@ table AccountChar {
     bytes: Bytes,
 }
 
-// OnSaleCellData
-
-table OnSaleCellData {
-    // the price of account
-    price: Uint64,
-    // the timestamp when sale starting
-    started_at: Uint64,
-}
-
 // BiddingCellData
 
 table BiddingCellData {
