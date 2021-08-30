@@ -77,6 +77,7 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::ConfigCellProposal as u32 => Ok(DataType::ConfigCellProposal),
             x if x == DataType::ConfigCellProfitRate as u32 => Ok(DataType::ConfigCellProfitRate),
             x if x == DataType::ConfigCellRelease as u32 => Ok(DataType::ConfigCellRelease),
+            x if x == DataType::ConfigCellSecondaryMarket as u32 => Ok(DataType::ConfigCellSecondaryMarket),
             x if x == DataType::ConfigCellRecordKeyNamespace as u32 => Ok(DataType::ConfigCellRecordKeyNamespace),
             x if x == DataType::ConfigCellPreservedAccount00 as u32 => Ok(DataType::ConfigCellPreservedAccount00),
             x if x == DataType::ConfigCellPreservedAccount01 as u32 => Ok(DataType::ConfigCellPreservedAccount01),

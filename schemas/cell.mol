@@ -151,7 +151,8 @@ table ConfigCellSecondaryMarket {
     min_sale_price: Uint64,
     // Expiration time limit for selling accounts.
     sale_expiration_limit: Uint64,
-    sale_description_bytes_limit: Uint64,
+    // Limitation of bytes size for the description of selling accounts.
+    sale_description_bytes_limit: Uint32,
 }
 
 // ProposalCellData
