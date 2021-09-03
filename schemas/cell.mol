@@ -26,6 +26,7 @@ table TypeIdTable {
     on_sale_cell: Hash,
     pre_account_cell: Hash,
     proposal_cell: Hash,
+    account_sale_cell: Hash,
 }
 
 table DasLockOutPointTable {
