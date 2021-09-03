@@ -15,7 +15,7 @@ pub const PRESERVED_ACCOUNT_CELL_COUNT: u8 = 20;
 pub enum DataType {
     ActionData = 0,
     AccountCellData,
-    OnSaleCellData,
+    AccountSaleCellData,
     BiddingCellData,
     ProposalCellData,
     PreAccountCellData,
@@ -65,7 +65,7 @@ impl TryFrom<u32> for DataType {
         match v {
             x if x == DataType::ActionData as u32 => Ok(DataType::ActionData),
             x if x == DataType::AccountCellData as u32 => Ok(DataType::AccountCellData),
-            x if x == DataType::OnSaleCellData as u32 => Ok(DataType::OnSaleCellData),
+            x if x == DataType::AccountSaleCellData as u32 => Ok(DataType::AccountSaleCellData),
             x if x == DataType::BiddingCellData as u32 => Ok(DataType::BiddingCellData),
             x if x == DataType::ProposalCellData as u32 => Ok(DataType::ProposalCellData),
             x if x == DataType::PreAccountCellData as u32 => Ok(DataType::PreAccountCellData),
