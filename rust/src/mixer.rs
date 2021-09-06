@@ -43,9 +43,7 @@ impl<'r> AccountCellDataReaderMixer<'r> for AccountCellDataV1Reader<'r> {
     }
 
     fn try_into_latest(&self) -> VerificationResult<AccountCellDataReader<'r>> {
-        Err(VerificationError::OffsetsNotMatch(
-            "AccountCellDataReader".to_string(),
-        ))
+        Err(VerificationError::OffsetsNotMatch("AccountCellDataReader".to_string()))
     }
 }
 

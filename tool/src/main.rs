@@ -12,17 +12,9 @@ use std::process;
 struct Options {
     #[clap(short = 'd', long = "data", about = "Hex data to virtualize.")]
     data: Option<String>,
-    #[clap(
-        short = 't',
-        long = "data-type",
-        about = "A file path to the configuration file."
-    )]
+    #[clap(short = 't', long = "data-type", about = "A file path to the configuration file.")]
     data_type: Option<String>,
-    #[clap(
-        short = 'w',
-        long = "witness",
-        about = "Hex witness data to virtualize."
-    )]
+    #[clap(short = 'w', long = "witness", about = "Hex witness data to virtualize.")]
     witness: Option<String>,
 }
 
@@ -53,17 +45,12 @@ fn main() {
         match hex_to_bytes(&options.witness.unwrap()) {
             Ok(bytes) => {
                 let raw_data_type = bytes.get(3..7).unwrap();
-                let data_type =
-                    DataType::try_from(u32::from_le_bytes(raw_data_type.try_into().unwrap()))
-                        .unwrap();
+                let data_type = DataType::try_from(u32::from_le_bytes(raw_data_type.try_into().unwrap())).unwrap();
                 let raw = bytes.get(7..).unwrap();
 
                 println!("expected_data_type: {:?}", data_type);
                 if let Err(e) = virtualize_witness(data_type, raw) {
-                    println!(
-                        "Parse witness to actual data type failed: {}",
-                        e.to_string()
-                    );
+                    println!("Parse witness to actual data type failed: {}", e.to_string());
                     process::exit(1);
                 }
             }
@@ -88,17 +75,20 @@ pub fn hex_to_bytes(input: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 }
 
 pub fn virtualize_witness(data_type: DataType, raw: &[u8]) -> Result<(), Box<dyn Error>> {
-    match data_type {
-        DataType::ActionData
-        | DataType::ConfigCellApply
-        | DataType::ConfigCellAccount
-        | DataType::ConfigCellIncome
-        | DataType::ConfigCellMain
-        | DataType::ConfigCellPrice
-        | DataType::ConfigCellProposal
-        | DataType::ConfigCellProfitRate => {
+    match data_type as u32 {
+        data_type_in_int if data_type_in_int == 0 || (data_type_in_int >= 100 && data_type_in_int < 1000) => {
             let (hash, entity) = virtualize_entity(data_type, 1, raw)?;
             println!("hash: 0x{}\nentity: {}", hex::encode(hash), entity);
+        }
+        data_type_in_int if data_type_in_int >= 10000 && data_type_in_int <= 20000 => {
+            let hash = blake2b_256(raw);
+            let length = u32::from_le_bytes(raw.get(..4).unwrap().try_into().unwrap());
+            println!("hash: 0x{}\nlength: {}", hex::encode(hash), length);
+        }
+        data_type_in_int if data_type_in_int >= 100000 && data_type_in_int <= 110000 => {
+            let hash = blake2b_256(raw);
+            let length = u32::from_le_bytes(raw.get(..4).unwrap().try_into().unwrap());
+            println!("hash: 0x{}\nlength: {}", hex::encode(hash), length);
         }
         _ => {
             let data = Data::from_slice(raw).map_err(error_to_string)?;
@@ -203,10 +193,13 @@ pub fn virtualize_entity(
         DataType::ConfigCellProfitRate => {
             entity = Box::new(ConfigCellProfitRate::from_slice(raw).map_err(error_to_string)?);
         }
+        DataType::ConfigCellRelease => {
+            entity = Box::new(ConfigCellRelease::from_slice(raw).map_err(error_to_string)?);
+        }
         DataType::ConfigCellPrice => {
             entity = Box::new(ConfigCellPrice::from_slice(raw).map_err(error_to_string)?);
         }
-        _ => return Err(format!("unsupported DataType {:?}", data_type).into()),
+        _ => return Err(format!("unsupported DataType for virtualization: {:?}", data_type).into()),
     }
 
     Ok((blake2b_256(raw), entity))
@@ -221,7 +214,7 @@ pub fn virtualize_data(data_type: &str, raw: &[u8]) -> Result<(), Box<dyn Error>
         "Uint64" => data = Box::new(u64::from(Uint64::from_slice(raw).map_err(error_to_string)?)),
         "Script" => data = Box::new(Script::from_slice(raw).map_err(error_to_string)?),
         "OutPoint" => data = Box::new(OutPoint::from_slice(raw).map_err(error_to_string)?),
-        _ => return Err(format!("unsupported DataType {}", data_type).into()),
+        _ => return Err(format!("unsupported DataType for virtualization: {}", data_type).into()),
     }
 
     println!("{}: {}", data_type, data);
