@@ -1,10 +1,9 @@
 use super::schemas::packed::*;
+use alloc::string::FromUtf8Error;
 use ckb_std::ckb_types::{bytes, packed as ckb_packed};
 use core::convert::TryFrom;
 use molecule::{error::VerificationError, prelude::*};
 use std::prelude::v1::*;
-#[cfg(feature = "std")]
-use std::{str, str::Utf8Error};
 
 /// Implement convert between primitive type and molecule types
 macro_rules! impl_uint_convert {
@@ -90,12 +89,11 @@ impl From<Bytes> for Vec<u8> {
 /// Convert schemas::basic::Bytes to String
 ///
 /// The main thing here is to remove the Header from the Molecule data.
-#[cfg(feature = "std")]
 impl TryFrom<Bytes> for String {
-    type Error = Utf8Error;
-    fn try_from(v: Bytes) -> Result<Self, Utf8Error> {
-        let bytes = v.as_reader().raw_data();
-        str::from_utf8(bytes).map(|v| String::from(v))
+    type Error = FromUtf8Error;
+    fn try_from(v: Bytes) -> Result<Self, FromUtf8Error> {
+        let bytes = v.as_reader().raw_data().to_vec();
+        String::from_utf8(bytes).map(|v| String::from(v))
     }
 }
 

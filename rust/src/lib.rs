@@ -5,7 +5,6 @@ extern crate no_std_compat as std;
 
 pub mod constants;
 pub mod convert;
-pub mod macros;
 pub mod mixer;
 pub mod util;
 
