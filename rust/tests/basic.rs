@@ -96,10 +96,5 @@ fn should_support_hash() {
     let ckb_byte32 = ckb_packed::Byte32::default();
     let data = Hash::default();
 
-    assert!(is_entity_eq(&ckb_byte32, &data.into()));
-
-    let a = Script::new_builder()
-        .hash_type(Byte::new(0u8))
-        .args(Bytes::from())
-        .build();
+    assert!(is_entity_eq(&ckb_byte32.into(), &data));
 }

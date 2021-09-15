@@ -164,7 +164,7 @@ pub fn virtualize_entity(
             entity = Box::new(AccountSaleCellData::from_slice(raw).map_err(error_to_string)?);
         }
         DataType::AccountAuctionCellData => {
-            entity = Box::new(BiddingCellData::from_slice(raw).map_err(error_to_string)?);
+            entity = Box::new(AccountAuctionCellData::from_slice(raw).map_err(error_to_string)?);
         }
         DataType::ProposalCellData => {
             entity = Box::new(ProposalCellData::from_slice(raw).map_err(error_to_string)?);

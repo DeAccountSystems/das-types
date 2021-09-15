@@ -54,10 +54,12 @@ table ConfigCellAccount {
     transfer_account_fee: Uint64,
     edit_manager_fee: Uint64,
     edit_records_fee: Uint64,
+    common_fee: Uint64,
     // The frequency limit of actions which manipulating account
     transfer_account_throttle: Uint32,
     edit_manager_throttle: Uint32,
     edit_records_throttle: Uint32,
+    common_throttle: Uint32,
 }
 
 table ConfigCellApply {
@@ -116,12 +118,22 @@ table ConfigCellProfitRate {
     proposal_confirm: Uint32,
     // The profit rate for consolidating IncomeCells
     income_consolidate: Uint32,
+    // =======================================
     // The profit rate for inviter in account sale.
     sale_inviter: Uint32,
     // The profit rate for channel in account sale.
     sale_channel: Uint32,
     // The profit rate for DAS in account sale.
     sale_das: Uint32,
+    // =======================================
+    // The profit rate inviter of bidders in each bid
+    auction_bidder_inviter: Uint32,
+    // The profit rate channel of bidders in each bid
+    auction_bidder_channel: Uint32,
+    // The profit rate for DAS in each bid
+    auction_das: Uint32,
+    // The profit rate for previous bidder in each bid, the seller will be treated as the first bidder.
+    auction_prev_bidder: Uint32,
 }
 
 table ConfigCellIncome {
@@ -148,30 +160,21 @@ table ReleaseRule {
 
 table ConfigCellSecondaryMarket {
     // Minimum price for selling an account.
-    min_sale_price: Uint64,
+    sale_min_price: Uint64,
     // Expiration time limit for selling accounts.
-    sale_expiration_limit: Uint64,
-    // Limitation of bytes size for the description of selling accounts.
+    sale_expiration_limit: Uint32,
+    // Bytes size limitation of the description for account sale.
     sale_description_bytes_limit: Uint32,
-}
-
-table ConfigCellAuction {
-    // default 7 days = 7 * 86400 seconds
-    max_duration: Uint64,
-
-    min_bid_price: Uint64,
-
-    default_increment_ratio: Uint64,
-
-    // the commission rate given to the seller
-    seller_commission_rate: Uint64,
-
-    // the commission rate given to the last bidder
-    last_bidder_commission_rate: Uint64,
-
-    inviter_commission_rate: Uint64,
-
-    channel_commission_rate: Uint64,
+    // The maximum extendable duration time for an auction, unit in seconds.
+    auction_max_extendable_duration: Uint32,
+    // The increment of duration brought by each bid in the auction, unit in seconds.
+    auction_duration_increment_each_bid: Uint32,
+    // The minimum opening price for an auction.
+    auction_min_opening_price: Uint64,
+    // The minimum bid increment rate of each bid.
+    auction_min_increment_rate_each_bid: Uint32,
+    // Bytes size limitation of the description for an auction.
+    auction_description_bytes_limit: Uint32,
 }
 
 // ProposalCellData
@@ -266,6 +269,29 @@ table AccountSaleCellData {
     started_at: Uint64,
 }
 
+// AccountAuctionCellData
+
+table AccountAuctionCellData {
+    // The account ID of associated account.
+    account_id: AccountId,
+    // The description of the auction.
+    description: Bytes,
+    // The opening price of the auction in shannon.
+    opening_price: Uint64,
+    // The bid increment rate.
+    increment_rate_each_bid: Uint32,
+    // The start timestamp of auction, unit in seconds.
+    started_at: Uint64,
+    // The end timestamp of auction, unit in seconds.
+    ended_at: Uint64,
+    // The current bidder's lock script.
+    current_bidder_lock: Script,
+    // The current bidder's bid price.
+    current_bid_price: Uint64,
+    // The profit rate for previous bidder in each bid, the seller will be treated as the first bidder.
+    prev_bidder_profit_rate: Uint32,
+}
+
 // PreAccountCellData
 
 table PreAccountCellData {
@@ -297,28 +323,4 @@ table AccountChar {
     char_set_name: Uint32,
     // Bytes of the char.
     bytes: Bytes,
-}
-
-// AccountAuctionCellData
-
-table AccountAuctionCellData {
-    account_id: AccountId,
-
-    description: Bytes,
-
-    // the opening price of the auction in CKB
-    opening_price: Uint64,
-
-    // a percentage based on 10000
-    increment_ratio: Uint64,
-
-    started_at: Timestamp,
-
-    ended_at: Timestamp,
-
-    // current bidder's lock script
-    bidder: ScriptOpt,
-
-    // current bidder's offer price
-    bid_price: Uint64,
 }
