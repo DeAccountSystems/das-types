@@ -261,6 +261,8 @@ vector Records <Record>;
 table AccountSaleCellData {
     // Account ID of associated account.
     account_id: AccountId,
+    // Account name of associated account.
+    account: Bytes,
     // The price user willing to sell the account.
     price: Uint64,
     // A customizable description for the account.
@@ -274,6 +276,8 @@ table AccountSaleCellData {
 table AccountAuctionCellData {
     // The account ID of associated account.
     account_id: AccountId,
+    // Account name of associated account.
+    account: Bytes,
     // The description of the auction.
     description: Bytes,
     // The opening price of the auction in shannon.

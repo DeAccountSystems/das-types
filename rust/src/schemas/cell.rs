@@ -1367,6 +1367,7 @@ impl ::core::fmt::Display for ConfigCellAccount {
         write!(f, ", {}: {}", "transfer_account_fee", self.transfer_account_fee())?;
         write!(f, ", {}: {}", "edit_manager_fee", self.edit_manager_fee())?;
         write!(f, ", {}: {}", "edit_records_fee", self.edit_records_fee())?;
+        write!(f, ", {}: {}", "common_fee", self.common_fee())?;
         write!(
             f,
             ", {}: {}",
@@ -1375,6 +1376,7 @@ impl ::core::fmt::Display for ConfigCellAccount {
         )?;
         write!(f, ", {}: {}", "edit_manager_throttle", self.edit_manager_throttle())?;
         write!(f, ", {}: {}", "edit_records_throttle", self.edit_records_throttle())?;
+        write!(f, ", {}: {}", "common_throttle", self.common_throttle())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1385,16 +1387,17 @@ impl ::core::fmt::Display for ConfigCellAccount {
 impl ::core::default::Default for ConfigCellAccount {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            120, 0, 0, 0, 52, 0, 0, 0, 56, 0, 0, 0, 64, 0, 0, 0, 72, 0, 0, 0, 76, 0, 0, 0, 80, 0, 0, 0, 84, 0, 0, 0,
-            92, 0, 0, 0, 100, 0, 0, 0, 108, 0, 0, 0, 112, 0, 0, 0, 116, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            140, 0, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 72, 0, 0, 0, 80, 0, 0, 0, 84, 0, 0, 0, 88, 0, 0, 0, 92, 0, 0, 0,
+            100, 0, 0, 0, 108, 0, 0, 0, 116, 0, 0, 0, 124, 0, 0, 0, 128, 0, 0, 0, 132, 0, 0, 0, 136, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
         ];
         ConfigCellAccount::new_unchecked(v.into())
     }
 }
 impl ConfigCellAccount {
-    pub const FIELD_COUNT: usize = 12;
+    pub const FIELD_COUNT: usize = 14;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1465,23 +1468,35 @@ impl ConfigCellAccount {
         let end = molecule::unpack_number(&slice[40..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn transfer_account_throttle(&self) -> Uint32 {
+    pub fn common_fee(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
-        Uint32::new_unchecked(self.0.slice(start..end))
+        Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn edit_manager_throttle(&self) -> Uint32 {
+    pub fn transfer_account_throttle(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[44..]) as usize;
         let end = molecule::unpack_number(&slice[48..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn edit_records_throttle(&self) -> Uint32 {
+    pub fn edit_manager_throttle(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[48..]) as usize;
+        let end = molecule::unpack_number(&slice[52..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn edit_records_throttle(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[52..]) as usize;
+        let end = molecule::unpack_number(&slice[56..]) as usize;
+        Uint32::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn common_throttle(&self) -> Uint32 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[56..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[52..]) as usize;
+            let end = molecule::unpack_number(&slice[60..]) as usize;
             Uint32::new_unchecked(self.0.slice(start..end))
         } else {
             Uint32::new_unchecked(self.0.slice(start..))
@@ -1523,9 +1538,11 @@ impl molecule::prelude::Entity for ConfigCellAccount {
             .transfer_account_fee(self.transfer_account_fee())
             .edit_manager_fee(self.edit_manager_fee())
             .edit_records_fee(self.edit_records_fee())
+            .common_fee(self.common_fee())
             .transfer_account_throttle(self.transfer_account_throttle())
             .edit_manager_throttle(self.edit_manager_throttle())
             .edit_records_throttle(self.edit_records_throttle())
+            .common_throttle(self.common_throttle())
     }
 }
 #[derive(Clone, Copy)]
@@ -1556,6 +1573,7 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
         write!(f, ", {}: {}", "transfer_account_fee", self.transfer_account_fee())?;
         write!(f, ", {}: {}", "edit_manager_fee", self.edit_manager_fee())?;
         write!(f, ", {}: {}", "edit_records_fee", self.edit_records_fee())?;
+        write!(f, ", {}: {}", "common_fee", self.common_fee())?;
         write!(
             f,
             ", {}: {}",
@@ -1564,6 +1582,7 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
         )?;
         write!(f, ", {}: {}", "edit_manager_throttle", self.edit_manager_throttle())?;
         write!(f, ", {}: {}", "edit_records_throttle", self.edit_records_throttle())?;
+        write!(f, ", {}: {}", "common_throttle", self.common_throttle())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1572,7 +1591,7 @@ impl<'r> ::core::fmt::Display for ConfigCellAccountReader<'r> {
     }
 }
 impl<'r> ConfigCellAccountReader<'r> {
-    pub const FIELD_COUNT: usize = 12;
+    pub const FIELD_COUNT: usize = 14;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1643,23 +1662,35 @@ impl<'r> ConfigCellAccountReader<'r> {
         let end = molecule::unpack_number(&slice[40..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn transfer_account_throttle(&self) -> Uint32Reader<'r> {
+    pub fn common_fee(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
         let end = molecule::unpack_number(&slice[44..]) as usize;
-        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn edit_manager_throttle(&self) -> Uint32Reader<'r> {
+    pub fn transfer_account_throttle(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[44..]) as usize;
         let end = molecule::unpack_number(&slice[48..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn edit_records_throttle(&self) -> Uint32Reader<'r> {
+    pub fn edit_manager_throttle(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[48..]) as usize;
+        let end = molecule::unpack_number(&slice[52..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn edit_records_throttle(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[52..]) as usize;
+        let end = molecule::unpack_number(&slice[56..]) as usize;
+        Uint32Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn common_throttle(&self) -> Uint32Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[56..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[52..]) as usize;
+            let end = molecule::unpack_number(&slice[60..]) as usize;
             Uint32Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint32Reader::new_unchecked(&self.as_slice()[start..])
@@ -1724,9 +1755,11 @@ impl<'r> molecule::prelude::Reader<'r> for ConfigCellAccountReader<'r> {
         Uint64Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         Uint64Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
         Uint64Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
         Uint32Reader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
         Uint32Reader::verify(&slice[offsets[11]..offsets[12]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[12]..offsets[13]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[13]..offsets[14]], compatible)?;
         Ok(())
     }
 }
@@ -1741,12 +1774,14 @@ pub struct ConfigCellAccountBuilder {
     pub(crate) transfer_account_fee: Uint64,
     pub(crate) edit_manager_fee: Uint64,
     pub(crate) edit_records_fee: Uint64,
+    pub(crate) common_fee: Uint64,
     pub(crate) transfer_account_throttle: Uint32,
     pub(crate) edit_manager_throttle: Uint32,
     pub(crate) edit_records_throttle: Uint32,
+    pub(crate) common_throttle: Uint32,
 }
 impl ConfigCellAccountBuilder {
-    pub const FIELD_COUNT: usize = 12;
+    pub const FIELD_COUNT: usize = 14;
     pub fn max_length(mut self, v: Uint32) -> Self {
         self.max_length = v;
         self
@@ -1783,6 +1818,10 @@ impl ConfigCellAccountBuilder {
         self.edit_records_fee = v;
         self
     }
+    pub fn common_fee(mut self, v: Uint64) -> Self {
+        self.common_fee = v;
+        self
+    }
     pub fn transfer_account_throttle(mut self, v: Uint32) -> Self {
         self.transfer_account_throttle = v;
         self
@@ -1793,6 +1832,10 @@ impl ConfigCellAccountBuilder {
     }
     pub fn edit_records_throttle(mut self, v: Uint32) -> Self {
         self.edit_records_throttle = v;
+        self
+    }
+    pub fn common_throttle(mut self, v: Uint32) -> Self {
+        self.common_throttle = v;
         self
     }
 }
@@ -1810,9 +1853,11 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
             + self.transfer_account_fee.as_slice().len()
             + self.edit_manager_fee.as_slice().len()
             + self.edit_records_fee.as_slice().len()
+            + self.common_fee.as_slice().len()
             + self.transfer_account_throttle.as_slice().len()
             + self.edit_manager_throttle.as_slice().len()
             + self.edit_records_throttle.as_slice().len()
+            + self.common_throttle.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -1836,11 +1881,15 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
         offsets.push(total_size);
         total_size += self.edit_records_fee.as_slice().len();
         offsets.push(total_size);
+        total_size += self.common_fee.as_slice().len();
+        offsets.push(total_size);
         total_size += self.transfer_account_throttle.as_slice().len();
         offsets.push(total_size);
         total_size += self.edit_manager_throttle.as_slice().len();
         offsets.push(total_size);
         total_size += self.edit_records_throttle.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.common_throttle.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -1854,9 +1903,11 @@ impl molecule::prelude::Builder for ConfigCellAccountBuilder {
         writer.write_all(self.transfer_account_fee.as_slice())?;
         writer.write_all(self.edit_manager_fee.as_slice())?;
         writer.write_all(self.edit_records_fee.as_slice())?;
+        writer.write_all(self.common_fee.as_slice())?;
         writer.write_all(self.transfer_account_throttle.as_slice())?;
         writer.write_all(self.edit_manager_throttle.as_slice())?;
         writer.write_all(self.edit_records_throttle.as_slice())?;
+        writer.write_all(self.common_throttle.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -10037,6 +10088,7 @@ impl ::core::fmt::Display for AccountSaleCellData {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "account_id", self.account_id())?;
+        write!(f, ", {}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "price", self.price())?;
         write!(f, ", {}: {}", "description", self.description())?;
         write!(f, ", {}: {}", "started_at", self.started_at())?;
@@ -10050,14 +10102,14 @@ impl ::core::fmt::Display for AccountSaleCellData {
 impl ::core::default::Default for AccountSaleCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            60, 0, 0, 0, 20, 0, 0, 0, 40, 0, 0, 0, 48, 0, 0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            68, 0, 0, 0, 24, 0, 0, 0, 44, 0, 0, 0, 48, 0, 0, 0, 56, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         AccountSaleCellData::new_unchecked(v.into())
     }
 }
 impl AccountSaleCellData {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -10080,23 +10132,29 @@ impl AccountSaleCellData {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         AccountId::new_unchecked(self.0.slice(start..end))
     }
-    pub fn price(&self) -> Uint64 {
+    pub fn account(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
+        Bytes::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn price(&self) -> Uint64 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        let end = molecule::unpack_number(&slice[16..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
     pub fn description(&self) -> Bytes {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[12..]) as usize;
-        let end = molecule::unpack_number(&slice[16..]) as usize;
+        let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
     pub fn started_at(&self) -> Uint64 {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[16..]) as usize;
+        let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[20..]) as usize;
+            let end = molecule::unpack_number(&slice[24..]) as usize;
             Uint64::new_unchecked(self.0.slice(start..end))
         } else {
             Uint64::new_unchecked(self.0.slice(start..))
@@ -10130,6 +10188,7 @@ impl molecule::prelude::Entity for AccountSaleCellData {
     fn as_builder(self) -> Self::Builder {
         Self::new_builder()
             .account_id(self.account_id())
+            .account(self.account())
             .price(self.price())
             .description(self.description())
             .started_at(self.started_at())
@@ -10155,6 +10214,7 @@ impl<'r> ::core::fmt::Display for AccountSaleCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "account_id", self.account_id())?;
+        write!(f, ", {}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "price", self.price())?;
         write!(f, ", {}: {}", "description", self.description())?;
         write!(f, ", {}: {}", "started_at", self.started_at())?;
@@ -10166,7 +10226,7 @@ impl<'r> ::core::fmt::Display for AccountSaleCellDataReader<'r> {
     }
 }
 impl<'r> AccountSaleCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -10189,23 +10249,29 @@ impl<'r> AccountSaleCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         AccountIdReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn price(&self) -> Uint64Reader<'r> {
+    pub fn account(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
+        BytesReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn price(&self) -> Uint64Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        let end = molecule::unpack_number(&slice[16..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn description(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[12..]) as usize;
-        let end = molecule::unpack_number(&slice[16..]) as usize;
+        let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn started_at(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[16..]) as usize;
+        let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[20..]) as usize;
+            let end = molecule::unpack_number(&slice[24..]) as usize;
             Uint64Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint64Reader::new_unchecked(&self.as_slice()[start..])
@@ -10262,23 +10328,29 @@ impl<'r> molecule::prelude::Reader<'r> for AccountSaleCellDataReader<'r> {
             return ve!(Self, OffsetsNotMatch);
         }
         AccountIdReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
-        Uint64Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
-        BytesReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        Uint64Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        BytesReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        BytesReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct AccountSaleCellDataBuilder {
     pub(crate) account_id: AccountId,
+    pub(crate) account: Bytes,
     pub(crate) price: Uint64,
     pub(crate) description: Bytes,
     pub(crate) started_at: Uint64,
 }
 impl AccountSaleCellDataBuilder {
-    pub const FIELD_COUNT: usize = 4;
+    pub const FIELD_COUNT: usize = 5;
     pub fn account_id(mut self, v: AccountId) -> Self {
         self.account_id = v;
+        self
+    }
+    pub fn account(mut self, v: Bytes) -> Self {
+        self.account = v;
         self
     }
     pub fn price(mut self, v: Uint64) -> Self {
@@ -10300,6 +10372,7 @@ impl molecule::prelude::Builder for AccountSaleCellDataBuilder {
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.account_id.as_slice().len()
+            + self.account.as_slice().len()
             + self.price.as_slice().len()
             + self.description.as_slice().len()
             + self.started_at.as_slice().len()
@@ -10309,6 +10382,8 @@ impl molecule::prelude::Builder for AccountSaleCellDataBuilder {
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
         offsets.push(total_size);
         total_size += self.account_id.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.account.as_slice().len();
         offsets.push(total_size);
         total_size += self.price.as_slice().len();
         offsets.push(total_size);
@@ -10320,6 +10395,7 @@ impl molecule::prelude::Builder for AccountSaleCellDataBuilder {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
         writer.write_all(self.account_id.as_slice())?;
+        writer.write_all(self.account.as_slice())?;
         writer.write_all(self.price.as_slice())?;
         writer.write_all(self.description.as_slice())?;
         writer.write_all(self.started_at.as_slice())?;
@@ -10352,6 +10428,7 @@ impl ::core::fmt::Display for AccountAuctionCellData {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "account_id", self.account_id())?;
+        write!(f, ", {}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "description", self.description())?;
         write!(f, ", {}: {}", "opening_price", self.opening_price())?;
         write!(f, ", {}: {}", "increment_rate_each_bid", self.increment_rate_each_bid())?;
@@ -10370,17 +10447,17 @@ impl ::core::fmt::Display for AccountAuctionCellData {
 impl ::core::default::Default for AccountAuctionCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            157, 0, 0, 0, 40, 0, 0, 0, 60, 0, 0, 0, 64, 0, 0, 0, 72, 0, 0, 0, 76, 0, 0, 0, 84, 0, 0, 0, 92, 0, 0, 0,
-            145, 0, 0, 0, 153, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48,
-            0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            165, 0, 0, 0, 44, 0, 0, 0, 64, 0, 0, 0, 68, 0, 0, 0, 72, 0, 0, 0, 80, 0, 0, 0, 84, 0, 0, 0, 92, 0, 0, 0,
+            100, 0, 0, 0, 153, 0, 0, 0, 161, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53,
+            0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         AccountAuctionCellData::new_unchecked(v.into())
     }
 }
 impl AccountAuctionCellData {
-    pub const FIELD_COUNT: usize = 9;
+    pub const FIELD_COUNT: usize = 10;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -10403,53 +10480,59 @@ impl AccountAuctionCellData {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         AccountId::new_unchecked(self.0.slice(start..end))
     }
-    pub fn description(&self) -> Bytes {
+    pub fn account(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn opening_price(&self) -> Uint64 {
+    pub fn description(&self) -> Bytes {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
+        Bytes::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn opening_price(&self) -> Uint64 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
     pub fn increment_rate_each_bid(&self) -> Uint32 {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[16..]) as usize;
-        let end = molecule::unpack_number(&slice[20..]) as usize;
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
     pub fn started_at(&self) -> Uint64 {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[20..]) as usize;
-        let end = molecule::unpack_number(&slice[24..]) as usize;
-        Uint64::new_unchecked(self.0.slice(start..end))
-    }
-    pub fn ended_at(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
-    pub fn current_bidder_lock(&self) -> Script {
+    pub fn ended_at(&self) -> Uint64 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
+        Uint64::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn current_bidder_lock(&self) -> Script {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[32..]) as usize;
+        let end = molecule::unpack_number(&slice[36..]) as usize;
         Script::new_unchecked(self.0.slice(start..end))
     }
     pub fn current_bid_price(&self) -> Uint64 {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[32..]) as usize;
-        let end = molecule::unpack_number(&slice[36..]) as usize;
+        let start = molecule::unpack_number(&slice[36..]) as usize;
+        let end = molecule::unpack_number(&slice[40..]) as usize;
         Uint64::new_unchecked(self.0.slice(start..end))
     }
     pub fn prev_bidder_profit_rate(&self) -> Uint32 {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[36..]) as usize;
+        let start = molecule::unpack_number(&slice[40..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[40..]) as usize;
+            let end = molecule::unpack_number(&slice[44..]) as usize;
             Uint32::new_unchecked(self.0.slice(start..end))
         } else {
             Uint32::new_unchecked(self.0.slice(start..))
@@ -10483,6 +10566,7 @@ impl molecule::prelude::Entity for AccountAuctionCellData {
     fn as_builder(self) -> Self::Builder {
         Self::new_builder()
             .account_id(self.account_id())
+            .account(self.account())
             .description(self.description())
             .opening_price(self.opening_price())
             .increment_rate_each_bid(self.increment_rate_each_bid())
@@ -10513,6 +10597,7 @@ impl<'r> ::core::fmt::Display for AccountAuctionCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "account_id", self.account_id())?;
+        write!(f, ", {}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "description", self.description())?;
         write!(f, ", {}: {}", "opening_price", self.opening_price())?;
         write!(f, ", {}: {}", "increment_rate_each_bid", self.increment_rate_each_bid())?;
@@ -10529,7 +10614,7 @@ impl<'r> ::core::fmt::Display for AccountAuctionCellDataReader<'r> {
     }
 }
 impl<'r> AccountAuctionCellDataReader<'r> {
-    pub const FIELD_COUNT: usize = 9;
+    pub const FIELD_COUNT: usize = 10;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -10552,53 +10637,59 @@ impl<'r> AccountAuctionCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[8..]) as usize;
         AccountIdReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn description(&self) -> BytesReader<'r> {
+    pub fn account(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[8..]) as usize;
         let end = molecule::unpack_number(&slice[12..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn opening_price(&self) -> Uint64Reader<'r> {
+    pub fn description(&self) -> BytesReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[12..]) as usize;
         let end = molecule::unpack_number(&slice[16..]) as usize;
+        BytesReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn opening_price(&self) -> Uint64Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[16..]) as usize;
+        let end = molecule::unpack_number(&slice[20..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn increment_rate_each_bid(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[16..]) as usize;
-        let end = molecule::unpack_number(&slice[20..]) as usize;
+        let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn started_at(&self) -> Uint64Reader<'r> {
-        let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[20..]) as usize;
-        let end = molecule::unpack_number(&slice[24..]) as usize;
-        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
-    }
-    pub fn ended_at(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn current_bidder_lock(&self) -> ScriptReader<'r> {
+    pub fn ended_at(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn current_bidder_lock(&self) -> ScriptReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[32..]) as usize;
+        let end = molecule::unpack_number(&slice[36..]) as usize;
         ScriptReader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn current_bid_price(&self) -> Uint64Reader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[32..]) as usize;
-        let end = molecule::unpack_number(&slice[36..]) as usize;
+        let start = molecule::unpack_number(&slice[36..]) as usize;
+        let end = molecule::unpack_number(&slice[40..]) as usize;
         Uint64Reader::new_unchecked(&self.as_slice()[start..end])
     }
     pub fn prev_bidder_profit_rate(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
-        let start = molecule::unpack_number(&slice[36..]) as usize;
+        let start = molecule::unpack_number(&slice[40..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[40..]) as usize;
+            let end = molecule::unpack_number(&slice[44..]) as usize;
             Uint32Reader::new_unchecked(&self.as_slice()[start..end])
         } else {
             Uint32Reader::new_unchecked(&self.as_slice()[start..])
@@ -10656,19 +10747,21 @@ impl<'r> molecule::prelude::Reader<'r> for AccountAuctionCellDataReader<'r> {
         }
         AccountIdReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         BytesReader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
-        Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        Uint64Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        BytesReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Uint64Reader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
-        ScriptReader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
-        Uint64Reader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
-        Uint32Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
+        ScriptReader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
+        Uint32Reader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
         Ok(())
     }
 }
 #[derive(Debug, Default)]
 pub struct AccountAuctionCellDataBuilder {
     pub(crate) account_id: AccountId,
+    pub(crate) account: Bytes,
     pub(crate) description: Bytes,
     pub(crate) opening_price: Uint64,
     pub(crate) increment_rate_each_bid: Uint32,
@@ -10679,9 +10772,13 @@ pub struct AccountAuctionCellDataBuilder {
     pub(crate) prev_bidder_profit_rate: Uint32,
 }
 impl AccountAuctionCellDataBuilder {
-    pub const FIELD_COUNT: usize = 9;
+    pub const FIELD_COUNT: usize = 10;
     pub fn account_id(mut self, v: AccountId) -> Self {
         self.account_id = v;
+        self
+    }
+    pub fn account(mut self, v: Bytes) -> Self {
+        self.account = v;
         self
     }
     pub fn description(mut self, v: Bytes) -> Self {
@@ -10723,6 +10820,7 @@ impl molecule::prelude::Builder for AccountAuctionCellDataBuilder {
     fn expected_length(&self) -> usize {
         molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
             + self.account_id.as_slice().len()
+            + self.account.as_slice().len()
             + self.description.as_slice().len()
             + self.opening_price.as_slice().len()
             + self.increment_rate_each_bid.as_slice().len()
@@ -10737,6 +10835,8 @@ impl molecule::prelude::Builder for AccountAuctionCellDataBuilder {
         let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
         offsets.push(total_size);
         total_size += self.account_id.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.account.as_slice().len();
         offsets.push(total_size);
         total_size += self.description.as_slice().len();
         offsets.push(total_size);
@@ -10758,6 +10858,7 @@ impl molecule::prelude::Builder for AccountAuctionCellDataBuilder {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
         }
         writer.write_all(self.account_id.as_slice())?;
+        writer.write_all(self.account.as_slice())?;
         writer.write_all(self.description.as_slice())?;
         writer.write_all(self.opening_price.as_slice())?;
         writer.write_all(self.increment_rate_each_bid.as_slice())?;

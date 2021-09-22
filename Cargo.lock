@@ -60,9 +60,9 @@ checksum = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
 
 [[package]]
 name = "ckb-hash"
-version = "0.40.0"
+version = "0.100.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11d4f751b424962da459cacc19b2da0597bf7ec6786ee49a20e145bd74240f9e"
+checksum = "df37898d25ee742d94857cb2b41090e59b270eeb1f3e4b8a7422f53ea0e98364"
 dependencies = [
  "blake2b-ref",
  "blake2b-rs",
@@ -132,17 +132,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "das-types-tool"
-version = "1.0.1"
-dependencies = [
- "ckb-hash",
- "ckb-std",
- "clap",
- "das-types",
- "hex",
-]
-
-[[package]]
 name = "hashbrown"
 version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -180,6 +169,17 @@ checksum = "824845a0bf897a9042383849b02c1bc219c2383772efcd5c6f9766fa4b81aef3"
 dependencies = [
  "autocfg",
  "hashbrown",
+]
+
+[[package]]
+name = "inspect"
+version = "1.0.1"
+dependencies = [
+ "ckb-hash",
+ "ckb-std",
+ "clap",
+ "das-types",
+ "hex",
 ]
 
 [[package]]
