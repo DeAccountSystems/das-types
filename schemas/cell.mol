@@ -120,9 +120,9 @@ table ConfigCellProfitRate {
     income_consolidate: Uint32,
     // =======================================
     // The profit rate for inviter in account sale.
-    sale_inviter: Uint32,
+    sale_buyer_inviter: Uint32,
     // The profit rate for channel in account sale.
-    sale_channel: Uint32,
+    sale_buyer_channel: Uint32,
     // The profit rate for DAS in account sale.
     sale_das: Uint32,
     // =======================================

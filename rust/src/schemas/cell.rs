@@ -4035,8 +4035,8 @@ impl ::core::fmt::Display for ConfigCellProfitRate {
         write!(f, ", {}: {}", "proposal_create", self.proposal_create())?;
         write!(f, ", {}: {}", "proposal_confirm", self.proposal_confirm())?;
         write!(f, ", {}: {}", "income_consolidate", self.income_consolidate())?;
-        write!(f, ", {}: {}", "sale_inviter", self.sale_inviter())?;
-        write!(f, ", {}: {}", "sale_channel", self.sale_channel())?;
+        write!(f, ", {}: {}", "sale_buyer_inviter", self.sale_buyer_inviter())?;
+        write!(f, ", {}: {}", "sale_buyer_channel", self.sale_buyer_channel())?;
         write!(f, ", {}: {}", "sale_das", self.sale_das())?;
         write!(f, ", {}: {}", "auction_bidder_inviter", self.auction_bidder_inviter())?;
         write!(f, ", {}: {}", "auction_bidder_channel", self.auction_bidder_channel())?;
@@ -4107,13 +4107,13 @@ impl ConfigCellProfitRate {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn sale_inviter(&self) -> Uint32 {
+    pub fn sale_buyer_inviter(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Uint32::new_unchecked(self.0.slice(start..end))
     }
-    pub fn sale_channel(&self) -> Uint32 {
+    pub fn sale_buyer_channel(&self) -> Uint32 {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
@@ -4185,8 +4185,8 @@ impl molecule::prelude::Entity for ConfigCellProfitRate {
             .proposal_create(self.proposal_create())
             .proposal_confirm(self.proposal_confirm())
             .income_consolidate(self.income_consolidate())
-            .sale_inviter(self.sale_inviter())
-            .sale_channel(self.sale_channel())
+            .sale_buyer_inviter(self.sale_buyer_inviter())
+            .sale_buyer_channel(self.sale_buyer_channel())
             .sale_das(self.sale_das())
             .auction_bidder_inviter(self.auction_bidder_inviter())
             .auction_bidder_channel(self.auction_bidder_channel())
@@ -4218,8 +4218,8 @@ impl<'r> ::core::fmt::Display for ConfigCellProfitRateReader<'r> {
         write!(f, ", {}: {}", "proposal_create", self.proposal_create())?;
         write!(f, ", {}: {}", "proposal_confirm", self.proposal_confirm())?;
         write!(f, ", {}: {}", "income_consolidate", self.income_consolidate())?;
-        write!(f, ", {}: {}", "sale_inviter", self.sale_inviter())?;
-        write!(f, ", {}: {}", "sale_channel", self.sale_channel())?;
+        write!(f, ", {}: {}", "sale_buyer_inviter", self.sale_buyer_inviter())?;
+        write!(f, ", {}: {}", "sale_buyer_channel", self.sale_buyer_channel())?;
         write!(f, ", {}: {}", "sale_das", self.sale_das())?;
         write!(f, ", {}: {}", "auction_bidder_inviter", self.auction_bidder_inviter())?;
         write!(f, ", {}: {}", "auction_bidder_channel", self.auction_bidder_channel())?;
@@ -4280,13 +4280,13 @@ impl<'r> ConfigCellProfitRateReader<'r> {
         let end = molecule::unpack_number(&slice[24..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn sale_inviter(&self) -> Uint32Reader<'r> {
+    pub fn sale_buyer_inviter(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[24..]) as usize;
         let end = molecule::unpack_number(&slice[28..]) as usize;
         Uint32Reader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn sale_channel(&self) -> Uint32Reader<'r> {
+    pub fn sale_buyer_channel(&self) -> Uint32Reader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[28..]) as usize;
         let end = molecule::unpack_number(&slice[32..]) as usize;
@@ -4398,8 +4398,8 @@ pub struct ConfigCellProfitRateBuilder {
     pub(crate) proposal_create: Uint32,
     pub(crate) proposal_confirm: Uint32,
     pub(crate) income_consolidate: Uint32,
-    pub(crate) sale_inviter: Uint32,
-    pub(crate) sale_channel: Uint32,
+    pub(crate) sale_buyer_inviter: Uint32,
+    pub(crate) sale_buyer_channel: Uint32,
     pub(crate) sale_das: Uint32,
     pub(crate) auction_bidder_inviter: Uint32,
     pub(crate) auction_bidder_channel: Uint32,
@@ -4428,12 +4428,12 @@ impl ConfigCellProfitRateBuilder {
         self.income_consolidate = v;
         self
     }
-    pub fn sale_inviter(mut self, v: Uint32) -> Self {
-        self.sale_inviter = v;
+    pub fn sale_buyer_inviter(mut self, v: Uint32) -> Self {
+        self.sale_buyer_inviter = v;
         self
     }
-    pub fn sale_channel(mut self, v: Uint32) -> Self {
-        self.sale_channel = v;
+    pub fn sale_buyer_channel(mut self, v: Uint32) -> Self {
+        self.sale_buyer_channel = v;
         self
     }
     pub fn sale_das(mut self, v: Uint32) -> Self {
@@ -4467,8 +4467,8 @@ impl molecule::prelude::Builder for ConfigCellProfitRateBuilder {
             + self.proposal_create.as_slice().len()
             + self.proposal_confirm.as_slice().len()
             + self.income_consolidate.as_slice().len()
-            + self.sale_inviter.as_slice().len()
-            + self.sale_channel.as_slice().len()
+            + self.sale_buyer_inviter.as_slice().len()
+            + self.sale_buyer_channel.as_slice().len()
             + self.sale_das.as_slice().len()
             + self.auction_bidder_inviter.as_slice().len()
             + self.auction_bidder_channel.as_slice().len()
@@ -4489,9 +4489,9 @@ impl molecule::prelude::Builder for ConfigCellProfitRateBuilder {
         offsets.push(total_size);
         total_size += self.income_consolidate.as_slice().len();
         offsets.push(total_size);
-        total_size += self.sale_inviter.as_slice().len();
+        total_size += self.sale_buyer_inviter.as_slice().len();
         offsets.push(total_size);
-        total_size += self.sale_channel.as_slice().len();
+        total_size += self.sale_buyer_channel.as_slice().len();
         offsets.push(total_size);
         total_size += self.sale_das.as_slice().len();
         offsets.push(total_size);
@@ -4511,8 +4511,8 @@ impl molecule::prelude::Builder for ConfigCellProfitRateBuilder {
         writer.write_all(self.proposal_create.as_slice())?;
         writer.write_all(self.proposal_confirm.as_slice())?;
         writer.write_all(self.income_consolidate.as_slice())?;
-        writer.write_all(self.sale_inviter.as_slice())?;
-        writer.write_all(self.sale_channel.as_slice())?;
+        writer.write_all(self.sale_buyer_inviter.as_slice())?;
+        writer.write_all(self.sale_buyer_channel.as_slice())?;
         writer.write_all(self.sale_das.as_slice())?;
         writer.write_all(self.auction_bidder_inviter.as_slice())?;
         writer.write_all(self.auction_bidder_channel.as_slice())?;
