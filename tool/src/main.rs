@@ -217,6 +217,12 @@ pub fn virtualize_data(data_type: &str, raw: &[u8]) -> Result<(), Box<dyn Error>
         "Script" => data = Box::new(Script::from_slice(raw).map_err(error_to_string)?),
         "OutPoint" => data = Box::new(OutPoint::from_slice(raw).map_err(error_to_string)?),
         "WitnessArgs" => data = Box::new(WitnessArgs::from_slice(raw).map_err(error_to_string)?),
+        "AccountCellData" => data = Box::new(AccountCellData::from_slice(raw).map_err(error_to_string)?),
+        "AccountSaleCellData" => data = Box::new(AccountSaleCellData::from_slice(raw).map_err(error_to_string)?),
+        "AccountAuctionCellData" => data = Box::new(AccountAuctionCellData::from_slice(raw).map_err(error_to_string)?),
+        "PreAccountCellData" => data = Box::new(PreAccountCellData::from_slice(raw).map_err(error_to_string)?),
+        "ProposalCellData" => data = Box::new(ProposalCellData::from_slice(raw).map_err(error_to_string)?),
+        "IncomeCellData" => data = Box::new(IncomeCellData::from_slice(raw).map_err(error_to_string)?),
         _ => return Err(format!("unsupported DataType for virtualization: {}", data_type).into()),
     }
 
