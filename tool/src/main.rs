@@ -1,11 +1,13 @@
 use ckb_hash::blake2b_256;
-use ckb_std::ckb_types::prelude::Entity;
+use ckb_std::ckb_types::{packed::WitnessArgs, prelude::Entity};
 use clap::Clap;
 use das_types::{constants::*, packed::*, prelude::*, VerificationError};
-use std::convert::{TryFrom, TryInto};
-use std::error::Error;
-use std::fmt::Display;
-use std::process;
+use std::{
+    convert::{TryFrom, TryInto},
+    error::Error,
+    fmt::Display,
+    process,
+};
 
 #[derive(Clap, Debug)]
 #[clap(version = "1.0", author = "Link Xie. <xieaolin@gmail.com>")]
@@ -160,11 +162,11 @@ pub fn virtualize_entity(
                 entity = Box::new(AccountCellData::from_slice(raw).map_err(error_to_string)?);
             }
         }
-        DataType::OnSaleCellData => {
-            entity = Box::new(OnSaleCellData::from_slice(raw).map_err(error_to_string)?);
+        DataType::AccountSaleCellData => {
+            entity = Box::new(AccountSaleCellData::from_slice(raw).map_err(error_to_string)?);
         }
-        DataType::BiddingCellData => {
-            entity = Box::new(BiddingCellData::from_slice(raw).map_err(error_to_string)?);
+        DataType::AccountAuctionCellData => {
+            entity = Box::new(AccountAuctionCellData::from_slice(raw).map_err(error_to_string)?);
         }
         DataType::ProposalCellData => {
             entity = Box::new(ProposalCellData::from_slice(raw).map_err(error_to_string)?);
@@ -214,6 +216,13 @@ pub fn virtualize_data(data_type: &str, raw: &[u8]) -> Result<(), Box<dyn Error>
         "Uint64" => data = Box::new(u64::from(Uint64::from_slice(raw).map_err(error_to_string)?)),
         "Script" => data = Box::new(Script::from_slice(raw).map_err(error_to_string)?),
         "OutPoint" => data = Box::new(OutPoint::from_slice(raw).map_err(error_to_string)?),
+        "WitnessArgs" => data = Box::new(WitnessArgs::from_slice(raw).map_err(error_to_string)?),
+        "AccountCellData" => data = Box::new(AccountCellData::from_slice(raw).map_err(error_to_string)?),
+        "AccountSaleCellData" => data = Box::new(AccountSaleCellData::from_slice(raw).map_err(error_to_string)?),
+        "AccountAuctionCellData" => data = Box::new(AccountAuctionCellData::from_slice(raw).map_err(error_to_string)?),
+        "PreAccountCellData" => data = Box::new(PreAccountCellData::from_slice(raw).map_err(error_to_string)?),
+        "ProposalCellData" => data = Box::new(ProposalCellData::from_slice(raw).map_err(error_to_string)?),
+        "IncomeCellData" => data = Box::new(IncomeCellData::from_slice(raw).map_err(error_to_string)?),
         _ => return Err(format!("unsupported DataType for virtualization: {}", data_type).into()),
     }
 
