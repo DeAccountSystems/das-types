@@ -25,6 +25,8 @@ table TypeIdTable {
     income_cell: Hash,
     pre_account_cell: Hash,
     proposal_cell: Hash,
+    account_sale_cell: Hash,
+    account_auction_cell: Hash,
 }
 
 table DasLockOutPointTable {
@@ -52,10 +54,12 @@ table ConfigCellAccount {
     transfer_account_fee: Uint64,
     edit_manager_fee: Uint64,
     edit_records_fee: Uint64,
+    common_fee: Uint64,
     // The frequency limit of actions which manipulating account
     transfer_account_throttle: Uint32,
     edit_manager_throttle: Uint32,
     edit_records_throttle: Uint32,
+    common_throttle: Uint32,
 }
 
 table ConfigCellApply {
@@ -114,6 +118,22 @@ table ConfigCellProfitRate {
     proposal_confirm: Uint32,
     // The profit rate for consolidating IncomeCells
     income_consolidate: Uint32,
+    // =======================================
+    // The profit rate for inviter in account sale.
+    sale_buyer_inviter: Uint32,
+    // The profit rate for channel in account sale.
+    sale_buyer_channel: Uint32,
+    // The profit rate for DAS in account sale.
+    sale_das: Uint32,
+    // =======================================
+    // The profit rate inviter of bidders in each bid
+    auction_bidder_inviter: Uint32,
+    // The profit rate channel of bidders in each bid
+    auction_bidder_channel: Uint32,
+    // The profit rate for DAS in each bid
+    auction_das: Uint32,
+    // The profit rate for previous bidder in each bid, the seller will be treated as the first bidder.
+    auction_prev_bidder: Uint32,
 }
 
 table ConfigCellIncome {
@@ -138,22 +158,33 @@ table ReleaseRule {
     release_end: Timestamp,
 }
 
-table ConfigCellMarket {
-    // primary market configurations
-    primary_market: MarketConfig,
-    // primary market configurations
-    secondary_market: MarketConfig,
-}
-
-table MarketConfig {
-    // The maximum time, in seconds, that an account in a sale can exist in the market.
-    max_selling_time: Uint32,
-    // The maximum time, in seconds, that an account in an auction can exist in the market.
-    max_auction_time: Uint32,
-    // The maximum time, in seconds, that an account in an auction waits before it closes.
-    max_auction_waiting: Uint32,
-    // The minimum percentage of raise at each bid in the auction.
-    min_auction_raise_rate: Uint32,
+table ConfigCellSecondaryMarket {
+    // The common fee for every transactions AccountSaleCell and AccountAuctionCell involved.
+    common_fee: Uint64,
+    // Minimum price for selling an account.
+    sale_min_price: Uint64,
+    // Expiration time limit for selling accounts.
+    sale_expiration_limit: Uint32,
+    // Bytes size limitation of the description for account sale.
+    sale_description_bytes_limit: Uint32,
+    // The basic capacity AccountSaleCell required, it is bigger than or equal to AccountSaleCell occupied capacity.
+    sale_cell_basic_capacity: Uint64,
+    // The fees prepared for various transactions.
+    sale_cell_prepared_fee_capacity: Uint64,
+    // The maximum extendable duration time for an auction, unit in seconds.
+    auction_max_extendable_duration: Uint32,
+    // The increment of duration brought by each bid in the auction, unit in seconds.
+    auction_duration_increment_each_bid: Uint32,
+    // The minimum opening price for an auction.
+    auction_min_opening_price: Uint64,
+    // The minimum bid increment rate of each bid.
+    auction_min_increment_rate_each_bid: Uint32,
+    // Bytes size limitation of the description for an auction.
+    auction_description_bytes_limit: Uint32,
+    // The basic capacity AccountAuctionCell required, it is bigger than or equal to AccountAuctionCell occupied capacity.
+    auction_cell_basic_capacity: Uint64,
+    // The fees prepared for various transactions.
+    auction_cell_prepared_fee_capacity: Uint64,
 }
 
 // ProposalCellData
@@ -235,6 +266,46 @@ table Record {
 
 vector Records <Record>;
 
+// AccountSaleCellData
+
+table AccountSaleCellData {
+    // Account ID of associated account.
+    account_id: AccountId,
+    // Account name of associated account.
+    account: Bytes,
+    // The price user willing to sell the account.
+    price: Uint64,
+    // A customizable description for the account.
+    description: Bytes,
+    // timestamp of account sale start.
+    started_at: Uint64,
+}
+
+// AccountAuctionCellData
+
+table AccountAuctionCellData {
+    // The account ID of associated account.
+    account_id: AccountId,
+    // Account name of associated account.
+    account: Bytes,
+    // The description of the auction.
+    description: Bytes,
+    // The opening price of the auction in shannon.
+    opening_price: Uint64,
+    // The bid increment rate.
+    increment_rate_each_bid: Uint32,
+    // The start timestamp of auction, unit in seconds.
+    started_at: Uint64,
+    // The end timestamp of auction, unit in seconds.
+    ended_at: Uint64,
+    // The current bidder's lock script.
+    current_bidder_lock: Script,
+    // The current bidder's bid price.
+    current_bid_price: Uint64,
+    // The profit rate for previous bidder in each bid, the seller will be treated as the first bidder.
+    prev_bidder_profit_rate: Uint32,
+}
+
 // PreAccountCellData
 
 table PreAccountCellData {
@@ -266,28 +337,4 @@ table AccountChar {
     char_set_name: Uint32,
     // Bytes of the char.
     bytes: Bytes,
-}
-
-// OnSaleCellData
-
-table OnSaleCellData {
-    // the price of account
-    price: Uint64,
-    // the timestamp when sale starting
-    started_at: Uint64,
-}
-
-// BiddingCellData
-
-table BiddingCellData {
-    // market type, 0x01 for primary，0x02 for secondary
-    market_type: Uint8,
-    // starting bidding price in USD
-    starting_price: Uint64,
-    // current bidding price in USD
-    current_price: Uint64,
-    // latest bidder's lock script
-    current_bidder: ScriptOpt,
-    // the timestamp when sale starting
-    started_at: Uint64,
 }

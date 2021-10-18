@@ -1,5 +1,6 @@
 use super::constants::*;
 use super::schemas::packed::*;
+use ckb_std::ckb_constants::Source;
 use core::convert::TryFrom;
 use molecule::prelude::*;
 
@@ -61,6 +62,7 @@ pub fn wrap_action_witness(action: &str, params_opt: Option<Bytes>) -> Bytes {
     wrap_entity_witness(DataType::ActionData, builder.build())
 }
 
+#[deprecated(since = "1.3.0", note = "Please use `wrap_data_witness_v2` instead.")]
 pub fn wrap_data_witness<A: Entity, B: Entity, C: Entity>(
     data_type: DataType,
     output_opt: Option<(u32, u32, A)>,
@@ -85,6 +87,32 @@ pub fn wrap_data_witness<A: Entity, B: Entity, C: Entity>(
     let builder = Data::new_builder().dep(dep).new(new).old(old);
 
     wrap_entity_witness(data_type, builder.build())
+}
+
+pub fn wrap_data_witness_v2<T: Entity>(
+    data_type: DataType,
+    version: u32,
+    index: u32,
+    entity: T,
+    source: Source,
+) -> Bytes {
+    let data = match source {
+        Source::CellDep => {
+            let data_entity = wrap_data_entity_opt(version, index, entity);
+            Data::new_builder().dep(data_entity).build()
+        }
+        Source::Input => {
+            let data_entity = wrap_data_entity_opt(version, index, entity);
+            Data::new_builder().old(data_entity).build()
+        }
+        Source::Output => {
+            let data_entity = wrap_data_entity_opt(version, index, entity);
+            Data::new_builder().new(data_entity).build()
+        }
+        _ => panic!("Only CellDep, Input and Output is supported."),
+    };
+
+    wrap_entity_witness(data_type, data)
 }
 
 pub fn data_type_to_char_set(data_type: DataType) -> CharSetType {

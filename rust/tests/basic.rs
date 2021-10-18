@@ -2,7 +2,6 @@ use ckb_std::ckb_types::packed as ckb_packed;
 use core::convert::TryFrom;
 use das_types::{packed::*, util::*};
 use hex;
-use molecule::prelude::{Builder, Entity};
 
 #[test]
 fn should_support_u8() {
@@ -38,18 +37,6 @@ fn should_support_u64() {
 }
 
 #[test]
-fn should_support_timestamp() {
-    let num: u64 = u64::MAX;
-    let data = Timestamp::from(num);
-    let reader = data.as_reader();
-    // println!("{:?}", data);
-
-    assert_eq!(num, u64::from(reader));
-    assert_eq!(num, u64::from(data));
-}
-
-#[test]
-#[cfg(feature = "std")]
 fn should_support_bytes() {
     // Convert from Bytes between Vec<u8>
     let text_in_vec = Vec::from("hello world");
@@ -79,27 +66,24 @@ fn should_support_bytes() {
 #[test]
 fn should_support_hash() {
     // Convert from Hash between Vec
-    let text = "a0ec1714a64139b5f0e46d1d1de4f2e7b32735ffedaab34285c49f2e5269abda";
-    let mut buf = [0u8; 32];
-    hex::decode_to_slice(text, &mut buf).ok();
-    let data = Hash::try_from(buf.to_vec()).unwrap();
+    let expected = vec![
+        160, 236, 23, 20, 166, 65, 57, 181, 240, 228, 109, 29, 29, 228, 242, 231, 179, 39, 53, 255, 237, 170, 179, 66,
+        133, 196, 159, 46, 82, 105, 171, 218,
+    ];
+    let result = Hash::try_from(expected.clone()).unwrap();
 
-    assert_eq!(Vec::from(data), buf.to_vec());
+    assert_eq!(Vec::from(result), expected);
 
     // Convert from ckb_std packed Bytes to das packed Bytes
     let ckb_byte32 = ckb_packed::Byte32::default();
-    let data = Hash::default();
+    let result = Hash::from(ckb_byte32);
+    let expected = Hash::default();
 
-    assert!(is_entity_eq(&Hash::from(ckb_byte32), &data));
+    assert!(is_entity_eq(&result, &expected));
 
     // Convert from das packed Bytes to ckb_std packed Bytes
     let ckb_byte32 = ckb_packed::Byte32::default();
     let data = Hash::default();
 
-    assert!(is_entity_eq(&ckb_byte32, &data.into()));
-
-    let a = Script::new_builder()
-        .hash_type(Byte::new(0u8))
-        .args(Bytes::from())
-        .build();
+    assert!(is_entity_eq(&ckb_byte32.into(), &data));
 }
