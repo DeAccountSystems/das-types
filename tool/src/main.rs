@@ -201,6 +201,9 @@ pub fn virtualize_entity(
         DataType::ConfigCellPrice => {
             entity = Box::new(ConfigCellPrice::from_slice(raw).map_err(error_to_string)?);
         }
+        DataType::ConfigCellSecondaryMarket => {
+            entity = Box::new(ConfigCellSecondaryMarket::from_slice(raw).map_err(error_to_string)?);
+        }
         _ => return Err(format!("unsupported DataType for virtualization: {:?}", data_type).into()),
     }
 

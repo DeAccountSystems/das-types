@@ -381,7 +381,7 @@ dependencies = [
 
 [[package]]
 name = "inspect"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "ckb-hash 0.100.0",
  "ckb-std",

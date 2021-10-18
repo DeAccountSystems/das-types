@@ -1,6 +1,6 @@
 [package]
 name = "inspect"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["Link <link@blockabc.com>"]
 edition = "2018"
 license = "LGPL-3.0-or-later"
