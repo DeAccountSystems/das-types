@@ -27,6 +27,7 @@ table TypeIdTable {
     proposal_cell: Hash,
     account_sale_cell: Hash,
     account_auction_cell: Hash,
+    reverse_record_cell: Hash,
 }
 
 table DasLockOutPointTable {
@@ -185,6 +186,15 @@ table ConfigCellSecondaryMarket {
     auction_cell_basic_capacity: Uint64,
     // The fees prepared for various transactions.
     auction_cell_prepared_fee_capacity: Uint64,
+}
+
+table ConfigCellReverseResolution {
+    // The basic capacity ReverseRecordCell required, it is bigger than or equal to ReverseRecordCell occupied capacity.
+    record_basic_capacity: Uint64,
+    // The fees prepared for various transactions.
+    record_prepared_fee_capacity: Uint64,
+    // The common fee for every transactions ReverseRecordCell involved.
+    common_fee: Uint64,
 }
 
 // ProposalCellData

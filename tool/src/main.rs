@@ -204,6 +204,9 @@ pub fn virtualize_entity(
         DataType::ConfigCellSecondaryMarket => {
             entity = Box::new(ConfigCellSecondaryMarket::from_slice(raw).map_err(error_to_string)?);
         }
+        DataType::ConfigCellReverseResolution => {
+            entity = Box::new(ConfigCellReverseResolution::from_slice(raw).map_err(error_to_string)?);
+        }
         _ => return Err(format!("unsupported DataType for virtualization: {:?}", data_type).into()),
     }
 

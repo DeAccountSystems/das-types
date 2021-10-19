@@ -297,8 +297,9 @@ impl ::core::fmt::Display for ConfigCellMain {
 impl ::core::default::Default for ConfigCellMain {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            1, 2, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 53, 1, 0, 0, 0, 36, 1, 0, 0, 36, 0, 0, 0, 68, 0, 0, 0, 100, 0, 0, 0,
-            132, 0, 0, 0, 164, 0, 0, 0, 196, 0, 0, 0, 228, 0, 0, 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            37, 2, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 89, 1, 0, 0, 0, 72, 1, 0, 0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0, 0,
+            136, 0, 0, 0, 168, 0, 0, 0, 200, 0, 0, 0, 232, 0, 0, 0, 8, 1, 0, 0, 40, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -600,6 +601,7 @@ impl ::core::fmt::Display for TypeIdTable {
         write!(f, ", {}: {}", "proposal_cell", self.proposal_cell())?;
         write!(f, ", {}: {}", "account_sale_cell", self.account_sale_cell())?;
         write!(f, ", {}: {}", "account_auction_cell", self.account_auction_cell())?;
+        write!(f, ", {}: {}", "reverse_record_cell", self.reverse_record_cell())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -610,21 +612,22 @@ impl ::core::fmt::Display for TypeIdTable {
 impl ::core::default::Default for TypeIdTable {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            36, 1, 0, 0, 36, 0, 0, 0, 68, 0, 0, 0, 100, 0, 0, 0, 132, 0, 0, 0, 164, 0, 0, 0, 196, 0, 0, 0, 228, 0, 0,
-            0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            72, 1, 0, 0, 40, 0, 0, 0, 72, 0, 0, 0, 104, 0, 0, 0, 136, 0, 0, 0, 168, 0, 0, 0, 200, 0, 0, 0, 232, 0, 0,
+            0, 8, 1, 0, 0, 40, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         TypeIdTable::new_unchecked(v.into())
     }
 }
 impl TypeIdTable {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 9;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -686,8 +689,14 @@ impl TypeIdTable {
     pub fn account_auction_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
+        let end = molecule::unpack_number(&slice[36..]) as usize;
+        Hash::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn reverse_record_cell(&self) -> Hash {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[36..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[36..]) as usize;
+            let end = molecule::unpack_number(&slice[40..]) as usize;
             Hash::new_unchecked(self.0.slice(start..end))
         } else {
             Hash::new_unchecked(self.0.slice(start..))
@@ -728,6 +737,7 @@ impl molecule::prelude::Entity for TypeIdTable {
             .proposal_cell(self.proposal_cell())
             .account_sale_cell(self.account_sale_cell())
             .account_auction_cell(self.account_auction_cell())
+            .reverse_record_cell(self.reverse_record_cell())
     }
 }
 #[derive(Clone, Copy)]
@@ -757,6 +767,7 @@ impl<'r> ::core::fmt::Display for TypeIdTableReader<'r> {
         write!(f, ", {}: {}", "proposal_cell", self.proposal_cell())?;
         write!(f, ", {}: {}", "account_sale_cell", self.account_sale_cell())?;
         write!(f, ", {}: {}", "account_auction_cell", self.account_auction_cell())?;
+        write!(f, ", {}: {}", "reverse_record_cell", self.reverse_record_cell())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -765,7 +776,7 @@ impl<'r> ::core::fmt::Display for TypeIdTableReader<'r> {
     }
 }
 impl<'r> TypeIdTableReader<'r> {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 9;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -827,8 +838,14 @@ impl<'r> TypeIdTableReader<'r> {
     pub fn account_auction_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[32..]) as usize;
+        let end = molecule::unpack_number(&slice[36..]) as usize;
+        HashReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn reverse_record_cell(&self) -> HashReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[36..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[36..]) as usize;
+            let end = molecule::unpack_number(&slice[40..]) as usize;
             HashReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             HashReader::new_unchecked(&self.as_slice()[start..])
@@ -892,6 +909,7 @@ impl<'r> molecule::prelude::Reader<'r> for TypeIdTableReader<'r> {
         HashReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         HashReader::verify(&slice[offsets[6]..offsets[7]], compatible)?;
         HashReader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
+        HashReader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
         Ok(())
     }
 }
@@ -905,9 +923,10 @@ pub struct TypeIdTableBuilder {
     pub(crate) proposal_cell: Hash,
     pub(crate) account_sale_cell: Hash,
     pub(crate) account_auction_cell: Hash,
+    pub(crate) reverse_record_cell: Hash,
 }
 impl TypeIdTableBuilder {
-    pub const FIELD_COUNT: usize = 8;
+    pub const FIELD_COUNT: usize = 9;
     pub fn account_cell(mut self, v: Hash) -> Self {
         self.account_cell = v;
         self
@@ -940,6 +959,10 @@ impl TypeIdTableBuilder {
         self.account_auction_cell = v;
         self
     }
+    pub fn reverse_record_cell(mut self, v: Hash) -> Self {
+        self.reverse_record_cell = v;
+        self
+    }
 }
 impl molecule::prelude::Builder for TypeIdTableBuilder {
     type Entity = TypeIdTable;
@@ -954,6 +977,7 @@ impl molecule::prelude::Builder for TypeIdTableBuilder {
             + self.proposal_cell.as_slice().len()
             + self.account_sale_cell.as_slice().len()
             + self.account_auction_cell.as_slice().len()
+            + self.reverse_record_cell.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -974,6 +998,8 @@ impl molecule::prelude::Builder for TypeIdTableBuilder {
         total_size += self.account_sale_cell.as_slice().len();
         offsets.push(total_size);
         total_size += self.account_auction_cell.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.reverse_record_cell.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -986,6 +1012,7 @@ impl molecule::prelude::Builder for TypeIdTableBuilder {
         writer.write_all(self.proposal_cell.as_slice())?;
         writer.write_all(self.account_sale_cell.as_slice())?;
         writer.write_all(self.account_auction_cell.as_slice())?;
+        writer.write_all(self.reverse_record_cell.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
@@ -6304,6 +6331,306 @@ impl molecule::prelude::Builder for ConfigCellSecondaryMarketBuilder {
     }
 }
 #[derive(Clone)]
+pub struct ConfigCellReverseResolution(molecule::bytes::Bytes);
+impl ::core::fmt::LowerHex for ConfigCellReverseResolution {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl ::core::fmt::Debug for ConfigCellReverseResolution {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl ::core::fmt::Display for ConfigCellReverseResolution {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} {{ ", Self::NAME)?;
+        write!(f, "{}: {}", "record_basic_capacity", self.record_basic_capacity())?;
+        write!(
+            f,
+            ", {}: {}",
+            "record_prepared_fee_capacity",
+            self.record_prepared_fee_capacity()
+        )?;
+        write!(f, ", {}: {}", "common_fee", self.common_fee())?;
+        let extra_count = self.count_extra_fields();
+        if extra_count != 0 {
+            write!(f, ", .. ({} fields)", extra_count)?;
+        }
+        write!(f, " }}")
+    }
+}
+impl ::core::default::Default for ConfigCellReverseResolution {
+    fn default() -> Self {
+        let v: Vec<u8> = vec![
+            40, 0, 0, 0, 16, 0, 0, 0, 24, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0,
+        ];
+        ConfigCellReverseResolution::new_unchecked(v.into())
+    }
+}
+impl ConfigCellReverseResolution {
+    pub const FIELD_COUNT: usize = 3;
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn field_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn count_extra_fields(&self) -> usize {
+        self.field_count() - Self::FIELD_COUNT
+    }
+    pub fn has_extra_fields(&self) -> bool {
+        Self::FIELD_COUNT != self.field_count()
+    }
+    pub fn record_basic_capacity(&self) -> Uint64 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint64::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn record_prepared_fee_capacity(&self) -> Uint64 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint64::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn common_fee(&self) -> Uint64 {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        if self.has_extra_fields() {
+            let end = molecule::unpack_number(&slice[16..]) as usize;
+            Uint64::new_unchecked(self.0.slice(start..end))
+        } else {
+            Uint64::new_unchecked(self.0.slice(start..))
+        }
+    }
+    pub fn as_reader<'r>(&'r self) -> ConfigCellReverseResolutionReader<'r> {
+        ConfigCellReverseResolutionReader::new_unchecked(self.as_slice())
+    }
+}
+impl molecule::prelude::Entity for ConfigCellReverseResolution {
+    type Builder = ConfigCellReverseResolutionBuilder;
+    const NAME: &'static str = "ConfigCellReverseResolution";
+    fn new_unchecked(data: molecule::bytes::Bytes) -> Self {
+        ConfigCellReverseResolution(data)
+    }
+    fn as_bytes(&self) -> molecule::bytes::Bytes {
+        self.0.clone()
+    }
+    fn as_slice(&self) -> &[u8] {
+        &self.0[..]
+    }
+    fn from_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        ConfigCellReverseResolutionReader::from_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn from_compatible_slice(slice: &[u8]) -> molecule::error::VerificationResult<Self> {
+        ConfigCellReverseResolutionReader::from_compatible_slice(slice).map(|reader| reader.to_entity())
+    }
+    fn new_builder() -> Self::Builder {
+        ::core::default::Default::default()
+    }
+    fn as_builder(self) -> Self::Builder {
+        Self::new_builder()
+            .record_basic_capacity(self.record_basic_capacity())
+            .record_prepared_fee_capacity(self.record_prepared_fee_capacity())
+            .common_fee(self.common_fee())
+    }
+}
+#[derive(Clone, Copy)]
+pub struct ConfigCellReverseResolutionReader<'r>(&'r [u8]);
+impl<'r> ::core::fmt::LowerHex for ConfigCellReverseResolutionReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        use molecule::hex_string;
+        if f.alternate() {
+            write!(f, "0x")?;
+        }
+        write!(f, "{}", hex_string(self.as_slice()))
+    }
+}
+impl<'r> ::core::fmt::Debug for ConfigCellReverseResolutionReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{}({:#x})", Self::NAME, self)
+    }
+}
+impl<'r> ::core::fmt::Display for ConfigCellReverseResolutionReader<'r> {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        write!(f, "{} {{ ", Self::NAME)?;
+        write!(f, "{}: {}", "record_basic_capacity", self.record_basic_capacity())?;
+        write!(
+            f,
+            ", {}: {}",
+            "record_prepared_fee_capacity",
+            self.record_prepared_fee_capacity()
+        )?;
+        write!(f, ", {}: {}", "common_fee", self.common_fee())?;
+        let extra_count = self.count_extra_fields();
+        if extra_count != 0 {
+            write!(f, ", .. ({} fields)", extra_count)?;
+        }
+        write!(f, " }}")
+    }
+}
+impl<'r> ConfigCellReverseResolutionReader<'r> {
+    pub const FIELD_COUNT: usize = 3;
+    pub fn total_size(&self) -> usize {
+        molecule::unpack_number(self.as_slice()) as usize
+    }
+    pub fn field_count(&self) -> usize {
+        if self.total_size() == molecule::NUMBER_SIZE {
+            0
+        } else {
+            (molecule::unpack_number(&self.as_slice()[molecule::NUMBER_SIZE..]) as usize / 4) - 1
+        }
+    }
+    pub fn count_extra_fields(&self) -> usize {
+        self.field_count() - Self::FIELD_COUNT
+    }
+    pub fn has_extra_fields(&self) -> bool {
+        Self::FIELD_COUNT != self.field_count()
+    }
+    pub fn record_basic_capacity(&self) -> Uint64Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[4..]) as usize;
+        let end = molecule::unpack_number(&slice[8..]) as usize;
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn record_prepared_fee_capacity(&self) -> Uint64Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[8..]) as usize;
+        let end = molecule::unpack_number(&slice[12..]) as usize;
+        Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn common_fee(&self) -> Uint64Reader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[12..]) as usize;
+        if self.has_extra_fields() {
+            let end = molecule::unpack_number(&slice[16..]) as usize;
+            Uint64Reader::new_unchecked(&self.as_slice()[start..end])
+        } else {
+            Uint64Reader::new_unchecked(&self.as_slice()[start..])
+        }
+    }
+}
+impl<'r> molecule::prelude::Reader<'r> for ConfigCellReverseResolutionReader<'r> {
+    type Entity = ConfigCellReverseResolution;
+    const NAME: &'static str = "ConfigCellReverseResolutionReader";
+    fn to_entity(&self) -> Self::Entity {
+        Self::Entity::new_unchecked(self.as_slice().to_owned().into())
+    }
+    fn new_unchecked(slice: &'r [u8]) -> Self {
+        ConfigCellReverseResolutionReader(slice)
+    }
+    fn as_slice(&self) -> &'r [u8] {
+        self.0
+    }
+    fn verify(slice: &[u8], compatible: bool) -> molecule::error::VerificationResult<()> {
+        use molecule::verification_error as ve;
+        let slice_len = slice.len();
+        if slice_len < molecule::NUMBER_SIZE {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE, slice_len);
+        }
+        let total_size = molecule::unpack_number(slice) as usize;
+        if slice_len != total_size {
+            return ve!(Self, TotalSizeNotMatch, total_size, slice_len);
+        }
+        if slice_len == molecule::NUMBER_SIZE && Self::FIELD_COUNT == 0 {
+            return Ok(());
+        }
+        if slice_len < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, HeaderIsBroken, molecule::NUMBER_SIZE * 2, slice_len);
+        }
+        let offset_first = molecule::unpack_number(&slice[molecule::NUMBER_SIZE..]) as usize;
+        if offset_first % molecule::NUMBER_SIZE != 0 || offset_first < molecule::NUMBER_SIZE * 2 {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        if slice_len < offset_first {
+            return ve!(Self, HeaderIsBroken, offset_first, slice_len);
+        }
+        let field_count = offset_first / molecule::NUMBER_SIZE - 1;
+        if field_count < Self::FIELD_COUNT {
+            return ve!(Self, FieldCountNotMatch, Self::FIELD_COUNT, field_count);
+        } else if !compatible && field_count > Self::FIELD_COUNT {
+            return ve!(Self, FieldCountNotMatch, Self::FIELD_COUNT, field_count);
+        };
+        let mut offsets: Vec<usize> = slice[molecule::NUMBER_SIZE..offset_first]
+            .chunks_exact(molecule::NUMBER_SIZE)
+            .map(|x| molecule::unpack_number(x) as usize)
+            .collect();
+        offsets.push(total_size);
+        if offsets.windows(2).any(|i| i[0] > i[1]) {
+            return ve!(Self, OffsetsNotMatch);
+        }
+        Uint64Reader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
+        Uint64Reader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
+        Ok(())
+    }
+}
+#[derive(Debug, Default)]
+pub struct ConfigCellReverseResolutionBuilder {
+    pub(crate) record_basic_capacity: Uint64,
+    pub(crate) record_prepared_fee_capacity: Uint64,
+    pub(crate) common_fee: Uint64,
+}
+impl ConfigCellReverseResolutionBuilder {
+    pub const FIELD_COUNT: usize = 3;
+    pub fn record_basic_capacity(mut self, v: Uint64) -> Self {
+        self.record_basic_capacity = v;
+        self
+    }
+    pub fn record_prepared_fee_capacity(mut self, v: Uint64) -> Self {
+        self.record_prepared_fee_capacity = v;
+        self
+    }
+    pub fn common_fee(mut self, v: Uint64) -> Self {
+        self.common_fee = v;
+        self
+    }
+}
+impl molecule::prelude::Builder for ConfigCellReverseResolutionBuilder {
+    type Entity = ConfigCellReverseResolution;
+    const NAME: &'static str = "ConfigCellReverseResolutionBuilder";
+    fn expected_length(&self) -> usize {
+        molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1)
+            + self.record_basic_capacity.as_slice().len()
+            + self.record_prepared_fee_capacity.as_slice().len()
+            + self.common_fee.as_slice().len()
+    }
+    fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
+        let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
+        let mut offsets = Vec::with_capacity(Self::FIELD_COUNT);
+        offsets.push(total_size);
+        total_size += self.record_basic_capacity.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.record_prepared_fee_capacity.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.common_fee.as_slice().len();
+        writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
+        for offset in offsets.into_iter() {
+            writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
+        }
+        writer.write_all(self.record_basic_capacity.as_slice())?;
+        writer.write_all(self.record_prepared_fee_capacity.as_slice())?;
+        writer.write_all(self.common_fee.as_slice())?;
+        Ok(())
+    }
+    fn build(&self) -> Self::Entity {
+        let mut inner = Vec::with_capacity(self.expected_length());
+        self.write(&mut inner)
+            .unwrap_or_else(|_| panic!("{} build should be ok", Self::NAME));
+        ConfigCellReverseResolution::new_unchecked(inner.into())
+    }
+}
+#[derive(Clone)]
 pub struct ProposalCellData(molecule::bytes::Bytes);
 impl ::core::fmt::LowerHex for ProposalCellData {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
@@ -8752,15 +9079,9 @@ impl ::core::fmt::Debug for AccountCellData {
 }
 impl ::core::fmt::Display for AccountCellData {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use alloc::string::String;
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "id", self.id())?;
-        write!(
-            f,
-            ", {}: {}",
-            "account",
-            String::from_utf8(self.account().as_readable()).unwrap()
-        )?;
+        write!(f, ", {}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "registered_at", self.registered_at())?;
         write!(
             f,
@@ -8914,15 +9235,9 @@ impl<'r> ::core::fmt::Debug for AccountCellDataReader<'r> {
 }
 impl<'r> ::core::fmt::Display for AccountCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use alloc::string::String;
         write!(f, "{} {{ ", Self::NAME)?;
         write!(f, "{}: {}", "id", self.id())?;
-        write!(
-            f,
-            ", {}: {}",
-            "account",
-            String::from_utf8(self.account().as_readable()).unwrap()
-        )?;
+        write!(f, ", {}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "registered_at", self.registered_at())?;
         write!(
             f,
@@ -11072,14 +11387,8 @@ impl ::core::fmt::Debug for PreAccountCellData {
 }
 impl ::core::fmt::Display for PreAccountCellData {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use alloc::string::String;
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(
-            f,
-            ", {}: {}",
-            "account",
-            String::from_utf8(self.account().as_readable()).unwrap()
-        )?;
+        write!(f, "{}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock_args", self.owner_lock_args())?;
         write!(f, ", {}: {}", "inviter_id", self.inviter_id())?;
@@ -11247,14 +11556,8 @@ impl<'r> ::core::fmt::Debug for PreAccountCellDataReader<'r> {
 }
 impl<'r> ::core::fmt::Display for PreAccountCellDataReader<'r> {
     fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-        use alloc::string::String;
         write!(f, "{} {{ ", Self::NAME)?;
-        write!(
-            f,
-            ", {}: {}",
-            "account",
-            String::from_utf8(self.account().as_readable()).unwrap()
-        )?;
+        write!(f, "{}: {}", "account", self.account())?;
         write!(f, ", {}: {}", "refund_lock", self.refund_lock())?;
         write!(f, ", {}: {}", "owner_lock_args", self.owner_lock_args())?;
         write!(f, ", {}: {}", "inviter_id", self.inviter_id())?;
