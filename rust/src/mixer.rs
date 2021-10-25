@@ -1,6 +1,6 @@
 use super::schemas::packed::*;
-use alloc::prelude::v1::{Box, ToString};
 use molecule::error::{VerificationError, VerificationResult};
+use std::prelude::v1::*;
 
 pub trait AccountCellDataMixer {
     fn version(&self) -> u32;
