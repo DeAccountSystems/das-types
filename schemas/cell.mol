@@ -363,6 +363,12 @@ table AccountChar {
 table OfferCellData {
     // The account of the offer .
     account: Bytes,
+    // The price of the offer.
+    price: Uint64,
     // The message from the offer maker to the seller.
     message: Bytes,
+    // The lock script of inviter.
+    inviter_lock: ScriptOpt,
+    // The lock script of channel.
+    channel_lock: ScriptOpt,
 }
