@@ -12611,8 +12611,11 @@ impl ::core::fmt::Display for OfferCellData {
 impl ::core::default::Default for OfferCellData {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            40, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
+            146, 0, 0, 0, 24, 0, 0, 0, 28, 0, 0, 0, 36, 0, 0, 0, 40, 0, 0, 0, 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 16, 0, 0, 0, 48,
+            0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         OfferCellData::new_unchecked(v.into())
     }
@@ -12653,20 +12656,20 @@ impl OfferCellData {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         Bytes::new_unchecked(self.0.slice(start..end))
     }
-    pub fn inviter_lock(&self) -> ScriptOpt {
+    pub fn inviter_lock(&self) -> Script {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        ScriptOpt::new_unchecked(self.0.slice(start..end))
+        Script::new_unchecked(self.0.slice(start..end))
     }
-    pub fn channel_lock(&self) -> ScriptOpt {
+    pub fn channel_lock(&self) -> Script {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[24..]) as usize;
-            ScriptOpt::new_unchecked(self.0.slice(start..end))
+            Script::new_unchecked(self.0.slice(start..end))
         } else {
-            ScriptOpt::new_unchecked(self.0.slice(start..))
+            Script::new_unchecked(self.0.slice(start..))
         }
     }
     pub fn as_reader<'r>(&'r self) -> OfferCellDataReader<'r> {
@@ -12770,20 +12773,20 @@ impl<'r> OfferCellDataReader<'r> {
         let end = molecule::unpack_number(&slice[16..]) as usize;
         BytesReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn inviter_lock(&self) -> ScriptOptReader<'r> {
+    pub fn inviter_lock(&self) -> ScriptReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[16..]) as usize;
         let end = molecule::unpack_number(&slice[20..]) as usize;
-        ScriptOptReader::new_unchecked(&self.as_slice()[start..end])
+        ScriptReader::new_unchecked(&self.as_slice()[start..end])
     }
-    pub fn channel_lock(&self) -> ScriptOptReader<'r> {
+    pub fn channel_lock(&self) -> ScriptReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
         if self.has_extra_fields() {
             let end = molecule::unpack_number(&slice[24..]) as usize;
-            ScriptOptReader::new_unchecked(&self.as_slice()[start..end])
+            ScriptReader::new_unchecked(&self.as_slice()[start..end])
         } else {
-            ScriptOptReader::new_unchecked(&self.as_slice()[start..])
+            ScriptReader::new_unchecked(&self.as_slice()[start..])
         }
     }
 }
@@ -12839,8 +12842,8 @@ impl<'r> molecule::prelude::Reader<'r> for OfferCellDataReader<'r> {
         BytesReader::verify(&slice[offsets[0]..offsets[1]], compatible)?;
         Uint64Reader::verify(&slice[offsets[1]..offsets[2]], compatible)?;
         BytesReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
-        ScriptOptReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
-        ScriptOptReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        ScriptReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
+        ScriptReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
         Ok(())
     }
 }
@@ -12849,8 +12852,8 @@ pub struct OfferCellDataBuilder {
     pub(crate) account: Bytes,
     pub(crate) price: Uint64,
     pub(crate) message: Bytes,
-    pub(crate) inviter_lock: ScriptOpt,
-    pub(crate) channel_lock: ScriptOpt,
+    pub(crate) inviter_lock: Script,
+    pub(crate) channel_lock: Script,
 }
 impl OfferCellDataBuilder {
     pub const FIELD_COUNT: usize = 5;
@@ -12866,11 +12869,11 @@ impl OfferCellDataBuilder {
         self.message = v;
         self
     }
-    pub fn inviter_lock(mut self, v: ScriptOpt) -> Self {
+    pub fn inviter_lock(mut self, v: Script) -> Self {
         self.inviter_lock = v;
         self
     }
-    pub fn channel_lock(mut self, v: ScriptOpt) -> Self {
+    pub fn channel_lock(mut self, v: Script) -> Self {
         self.channel_lock = v;
         self
     }
