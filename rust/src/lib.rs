@@ -7,6 +7,7 @@ pub mod constants;
 pub mod convert;
 pub mod mixer;
 pub mod util;
+pub mod prettier;
 
 mod schemas;
 
