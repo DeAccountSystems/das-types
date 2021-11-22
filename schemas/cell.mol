@@ -120,17 +120,17 @@ table ConfigCellProfitRate {
     proposal_confirm: Uint32,
     // The profit rate for consolidating IncomeCells
     income_consolidate: Uint32,
-    // =======================================
+    // SaleCell =======================================
     // The profit rate for inviter in account sale.
     sale_buyer_inviter: Uint32,
     // The profit rate for channel in account sale.
     sale_buyer_channel: Uint32,
     // The profit rate for DAS in account sale.
     sale_das: Uint32,
-    // =======================================
-    // The profit rate inviter of bidders in each bid
+    // AuctionCell ====================================
+    // The profit rate for the inviter of bidders in each bid
     auction_bidder_inviter: Uint32,
-    // The profit rate channel of bidders in each bid
+    // The profit rate for the channel of bidders in each bid
     auction_bidder_channel: Uint32,
     // The profit rate for DAS in each bid
     auction_das: Uint32,
@@ -163,6 +163,7 @@ table ReleaseRule {
 table ConfigCellSecondaryMarket {
     // The common fee for every transactions AccountSaleCell and AccountAuctionCell involved.
     common_fee: Uint64,
+    // SaleCell =======================================
     // The minimum price for selling an account.
     sale_min_price: Uint64,
     // Expiration time limit for selling accounts.
@@ -173,6 +174,7 @@ table ConfigCellSecondaryMarket {
     sale_cell_basic_capacity: Uint64,
     // The fees prepared for various transactions.
     sale_cell_prepared_fee_capacity: Uint64,
+    // AuctionCell ====================================
     // The maximum extendable duration time for an auction, unit in seconds.
     auction_max_extendable_duration: Uint32,
     // The increment of duration brought by each bid in the auction, unit in seconds.
