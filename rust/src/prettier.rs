@@ -1,4 +1,5 @@
 use std::prelude::v1::*;
+
 use super::schemas::packed::*;
 
 pub trait Prettier {
@@ -14,7 +15,11 @@ impl Prettier for Uint8 {
 impl<'a> Prettier for Uint8Reader<'a> {
     fn as_prettier(&self) -> String {
         use core::convert::TryInto;
-        let number = self.raw_data().try_into().map(u8::from_le_bytes).expect("Decoding Uint8 failed.");
+        let number = self
+            .raw_data()
+            .try_into()
+            .map(u8::from_le_bytes)
+            .expect("Decoding Uint8 failed.");
         format!("Uint8({})", number)
     }
 }
@@ -28,7 +33,11 @@ impl Prettier for Uint32 {
 impl<'a> Prettier for Uint32Reader<'a> {
     fn as_prettier(&self) -> String {
         use core::convert::TryInto;
-        let number = self.raw_data().try_into().map(u32::from_le_bytes).expect("Decoding Uint32 failed.");
+        let number = self
+            .raw_data()
+            .try_into()
+            .map(u32::from_le_bytes)
+            .expect("Decoding Uint32 failed.");
         format!("Uint32({})", number)
     }
 }
@@ -42,7 +51,11 @@ impl Prettier for Uint64 {
 impl<'a> Prettier for Uint64Reader<'a> {
     fn as_prettier(&self) -> String {
         use core::convert::TryInto;
-        let number = self.raw_data().try_into().map(u64::from_le_bytes).expect("Decoding Uint64 failed.");
+        let number = self
+            .raw_data()
+            .try_into()
+            .map(u64::from_le_bytes)
+            .expect("Decoding Uint64 failed.");
         format!("Uint64({})", number)
     }
 }
@@ -56,7 +69,11 @@ impl Prettier for Timestamp {
 impl<'a> Prettier for TimestampReader<'a> {
     fn as_prettier(&self) -> String {
         use core::convert::TryInto;
-        let number = self.raw_data().try_into().map(u64::from_le_bytes).expect("Decoding Uint64 failed.");
+        let number = self
+            .raw_data()
+            .try_into()
+            .map(u64::from_le_bytes)
+            .expect("Decoding Uint64 failed.");
         format!("Uint64({})", number)
     }
 }
@@ -69,7 +86,6 @@ impl Prettier for Script {
 
 impl<'a> Prettier for ScriptReader<'a> {
     fn as_prettier(&self) -> String {
-
         String::from("Script")
             + " { "
             + &format!("{}: {}, ", "code_hash", self.code_hash())
@@ -103,7 +119,6 @@ impl Prettier for PriceConfig {
 
 impl<'a> Prettier for PriceConfigReader<'a> {
     fn as_prettier(&self) -> String {
-
         String::from("PriceConfig")
             + " { "
             + &format!("{}: {}, ", "length", self.length().as_prettier())
@@ -141,7 +156,10 @@ impl<'a> Prettier for AccountCharsReader<'a> {
             ret.append(&mut reader.bytes().raw_data().to_owned());
         }
 
-        format!("AccountChars({})", String::from_utf8(ret).expect("AccountChars should contains only utf8 chars."))
+        format!(
+            "AccountChars({})",
+            String::from_utf8(ret).expect("AccountChars should contains only utf8 chars.")
+        )
     }
 }
 
@@ -166,7 +184,6 @@ impl<'a> Prettier for PreAccountCellDataReader<'a> {
             + &format!("{}: {}, ", "invited_discount", self.invited_discount().as_prettier())
             + &format!("{}: {}, ", "created_at", self.created_at().as_prettier())
             + "}"
-
     }
 }
 
@@ -196,7 +213,6 @@ impl Prettier for Record {
 
 impl<'a> Prettier for RecordReader<'a> {
     fn as_prettier(&self) -> String {
-
         String::from("Record")
             + " { "
             + &format!("{}: {}, ", "record_type", self.record_type())
@@ -221,9 +237,21 @@ impl<'a> Prettier for AccountCellDataReader<'a> {
             + &format!("{}: {}, ", "id", self.id().as_prettier())
             + &format!("{}: {}, ", "account", self.account().as_prettier())
             + &format!("{}: {}, ", "registered_at", self.registered_at().as_prettier())
-            + &format!("{}: {}, ", "last_transfer_account_at", self.last_transfer_account_at().as_prettier())
-            + &format!("{}: {}, ", "last_edit_manager_at", self.last_edit_manager_at().as_prettier())
-            + &format!("{}: {}, ", "last_edit_records_at", self.last_edit_records_at().as_prettier())
+            + &format!(
+                "{}: {}, ",
+                "last_transfer_account_at",
+                self.last_transfer_account_at().as_prettier()
+            )
+            + &format!(
+                "{}: {}, ",
+                "last_edit_manager_at",
+                self.last_edit_manager_at().as_prettier()
+            )
+            + &format!(
+                "{}: {}, ",
+                "last_edit_records_at",
+                self.last_edit_records_at().as_prettier()
+            )
             + &format!("{}: {}, ", "status", self.status().as_prettier())
             + &format!("{}: {}, ", "records", self.records().as_prettier())
             + "}"

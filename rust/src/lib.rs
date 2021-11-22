@@ -6,8 +6,8 @@ extern crate no_std_compat as std;
 pub mod constants;
 pub mod convert;
 pub mod mixer;
-pub mod util;
 pub mod prettier;
+pub mod util;
 
 mod schemas;
 
