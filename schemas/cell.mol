@@ -27,6 +27,8 @@ table TypeIdTable {
     proposal_cell: Hash,
     account_sale_cell: Hash,
     account_auction_cell: Hash,
+    offer_cell: Hash,
+    reverse_record_cell: Hash,
 }
 
 table DasLockOutPointTable {
@@ -118,17 +120,17 @@ table ConfigCellProfitRate {
     proposal_confirm: Uint32,
     // The profit rate for consolidating IncomeCells
     income_consolidate: Uint32,
-    // =======================================
+    // SaleCell =======================================
     // The profit rate for inviter in account sale.
     sale_buyer_inviter: Uint32,
     // The profit rate for channel in account sale.
     sale_buyer_channel: Uint32,
     // The profit rate for DAS in account sale.
     sale_das: Uint32,
-    // =======================================
-    // The profit rate inviter of bidders in each bid
+    // AuctionCell ====================================
+    // The profit rate for the inviter of bidders in each bid
     auction_bidder_inviter: Uint32,
-    // The profit rate channel of bidders in each bid
+    // The profit rate for the channel of bidders in each bid
     auction_bidder_channel: Uint32,
     // The profit rate for DAS in each bid
     auction_das: Uint32,
@@ -161,7 +163,8 @@ table ReleaseRule {
 table ConfigCellSecondaryMarket {
     // The common fee for every transactions AccountSaleCell and AccountAuctionCell involved.
     common_fee: Uint64,
-    // Minimum price for selling an account.
+    // SaleCell =======================================
+    // The minimum price for selling an account.
     sale_min_price: Uint64,
     // Expiration time limit for selling accounts.
     sale_expiration_limit: Uint32,
@@ -171,6 +174,7 @@ table ConfigCellSecondaryMarket {
     sale_cell_basic_capacity: Uint64,
     // The fees prepared for various transactions.
     sale_cell_prepared_fee_capacity: Uint64,
+    // AuctionCell ====================================
     // The maximum extendable duration time for an auction, unit in seconds.
     auction_max_extendable_duration: Uint32,
     // The increment of duration brought by each bid in the auction, unit in seconds.
@@ -185,6 +189,23 @@ table ConfigCellSecondaryMarket {
     auction_cell_basic_capacity: Uint64,
     // The fees prepared for various transactions.
     auction_cell_prepared_fee_capacity: Uint64,
+    // The minimum price for making an offer.
+    offer_min_price: Uint64,
+    // The basic capacity OfferCell required, it is bigger than or equal to OfferCell occupied capacity.
+    offer_cell_basic_capacity: Uint64,
+    // The fees prepared for various transactions.
+    offer_cell_prepared_fee_capacity: Uint64,
+    // Bytes size limitation of the message for offer.
+    offer_message_bytes_limit: Uint32,
+}
+
+table ConfigCellReverseResolution {
+    // The basic capacity ReverseRecordCell required, it is bigger than or equal to ReverseRecordCell occupied capacity.
+    record_basic_capacity: Uint64,
+    // The fees prepared for various transactions.
+    record_prepared_fee_capacity: Uint64,
+    // The common fee for every transactions ReverseRecordCell involved.
+    common_fee: Uint64,
 }
 
 // ProposalCellData
@@ -337,4 +358,19 @@ table AccountChar {
     char_set_name: Uint32,
     // Bytes of the char.
     bytes: Bytes,
+}
+
+// OfferCellData
+
+table OfferCellData {
+    // The account of the offer .
+    account: Bytes,
+    // The price of the offer.
+    price: Uint64,
+    // The message from the offer maker to the seller.
+    message: Bytes,
+    // The lock script of inviter.
+    inviter_lock: Script,
+    // The lock script of channel.
+    channel_lock: Script,
 }
