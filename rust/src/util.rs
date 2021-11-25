@@ -1,10 +1,21 @@
 use super::constants::*;
 use super::schemas::packed::*;
-use ckb_std::ckb_constants::Source;
 use core::convert::TryFrom;
 use molecule::prelude::*;
 
 pub use molecule::hex_string;
+
+// use ckb_std::ckb_constants::Source;
+#[derive(Eq, PartialEq, Debug, Clone, Copy)]
+#[repr(u64)]
+pub enum Source {
+    Input = 1,
+    Output = 2,
+    CellDep = 3,
+    HeaderDep = 4,
+    GroupInput = 0x0100000000000001,
+    GroupOutput = 0x0100000000000002,
+}
 
 pub fn is_entity_eq<T: Entity>(a: &T, b: &T) -> bool {
     a.as_slice() == b.as_slice()

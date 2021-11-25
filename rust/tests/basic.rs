@@ -1,4 +1,4 @@
-use ckb_std::ckb_types::packed as ckb_packed;
+use ckb_types::packed as ckb_packed;
 use core::convert::TryFrom;
 use das_types::{packed::*, util::*};
 
