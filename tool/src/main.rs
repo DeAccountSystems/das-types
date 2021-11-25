@@ -177,6 +177,9 @@ pub fn virtualize_entity(
         DataType::IncomeCellData => {
             entity = Box::new(IncomeCellData::from_slice(raw).map_err(error_to_string)?);
         }
+        DataType::OfferCellData => {
+            entity = Box::new(OfferCellData::from_slice(raw).map_err(error_to_string)?);
+        }
         DataType::ConfigCellAccount => {
             entity = Box::new(ConfigCellAccount::from_slice(raw).map_err(error_to_string)?);
         }
@@ -204,6 +207,9 @@ pub fn virtualize_entity(
         DataType::ConfigCellSecondaryMarket => {
             entity = Box::new(ConfigCellSecondaryMarket::from_slice(raw).map_err(error_to_string)?);
         }
+        DataType::ConfigCellReverseResolution => {
+            entity = Box::new(ConfigCellReverseResolution::from_slice(raw).map_err(error_to_string)?);
+        }
         _ => return Err(format!("unsupported DataType for virtualization: {:?}", data_type).into()),
     }
 
@@ -226,6 +232,7 @@ pub fn virtualize_data(data_type: &str, raw: &[u8]) -> Result<(), Box<dyn Error>
         "PreAccountCellData" => data = Box::new(PreAccountCellData::from_slice(raw).map_err(error_to_string)?),
         "ProposalCellData" => data = Box::new(ProposalCellData::from_slice(raw).map_err(error_to_string)?),
         "IncomeCellData" => data = Box::new(IncomeCellData::from_slice(raw).map_err(error_to_string)?),
+        "OfferCellData" => data = Box::new(OfferCellData::from_slice(raw).map_err(error_to_string)?),
         _ => return Err(format!("unsupported DataType for virtualization: {}", data_type).into()),
     }
 
