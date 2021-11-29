@@ -289,6 +289,19 @@ vector Records <Record>;
 
 // AccountSaleCellData
 
+table AccountSaleCellDataV1 {
+    // Account ID of associated account.
+    account_id: AccountId,
+    // Account name of associated account.
+    account: Bytes,
+    // The price user willing to sell the account.
+    price: Uint64,
+    // A customizable description for the account.
+    description: Bytes,
+    // timestamp of account sale start.
+    started_at: Uint64,
+}
+
 table AccountSaleCellData {
     // Account ID of associated account.
     account_id: AccountId,
@@ -300,6 +313,8 @@ table AccountSaleCellData {
     description: Bytes,
     // timestamp of account sale start.
     started_at: Uint64,
+    // The custom profit rate for the inviter of buyer.
+    buyer_inviter_profit_rate: Uint32,
 }
 
 // AccountAuctionCellData
