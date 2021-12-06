@@ -306,6 +306,24 @@ impl<'a> Prettier for AccountCellDataReader<'a> {
     }
 }
 
+impl Prettier for AccountSaleCellDataV1 {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for AccountSaleCellDataV1Reader<'a> {
+    fn as_prettier(&self) -> String {
+        print_fields!(self, "AccountSaleCellDataV1", {
+            account_id,
+            account,
+            price,
+            description,
+            started_at
+        })
+    }
+}
+
 impl Prettier for AccountSaleCellData {
     fn as_prettier(&self) -> String {
         self.as_reader().as_prettier()
@@ -319,7 +337,8 @@ impl<'a> Prettier for AccountSaleCellDataReader<'a> {
             account,
             price,
             description,
-            started_at
+            started_at,
+            buyer_inviter_profit_rate
         })
     }
 }
