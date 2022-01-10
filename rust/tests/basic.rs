@@ -1,7 +1,6 @@
 use ckb_std::ckb_types::packed as ckb_packed;
 use core::convert::TryFrom;
 use das_types::{packed::*, util::*};
-use hex;
 
 #[test]
 fn should_support_u8() {
