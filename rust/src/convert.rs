@@ -1,12 +1,8 @@
-use alloc::string::FromUtf8Error;
 use super::schemas::packed::*;
 use core::convert::TryFrom;
 use molecule::{error::VerificationError, prelude::*};
 use ckb_types::{bytes, packed};
-use std::prelude::v1::*;
-
-// TODO Add support for ckb-std, it always reports memory allocation errors at now.
-// The ckb-std may not be able to compile without docker environment anymore.
+use std::string::FromUtf8Error;
 
 /// Implement convert between primitive type and molecule types
 macro_rules! impl_uint_convert {
@@ -140,7 +136,7 @@ impl From<[u8; 32]> for Hash {
     }
 }
 
-/// Convert between schemas::Hash and ckb_std::ckb_types::packed::Byte32
+/// Convert between schemas::Hash and ckb_types::packed::Byte32
 impl From<packed::Byte32> for Hash {
     fn from(v: packed::Byte32) -> Self {
         Hash::new_unchecked(v.as_bytes().into())

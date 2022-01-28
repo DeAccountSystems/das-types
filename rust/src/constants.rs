@@ -201,3 +201,14 @@ pub enum LockRole {
 
 // [100, 97, 115] equals "das".as_bytes()
 pub const WITNESS_HEADER: [u8; 3] = [100, 97, 115];
+
+#[derive(Eq, PartialEq, Debug, Clone, Copy)]
+#[repr(u64)]
+pub enum Source {
+    Input = 1,
+    Output = 2,
+    CellDep = 3,
+    HeaderDep = 4,
+    GroupInput = 0x0100000000000001,
+    GroupOutput = 0x0100000000000002,
+}
