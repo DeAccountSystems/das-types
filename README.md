@@ -3,6 +3,15 @@
 DAS choose [Molecule][1] as data serialization standard, this serialization system is maintaining by [Nervos](https://nervos.org).
 
 
+## `std` and `non_std`
+
+> WARNING, read this first otherwise you will face memory issues when compiling.
+
+Since some versions of ckb_std it can no more be used with std environment, so we have to split this library into two branches. One support 
+non_std environment, one support std environment. For non_std version you may keep using the `develop` branch, and for std version you must 
+using the `develop-std` branch from now on.
+
+
 ## Development
 
 ### Setup environment
