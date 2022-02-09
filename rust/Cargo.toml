@@ -1,13 +1,14 @@
 [package]
 name = "das-types"
-version = "1.7.0"
+version = "1.7.1"
 authors = ["Link <link@blockabc.com>"]
 edition = "2018"
 license = "MIT"
 
 [dependencies]
-molecule = { version = "=0.6.0", default-features = false }
-ckb-std = "0.7.1"
+# CAREFUL! This version should be the same as which in ckb-standalone-types, otherwise will occur many type error in current codes.
+molecule = { version = "0.7", default-features = false }
+ckb-std = "0.8.0"
 
 [dev-dependencies]
 hex = "0.4"

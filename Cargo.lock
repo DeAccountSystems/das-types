@@ -16,15 +16,15 @@ checksum = "4c0496836a84f8d0495758516b8621a622beb77c0fed418570e50764093ced48"
 
 [[package]]
 name = "cfg-if"
-version = "0.1.10"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
+checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "ckb-standalone-types"
-version = "0.0.1-pre.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af2cdbdf65ee5b1da71504f5a03d6984bce77d0b4b46daff63f4ba4a3b0eef08"
+checksum = "22d7cbbdab96e6b809a102cf88bfec28795a0a3c06bfdea4abe4de89777801cd"
 dependencies = [
  "cfg-if",
  "molecule",
@@ -32,9 +32,9 @@ dependencies = [
 
 [[package]]
 name = "ckb-std"
-version = "0.7.4"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5247e68ff32c17714105e2460db6113fb99efde8c830bbdd99f8bf715100dd64"
+checksum = "8478fb713288ad5309023f0769790e489e732700e2e81ca51e4fba02eef6803e"
 dependencies = [
  "buddy-alloc",
  "cc",
@@ -43,7 +43,7 @@ dependencies = [
 
 [[package]]
 name = "das-types"
-version = "1.7.0"
+version = "1.7.1"
 dependencies = [
  "ckb-std",
  "hex",
@@ -58,9 +58,9 @@ checksum = "644f9158b2f133fd50f5fb3242878846d9eb792e445c893805ff0e3824006e35"
 
 [[package]]
 name = "molecule"
-version = "0.6.0"
+version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "663f76cc52219e5957e2f5563cce9d89f98aa8503c9c898b5c412d97df663998"
+checksum = "edc8276c02a006bddad7d1c28c1a88f30421e1b5f0ba0ca96ceb8077c7d20c01"
 dependencies = [
  "cfg-if",
 ]
