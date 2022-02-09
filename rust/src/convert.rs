@@ -1,12 +1,12 @@
 use super::schemas::packed::*;
-use alloc::string::FromUtf8Error;
-use ckb_std::ckb_types::{bytes, packed as no_std_packed};
+use alloc::string::{FromUtf8Error, String};
+use molecule::{
+    bytes,
+    error::VerificationError,
+    prelude::*
+};
+use ckb_std::ckb_types::{packed};
 use core::convert::TryFrom;
-use molecule::{error::VerificationError, prelude::*};
-use std::prelude::v1::*;
-
-#[cfg(feature = "std")]
-use ckb_types::packed as std_packed;
 
 /// Implement convert between primitive type and molecule types
 macro_rules! impl_uint_convert {
@@ -68,15 +68,15 @@ impl From<bytes::Bytes> for Bytes {
     }
 }
 
-impl From<no_std_packed::Bytes> for Bytes {
-    fn from(v: no_std_packed::Bytes) -> Self {
+impl From<packed::Bytes> for Bytes {
+    fn from(v: packed::Bytes) -> Self {
         Bytes::new_unchecked(v.as_bytes().into())
     }
 }
 
-impl Into<no_std_packed::Bytes> for Bytes {
-    fn into(self) -> no_std_packed::Bytes {
-        no_std_packed::Bytes::new_unchecked(self.as_bytes().into())
+impl Into<packed::Bytes> for Bytes {
+    fn into(self) -> packed::Bytes {
+        packed::Bytes::new_unchecked(self.as_bytes().into())
     }
 }
 
@@ -140,55 +140,27 @@ impl From<[u8; 32]> for Hash {
 }
 
 /// Convert between schemas::Hash and ckb_std::ckb_types::packed::Byte32
-impl From<no_std_packed::Byte32> for Hash {
-    fn from(v: no_std_packed::Byte32) -> Self {
+impl From<packed::Byte32> for Hash {
+    fn from(v: packed::Byte32) -> Self {
         Hash::new_unchecked(v.as_bytes().into())
     }
 }
 
-impl<'r> From<no_std_packed::Byte32Reader<'r>> for HashReader<'r> {
-    fn from(v: no_std_packed::Byte32Reader<'r>) -> Self {
+impl<'r> From<packed::Byte32Reader<'r>> for HashReader<'r> {
+    fn from(v: packed::Byte32Reader<'r>) -> Self {
         HashReader::new_unchecked(v.as_slice())
     }
 }
 
-impl Into<no_std_packed::Byte32> for Hash {
-    fn into(self) -> no_std_packed::Byte32 {
-        no_std_packed::Byte32::new_unchecked(self.as_bytes().into())
+impl Into<packed::Byte32> for Hash {
+    fn into(self) -> packed::Byte32 {
+        packed::Byte32::new_unchecked(self.as_bytes().into())
     }
 }
 
-impl<'r> Into<no_std_packed::Byte32Reader<'r>> for HashReader<'r> {
-    fn into(self) -> no_std_packed::Byte32Reader<'r> {
-        no_std_packed::Byte32Reader::new_unchecked(self.as_slice())
-    }
-}
-
-#[cfg(feature = "std")]
-impl From<std_packed::Byte32> for Hash {
-    fn from(v: std_packed::Byte32) -> Self {
-        Hash::new_unchecked(v.as_bytes().into())
-    }
-}
-
-#[cfg(feature = "std")]
-impl<'r> From<std_packed::Byte32Reader<'r>> for HashReader<'r> {
-    fn from(v: std_packed::Byte32Reader<'r>) -> Self {
-        HashReader::new_unchecked(v.as_slice())
-    }
-}
-
-#[cfg(feature = "std")]
-impl Into<std_packed::Byte32> for Hash {
-    fn into(self) -> std_packed::Byte32 {
-        std_packed::Byte32::new_unchecked(self.as_bytes().into())
-    }
-}
-
-#[cfg(feature = "std")]
-impl<'r> Into<std_packed::Byte32Reader<'r>> for HashReader<'r> {
-    fn into(self) -> std_packed::Byte32Reader<'r> {
-        std_packed::Byte32Reader::new_unchecked(self.as_slice())
+impl<'r> Into<packed::Byte32Reader<'r>> for HashReader<'r> {
+    fn into(self) -> packed::Byte32Reader<'r> {
+        packed::Byte32Reader::new_unchecked(self.as_slice())
     }
 }
 
@@ -200,55 +172,27 @@ impl From<Hash> for Vec<u8> {
 }
 
 /// Convert between schemas::Script and ckb_std::ckb_types::packed::Script
-impl From<no_std_packed::Script> for Script {
-    fn from(v: no_std_packed::Script) -> Self {
+impl From<packed::Script> for Script {
+    fn from(v: packed::Script) -> Self {
         Script::new_unchecked(v.as_bytes().into())
     }
 }
 
-impl<'r> From<no_std_packed::ScriptReader<'r>> for ScriptReader<'r> {
-    fn from(v: no_std_packed::ScriptReader<'r>) -> Self {
+impl<'r> From<packed::ScriptReader<'r>> for ScriptReader<'r> {
+    fn from(v: packed::ScriptReader<'r>) -> Self {
         ScriptReader::new_unchecked(v.as_slice())
     }
 }
 
-impl Into<no_std_packed::Script> for Script {
-    fn into(self) -> no_std_packed::Script {
-        no_std_packed::Script::new_unchecked(self.as_bytes().into())
+impl Into<packed::Script> for Script {
+    fn into(self) -> packed::Script {
+        packed::Script::new_unchecked(self.as_bytes().into())
     }
 }
 
-impl<'r> Into<no_std_packed::ScriptReader<'r>> for ScriptReader<'r> {
-    fn into(self) -> no_std_packed::ScriptReader<'r> {
-        no_std_packed::ScriptReader::new_unchecked(self.as_slice())
-    }
-}
-
-#[cfg(feature = "std")]
-impl From<std_packed::Script> for Script {
-    fn from(v: std_packed::Script) -> Self {
-        Script::new_unchecked(v.as_bytes().into())
-    }
-}
-
-#[cfg(feature = "std")]
-impl<'r> From<std_packed::ScriptReader<'r>> for ScriptReader<'r> {
-    fn from(v: std_packed::ScriptReader<'r>) -> Self {
-        ScriptReader::new_unchecked(v.as_slice())
-    }
-}
-
-#[cfg(feature = "std")]
-impl Into<std_packed::Script> for Script {
-    fn into(self) -> std_packed::Script {
-        std_packed::Script::new_unchecked(self.as_bytes().into())
-    }
-}
-
-#[cfg(feature = "std")]
-impl<'r> Into<std_packed::ScriptReader<'r>> for ScriptReader<'r> {
-    fn into(self) -> std_packed::ScriptReader<'r> {
-        std_packed::ScriptReader::new_unchecked(self.as_slice())
+impl<'r> Into<packed::ScriptReader<'r>> for ScriptReader<'r> {
+    fn into(self) -> packed::ScriptReader<'r> {
+        packed::ScriptReader::new_unchecked(self.as_slice())
     }
 }
 

@@ -59,7 +59,7 @@ fn should_support_bytes() {
     let ckb_bytes = ckb_packed::Bytes::default();
     let data = Bytes::default();
 
-    assert!(is_entity_eq(&ckb_bytes, &data.into()));
+    assert!(is_entity_eq(&ckb_bytes.into(), &data));
 }
 
 #[test]

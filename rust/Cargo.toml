@@ -1,20 +1,13 @@
 [package]
 name = "das-types"
-version = "1.6.0"
+version = "1.7.0"
 authors = ["Link <link@blockabc.com>"]
 edition = "2018"
 license = "MIT"
 
-[features]
-default = ["no_std"]
-std = ["no-std-compat/std", "ckb-types"]
-no_std = []
-
 [dependencies]
 molecule = { version = "=0.6.0", default-features = false }
-ckb-std = "=0.7.4"
-ckb-types = { version = "0.39.1", optional = true }
-no-std-compat = { version = "0.4.1", features = [ "alloc", "compat_macros" ] }
+ckb-std = "0.7.1"
 
 [dev-dependencies]
 hex = "0.4"
