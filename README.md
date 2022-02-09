@@ -11,6 +11,8 @@ Since some versions of ckb_std it can no more be used with std environment, so w
 non_std environment, one support std environment. For non_std version you may keep using the `develop` branch, and for std version you must 
 using the `develop-std` branch from now on.
 
+And the name of the crate has been renamed to **das-types-std**, because [das-contracts]() depends on the non_std branch in contracts and 
+std branch in unit tests at the same time, so they can not share the same name otherwise cargo will report ambiguous dependency error.
 
 ## Development
 

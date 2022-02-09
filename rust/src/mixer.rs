@@ -1,6 +1,5 @@
 use super::schemas::packed::*;
 use molecule::error::{VerificationError, VerificationResult};
-use std::prelude::v1::*;
 
 macro_rules! gen_trait_try_into_fns {
     ({$( $fn_name:ident -> $fn_return:ty ),+}) => {

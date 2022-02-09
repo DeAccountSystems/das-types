@@ -1,5 +1,5 @@
 [package]
-name = "das-types"
+name = "das-types-std"
 version = "1.7.0"
 authors = ["Link <link@blockabc.com>"]
 edition = "2018"
