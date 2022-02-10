@@ -1,5 +1,3 @@
-use std::prelude::v1::*;
-
 use super::schemas::packed::*;
 
 macro_rules! print_fields {
@@ -614,9 +612,7 @@ impl Prettier for DiscountConfig {
 
 impl<'a> Prettier for DiscountConfigReader<'a> {
     fn as_prettier(&self) -> String {
-        print_fields!(self, "DiscountConfig", {
-            invited_discount
-        })
+        print_fields!(self, "DiscountConfig", { invited_discount })
     }
 }
 

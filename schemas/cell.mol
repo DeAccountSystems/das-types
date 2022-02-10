@@ -37,6 +37,7 @@ table DasLockOutPointTable {
     ckb_anyone_can_pay: OutPoint,
     eth: OutPoint,
     tron: OutPoint,
+    ed25519: OutPoint,
 }
 
 table ConfigCellAccount {

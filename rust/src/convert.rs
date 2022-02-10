@@ -1,7 +1,7 @@
 use super::schemas::packed::*;
+use ckb_types::{bytes, packed};
 use core::convert::TryFrom;
 use molecule::{error::VerificationError, prelude::*};
-use ckb_types::{bytes, packed};
 use std::string::FromUtf8Error;
 
 /// Implement convert between primitive type and molecule types
@@ -95,7 +95,6 @@ impl Into<packed::Bytes> for Bytes {
         packed::Bytes::new_unchecked(self.as_bytes().into())
     }
 }
-
 
 impl From<Script> for ScriptOpt {
     fn from(v: Script) -> Self {
