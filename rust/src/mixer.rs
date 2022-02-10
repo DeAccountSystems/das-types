@@ -1,8 +1,5 @@
-use alloc::{
-    boxed::Box,
-    string::ToString
-};
 use super::schemas::packed::*;
+use alloc::{boxed::Box, string::ToString};
 use molecule::error::{VerificationError, VerificationResult};
 
 macro_rules! gen_trait_try_into_fns {

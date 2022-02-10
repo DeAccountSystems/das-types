@@ -1,12 +1,8 @@
 use super::schemas::packed::*;
 use alloc::string::{FromUtf8Error, String};
-use molecule::{
-    bytes,
-    error::VerificationError,
-    prelude::*
-};
-use ckb_std::ckb_types::{packed};
+use ckb_std::ckb_types::packed;
 use core::convert::TryFrom;
+use molecule::{bytes, error::VerificationError, prelude::*};
 
 /// Implement convert between primitive type and molecule types
 macro_rules! impl_uint_convert {

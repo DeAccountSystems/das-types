@@ -297,7 +297,7 @@ impl ::core::fmt::Display for ConfigCellMain {
 impl ::core::default::Default for ConfigCellMain {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            73, 2, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 125, 1, 0, 0, 0, 108, 1, 0, 0, 44, 0, 0, 0, 76, 0, 0, 0, 108, 0, 0,
+            113, 2, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 125, 1, 0, 0, 0, 108, 1, 0, 0, 44, 0, 0, 0, 76, 0, 0, 0, 108, 0, 0,
             0, 140, 0, 0, 0, 172, 0, 0, 0, 204, 0, 0, 0, 236, 0, 0, 0, 12, 1, 0, 0, 44, 1, 0, 0, 76, 1, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -307,13 +307,14 @@ impl ::core::default::Default for ConfigCellMain {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 204, 0, 0, 0, 24, 0,
-            0, 0, 60, 0, 0, 0, 96, 0, 0, 0, 132, 0, 0, 0, 168, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 244, 0, 0, 0, 28, 0,
+            0, 0, 64, 0, 0, 0, 100, 0, 0, 0, 136, 0, 0, 0, 172, 0, 0, 0, 208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellMain::new_unchecked(v.into())
     }
@@ -1073,6 +1074,7 @@ impl ::core::fmt::Display for DasLockOutPointTable {
         write!(f, ", {}: {}", "ckb_anyone_can_pay", self.ckb_anyone_can_pay())?;
         write!(f, ", {}: {}", "eth", self.eth())?;
         write!(f, ", {}: {}", "tron", self.tron())?;
+        write!(f, ", {}: {}", "ed25519", self.ed25519())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1083,18 +1085,19 @@ impl ::core::fmt::Display for DasLockOutPointTable {
 impl ::core::default::Default for DasLockOutPointTable {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            204, 0, 0, 0, 24, 0, 0, 0, 60, 0, 0, 0, 96, 0, 0, 0, 132, 0, 0, 0, 168, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            244, 0, 0, 0, 28, 0, 0, 0, 64, 0, 0, 0, 100, 0, 0, 0, 136, 0, 0, 0, 172, 0, 0, 0, 208, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         DasLockOutPointTable::new_unchecked(v.into())
     }
 }
 impl DasLockOutPointTable {
-    pub const FIELD_COUNT: usize = 5;
+    pub const FIELD_COUNT: usize = 6;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1138,8 +1141,14 @@ impl DasLockOutPointTable {
     pub fn tron(&self) -> OutPoint {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
+        OutPoint::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn ed25519(&self) -> OutPoint {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[24..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[24..]) as usize;
+            let end = molecule::unpack_number(&slice[28..]) as usize;
             OutPoint::new_unchecked(self.0.slice(start..end))
         } else {
             OutPoint::new_unchecked(self.0.slice(start..))
@@ -1177,6 +1186,7 @@ impl molecule::prelude::Entity for DasLockOutPointTable {
             .ckb_anyone_can_pay(self.ckb_anyone_can_pay())
             .eth(self.eth())
             .tron(self.tron())
+            .ed25519(self.ed25519())
     }
 }
 #[derive(Clone, Copy)]
@@ -1203,6 +1213,7 @@ impl<'r> ::core::fmt::Display for DasLockOutPointTableReader<'r> {
         write!(f, ", {}: {}", "ckb_anyone_can_pay", self.ckb_anyone_can_pay())?;
         write!(f, ", {}: {}", "eth", self.eth())?;
         write!(f, ", {}: {}", "tron", self.tron())?;
+        write!(f, ", {}: {}", "ed25519", self.ed25519())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -1211,7 +1222,7 @@ impl<'r> ::core::fmt::Display for DasLockOutPointTableReader<'r> {
     }
 }
 impl<'r> DasLockOutPointTableReader<'r> {
-    pub const FIELD_COUNT: usize = 5;
+    pub const FIELD_COUNT: usize = 6;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -1255,8 +1266,14 @@ impl<'r> DasLockOutPointTableReader<'r> {
     pub fn tron(&self) -> OutPointReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[20..]) as usize;
+        let end = molecule::unpack_number(&slice[24..]) as usize;
+        OutPointReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn ed25519(&self) -> OutPointReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[24..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[24..]) as usize;
+            let end = molecule::unpack_number(&slice[28..]) as usize;
             OutPointReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             OutPointReader::new_unchecked(&self.as_slice()[start..])
@@ -1317,6 +1334,7 @@ impl<'r> molecule::prelude::Reader<'r> for DasLockOutPointTableReader<'r> {
         OutPointReader::verify(&slice[offsets[2]..offsets[3]], compatible)?;
         OutPointReader::verify(&slice[offsets[3]..offsets[4]], compatible)?;
         OutPointReader::verify(&slice[offsets[4]..offsets[5]], compatible)?;
+        OutPointReader::verify(&slice[offsets[5]..offsets[6]], compatible)?;
         Ok(())
     }
 }
@@ -1327,9 +1345,10 @@ pub struct DasLockOutPointTableBuilder {
     pub(crate) ckb_anyone_can_pay: OutPoint,
     pub(crate) eth: OutPoint,
     pub(crate) tron: OutPoint,
+    pub(crate) ed25519: OutPoint,
 }
 impl DasLockOutPointTableBuilder {
-    pub const FIELD_COUNT: usize = 5;
+    pub const FIELD_COUNT: usize = 6;
     pub fn ckb_signall(mut self, v: OutPoint) -> Self {
         self.ckb_signall = v;
         self
@@ -1350,6 +1369,10 @@ impl DasLockOutPointTableBuilder {
         self.tron = v;
         self
     }
+    pub fn ed25519(mut self, v: OutPoint) -> Self {
+        self.ed25519 = v;
+        self
+    }
 }
 impl molecule::prelude::Builder for DasLockOutPointTableBuilder {
     type Entity = DasLockOutPointTable;
@@ -1361,6 +1384,7 @@ impl molecule::prelude::Builder for DasLockOutPointTableBuilder {
             + self.ckb_anyone_can_pay.as_slice().len()
             + self.eth.as_slice().len()
             + self.tron.as_slice().len()
+            + self.ed25519.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -1375,6 +1399,8 @@ impl molecule::prelude::Builder for DasLockOutPointTableBuilder {
         total_size += self.eth.as_slice().len();
         offsets.push(total_size);
         total_size += self.tron.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.ed25519.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -1384,6 +1410,7 @@ impl molecule::prelude::Builder for DasLockOutPointTableBuilder {
         writer.write_all(self.ckb_anyone_can_pay.as_slice())?;
         writer.write_all(self.eth.as_slice())?;
         writer.write_all(self.tron.as_slice())?;
+        writer.write_all(self.ed25519.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {

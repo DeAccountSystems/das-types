@@ -1,5 +1,5 @@
-use alloc::{borrow::ToOwned, format, string::String, vec::Vec};
 use super::schemas::packed::*;
+use alloc::{borrow::ToOwned, format, string::String, vec::Vec};
 
 macro_rules! print_fields {
     ($self:expr, $struct_name:expr, {$( $tt:tt ),+}) => {
@@ -613,9 +613,7 @@ impl Prettier for DiscountConfig {
 
 impl<'a> Prettier for DiscountConfigReader<'a> {
     fn as_prettier(&self) -> String {
-        print_fields!(self, "DiscountConfig", {
-            invited_discount
-        })
+        print_fields!(self, "DiscountConfig", { invited_discount })
     }
 }
 
