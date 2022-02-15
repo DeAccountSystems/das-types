@@ -96,6 +96,18 @@ impl Into<packed::Bytes> for Bytes {
     }
 }
 
+impl<'r> From<packed::BytesReader<'r>> for BytesReader<'r> {
+    fn from(v: packed::BytesReader<'r>) -> Self {
+        BytesReader::new_unchecked(v.as_slice())
+    }
+}
+
+impl<'r> Into<packed::BytesReader<'r>> for BytesReader<'r> {
+    fn into(self) -> packed::BytesReader<'r> {
+        packed::BytesReader::new_unchecked(self.as_slice())
+    }
+}
+
 impl From<Script> for ScriptOpt {
     fn from(v: Script) -> Self {
         ScriptOpt::new_builder().set(Some(v)).build()
