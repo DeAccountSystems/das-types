@@ -283,6 +283,27 @@ impl<'a> Prettier for RecordReader<'a> {
     }
 }
 
+impl Prettier for AccountCellDataV2 {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for AccountCellDataV2Reader<'a> {
+    fn as_prettier(&self) -> String {
+        print_fields!(self, "AccountCellDataV2", {
+            id,
+            account,
+            registered_at,
+            last_transfer_account_at,
+            last_edit_manager_at,
+            last_edit_records_at,
+            status,
+            records
+        })
+    }
+}
+
 impl Prettier for AccountCellData {
     fn as_prettier(&self) -> String {
         self.as_reader().as_prettier()
@@ -299,7 +320,9 @@ impl<'a> Prettier for AccountCellDataReader<'a> {
             last_edit_manager_at,
             last_edit_records_at,
             status,
-            records
+            records,
+            enable_sub_account,
+            renew_sub_account_price
         })
     }
 }

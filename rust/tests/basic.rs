@@ -1,6 +1,6 @@
 use ckb_types::packed as ckb_packed;
 use core::convert::TryFrom;
-use das_types::{packed::*, util::*};
+use das_types_std::{packed::*, util::*};
 
 #[test]
 fn should_support_u8() {

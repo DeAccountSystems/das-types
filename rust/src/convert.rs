@@ -57,26 +57,6 @@ impl From<Vec<u8>> for Bytes {
     }
 }
 
-/// Convert schemas::basic::Bytes to Vec<u8>
-///
-/// The main thing here is to remove the Header from the Molecule data.
-impl From<Bytes> for Vec<u8> {
-    fn from(v: Bytes) -> Self {
-        v.as_reader().raw_data().to_vec()
-    }
-}
-
-/// Convert schemas::basic::Bytes to String
-///
-/// The main thing here is to remove the Header from the Molecule data.
-impl TryFrom<Bytes> for String {
-    type Error = FromUtf8Error;
-    fn try_from(v: Bytes) -> Result<Self, FromUtf8Error> {
-        let bytes = v.as_reader().raw_data().to_vec();
-        String::from_utf8(bytes).map(|v| String::from(v))
-    }
-}
-
 /// Convert bytes::Bytes to schemas::basic::Bytes
 impl From<bytes::Bytes> for Bytes {
     fn from(v: bytes::Bytes) -> Self {
@@ -105,6 +85,26 @@ impl<'r> From<packed::BytesReader<'r>> for BytesReader<'r> {
 impl<'r> Into<packed::BytesReader<'r>> for BytesReader<'r> {
     fn into(self) -> packed::BytesReader<'r> {
         packed::BytesReader::new_unchecked(self.as_slice())
+    }
+}
+
+/// Convert schemas::basic::Bytes to Vec<u8>
+///
+/// The main thing here is to remove the Header from the Molecule data.
+impl From<Bytes> for Vec<u8> {
+    fn from(v: Bytes) -> Self {
+        v.as_reader().raw_data().to_vec()
+    }
+}
+
+/// Convert schemas::basic::Bytes to String
+///
+/// The main thing here is to remove the Header from the Molecule data.
+impl TryFrom<Bytes> for String {
+    type Error = FromUtf8Error;
+    fn try_from(v: Bytes) -> Result<Self, FromUtf8Error> {
+        let bytes = v.as_reader().raw_data().to_vec();
+        String::from_utf8(bytes).map(|v| String::from(v))
     }
 }
 

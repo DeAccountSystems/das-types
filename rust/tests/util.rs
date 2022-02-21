@@ -1,6 +1,6 @@
 use core::convert::TryFrom;
-use das_types::{
-    constants::{DataType, WITNESS_HEADER},
+use das_types_std::{
+    constants::{DataType, Source, WITNESS_HEADER},
     packed::*,
     prelude::*,
     util,
@@ -156,18 +156,11 @@ fn test_wrap_entity_witness() {
 
 #[test]
 fn test_wrap_data_witness() {
-    let old_entity = AccountCellDataV1::default();
-    // println!("entity = {:#?}", entity);
-
     let new_entity = AccountCellData::default();
     // println!("entity = {:#?}", entity);
 
-    let witness = util::wrap_data_witness::<AccountCellData, AccountCellDataV1, AccountCellData>(
-        DataType::AccountCellData,
-        Some((2, 0, new_entity.clone())),
-        Some((1, 0, old_entity.clone())),
-        None,
-    );
+    let witness =
+        util::wrap_data_witness_v2::<AccountCellData>(DataType::AccountCellData, 3, 0, new_entity, Source::Output);
     // println!("witness = {:#?}", witness);
 
     let header = witness.as_slice().get(4..7).unwrap();
