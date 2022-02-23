@@ -86,24 +86,64 @@ pub fn wrap_data_witness<A: Entity, B: Entity, C: Entity>(
     wrap_entity_witness(data_type, builder.build())
 }
 
-pub fn wrap_data_witness_v2<T: Entity>(
+pub enum EntityWrapper {
+    PreAccountCellData(PreAccountCellData),
+    ProposalCellData(ProposalCellData),
+    AccountCellData(AccountCellData),
+    AccountCellDataV2(AccountCellDataV2),
+    AccountSaleCellData(AccountSaleCellData),
+    AccountSaleCellDataV1(AccountSaleCellDataV1),
+    AccountAuctionCellData(AccountAuctionCellData),
+    IncomeCellData(IncomeCellData),
+    OfferCellData(OfferCellData),
+}
+
+pub fn wrap_data_entity_v3(version: u32, index: u32, entity: EntityWrapper) -> DataEntity {
+    fn wrap_data_entity(version: u32, index: u32, entity: impl Entity) -> DataEntity {
+        DataEntity::new_builder()
+            .version(Uint32::from(version))
+            .index(Uint32::from(index))
+            .entity(Bytes::from(entity.as_slice()))
+            .build()
+    }
+
+    match entity {
+        EntityWrapper::PreAccountCellData(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ProposalCellData(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::AccountCellData(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::AccountCellDataV2(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::AccountSaleCellData(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::AccountSaleCellDataV1(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::AccountAuctionCellData(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::IncomeCellData(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::OfferCellData(entity) => wrap_data_entity(version, index, entity),
+    }
+}
+
+pub fn wrap_data_entity_opt_v3(version: u32, index: u32, entity: EntityWrapper) -> DataEntityOpt {
+    DataEntityOpt::new_builder()
+        .set(Some(wrap_data_entity_v3(version, index, entity)))
+        .build()
+}
+
+pub fn wrap_data_witness_v3(
     data_type: DataType,
     version: u32,
     index: u32,
-    entity: T,
+    entity: EntityWrapper,
     source: Source,
 ) -> Bytes {
     let data = match source {
         Source::CellDep => {
-            let data_entity = wrap_data_entity_opt(version, index, entity);
+            let data_entity = wrap_data_entity_opt_v3(version, index, entity);
             Data::new_builder().dep(data_entity).build()
         }
         Source::Input => {
-            let data_entity = wrap_data_entity_opt(version, index, entity);
+            let data_entity = wrap_data_entity_opt_v3(version, index, entity);
             Data::new_builder().old(data_entity).build()
         }
         Source::Output => {
-            let data_entity = wrap_data_entity_opt(version, index, entity);
+            let data_entity = wrap_data_entity_opt_v3(version, index, entity);
             Data::new_builder().new(data_entity).build()
         }
         _ => panic!("Only CellDep, Input and Output is supported."),
