@@ -418,9 +418,9 @@ table OfferCellData {
     channel_lock: Script,
 }
 
-// SubAccountData
+// SubAccount
 
-table SubAccountData {
+table SubAccount {
     // The lock of owner and manager
     lock: Script,
     // The first 160 bits of the hash of account.
@@ -438,7 +438,7 @@ table SubAccountData {
     // Resolving records of this sub-account.
     records: Records,
     // This is a count field, it mainly used to prevent replay attacks.
-    nonce: Uint32,
+    nonce: Uint64,
     // If sub-account of sub-account is enabled.
     enable_sub_account: Uint8,
     // The price of renew sub-account of this sub-account.

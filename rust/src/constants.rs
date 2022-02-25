@@ -75,6 +75,7 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::PreAccountCellData as u32 => Ok(DataType::PreAccountCellData),
             x if x == DataType::IncomeCellData as u32 => Ok(DataType::IncomeCellData),
             x if x == DataType::OfferCellData as u32 => Ok(DataType::OfferCellData),
+            x if x == DataType::SubAccount as u32 => Ok(DataType::SubAccount),
             x if x == DataType::ConfigCellAccount as u32 => Ok(DataType::ConfigCellAccount),
             x if x == DataType::ConfigCellApply as u32 => Ok(DataType::ConfigCellApply),
             x if x == DataType::ConfigCellIncome as u32 => Ok(DataType::ConfigCellIncome),
