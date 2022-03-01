@@ -11,6 +11,22 @@ pub fn is_reader_eq<'a, T: Reader<'a>>(a: T, b: T) -> bool {
     a.as_slice() == b.as_slice()
 }
 
+pub fn data_type_to_char_set(data_type: DataType) -> CharSetType {
+    CharSetType::try_from(data_type as u32 - 100000).unwrap()
+}
+
+pub fn char_set_to_data_type(char_set: CharSetType) -> DataType {
+    DataType::try_from(char_set as u32 + 100000).unwrap()
+}
+
+pub fn data_type_to_preserved_accounts_group(data_type: DataType) -> usize {
+    data_type as u32 as usize - 10000
+}
+
+pub fn preserved_accounts_group_to_data_type(group: usize) -> DataType {
+    DataType::try_from(group as u32 + 10000).unwrap()
+}
+
 pub fn wrap_data_entity(version: u32, index: u32, entity: impl Entity) -> DataEntity {
     DataEntity::new_builder()
         .version(Uint32::from(version))
@@ -59,7 +75,7 @@ pub fn wrap_action_witness(action: &str, params_opt: Option<Bytes>) -> Bytes {
     wrap_entity_witness(DataType::ActionData, builder.build())
 }
 
-#[deprecated(since = "1.3.0", note = "Please use `wrap_data_witness_v2` instead.")]
+#[deprecated(since = "1.3.0", note = "Please use `wrap_data_witness_v3` instead.")]
 pub fn wrap_data_witness<A: Entity, B: Entity, C: Entity>(
     data_type: DataType,
     output_opt: Option<(u32, u32, A)>,
@@ -87,6 +103,7 @@ pub fn wrap_data_witness<A: Entity, B: Entity, C: Entity>(
 }
 
 pub enum EntityWrapper {
+    ActionData(ActionData),
     PreAccountCellData(PreAccountCellData),
     ProposalCellData(ProposalCellData),
     AccountCellData(AccountCellData),
@@ -96,13 +113,53 @@ pub enum EntityWrapper {
     AccountAuctionCellData(AccountAuctionCellData),
     IncomeCellData(IncomeCellData),
     OfferCellData(OfferCellData),
+    SubAccount(SubAccount),
+    ConfigCellAccount(ConfigCellAccount),
+    ConfigCellApply(ConfigCellApply),
+    ConfigCellIncome(ConfigCellIncome),
+    ConfigCellMain(ConfigCellMain),
+    ConfigCellPrice(ConfigCellPrice),
+    ConfigCellProposal(ConfigCellProposal),
+    ConfigCellProfitRate(ConfigCellProfitRate),
+    ConfigCellRelease(ConfigCellRelease),
+    ConfigCellSecondaryMarket(ConfigCellSecondaryMarket),
+    ConfigCellReverseResolution(ConfigCellReverseResolution),
+    ConfigCellSubAccount(ConfigCellSubAccount),
 }
 
-pub fn wrap_data_entity_v3(version: u32, index: u32, entity: EntityWrapper) -> DataEntity {
-    fn wrap_data_entity(version: u32, index: u32, entity: impl Entity) -> DataEntity {
+pub fn wrap_entity_witness_v3(data_type: DataType, entity: EntityWrapper) -> Bytes {
+    let mut data = Vec::new();
+    let mut data_type_bytes = (data_type as u32).to_le_bytes().to_vec();
+    data.append(&mut WITNESS_HEADER.to_vec());
+    data.append(&mut data_type_bytes);
+
+    let mut entity_bytes = match entity {
+        EntityWrapper::ActionData(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellAccount(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellApply(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellIncome(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellMain(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellPrice(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellProposal(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellProfitRate(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellRelease(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellSecondaryMarket(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellReverseResolution(entity) => entity.as_slice().to_vec(),
+        EntityWrapper::ConfigCellSubAccount(entity) => entity.as_slice().to_vec(),
+        _ => unreachable!(),
+    };
+    data.append(&mut entity_bytes);
+
+    Bytes::new_builder()
+        .set(data.into_iter().map(Byte::new).collect())
+        .build()
+}
+
+pub fn wrap_data_entity_v3(version: u32, index: usize, entity: EntityWrapper) -> DataEntity {
+    fn wrap_data_entity(version: u32, index: usize, entity: impl Entity) -> DataEntity {
         DataEntity::new_builder()
             .version(Uint32::from(version))
-            .index(Uint32::from(index))
+            .index(Uint32::from(index as u32))
             .entity(Bytes::from(entity.as_slice()))
             .build()
     }
@@ -117,10 +174,23 @@ pub fn wrap_data_entity_v3(version: u32, index: u32, entity: EntityWrapper) -> D
         EntityWrapper::AccountAuctionCellData(entity) => wrap_data_entity(version, index, entity),
         EntityWrapper::IncomeCellData(entity) => wrap_data_entity(version, index, entity),
         EntityWrapper::OfferCellData(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::SubAccount(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellAccount(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellApply(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellIncome(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellMain(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellPrice(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellProposal(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellProfitRate(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellRelease(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellSecondaryMarket(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellReverseResolution(entity) => wrap_data_entity(version, index, entity),
+        EntityWrapper::ConfigCellSubAccount(entity) => wrap_data_entity(version, index, entity),
+        _ => unreachable!(),
     }
 }
 
-pub fn wrap_data_entity_opt_v3(version: u32, index: u32, entity: EntityWrapper) -> DataEntityOpt {
+pub fn wrap_data_entity_opt_v3(version: u32, index: usize, entity: EntityWrapper) -> DataEntityOpt {
     DataEntityOpt::new_builder()
         .set(Some(wrap_data_entity_v3(version, index, entity)))
         .build()
@@ -129,7 +199,7 @@ pub fn wrap_data_entity_opt_v3(version: u32, index: u32, entity: EntityWrapper) 
 pub fn wrap_data_witness_v3(
     data_type: DataType,
     version: u32,
-    index: u32,
+    index: usize,
     entity: EntityWrapper,
     source: Source,
 ) -> Bytes {
@@ -152,18 +222,12 @@ pub fn wrap_data_witness_v3(
     wrap_entity_witness(data_type, data)
 }
 
-pub fn data_type_to_char_set(data_type: DataType) -> CharSetType {
-    CharSetType::try_from(data_type as u32 - 100000).unwrap()
-}
+pub fn wrap_sub_account_witness(mut sub_account_data: Vec<u8>) -> Vec<u8> {
+    let mut data = Vec::new();
+    let mut data_type_bytes = (DataType::SubAccount as u32).to_le_bytes().to_vec();
+    data.append(&mut WITNESS_HEADER.to_vec());
+    data.append(&mut data_type_bytes);
+    data.append(&mut sub_account_data);
 
-pub fn char_set_to_data_type(char_set: CharSetType) -> DataType {
-    DataType::try_from(char_set as u32 + 100000).unwrap()
-}
-
-pub fn data_type_to_preserved_accounts_group(data_type: DataType) -> usize {
-    data_type as u32 as usize - 10000
-}
-
-pub fn preserved_accounts_group_to_data_type(group: usize) -> DataType {
-    DataType::try_from(group as u32 + 10000).unwrap()
+    data
 }
