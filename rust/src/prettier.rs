@@ -10,7 +10,7 @@ macro_rules! print_fields {
     (@field $self:expr, $field:ident) => {
         String::from(stringify!($field)) + ": " + &$self.$field().as_prettier()
     };
-    (@field $self:expr, $field:ident -> $value:expr) => {
+    (@field $self:expr, ($field:ident -> $value:expr)) => {
         String::from(stringify!($field)) + ": " + $value
     }
 }
@@ -775,6 +775,31 @@ impl<'a> Prettier for ConfigCellReverseResolutionReader<'a> {
             record_basic_capacity,
             record_prepared_fee_capacity,
             common_fee
+        })
+    }
+}
+
+impl Prettier for SubAccount {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for SubAccountReader<'a> {
+    fn as_prettier(&self) -> String {
+        let fmt_suffix = String::from_utf8(self.suffix().raw_data().to_vec()).expect("Encoding utf-8 failed.");
+        print_fields!(self, "SubAccount", {
+            lock,
+            id,
+            account,
+            (suffix -> &fmt_suffix),
+            registered_at,
+            expired_at,
+            status,
+            records,
+            nonce,
+            enable_sub_account,
+            renew_sub_account_price
         })
     }
 }
