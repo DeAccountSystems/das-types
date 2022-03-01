@@ -29,6 +29,7 @@ table TypeIdTable {
     account_auction_cell: Hash,
     offer_cell: Hash,
     reverse_record_cell: Hash,
+    sub_account_cell: Hash,
 }
 
 table DasLockOutPointTable {

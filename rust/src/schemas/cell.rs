@@ -297,8 +297,8 @@ impl ::core::fmt::Display for ConfigCellMain {
 impl ::core::default::Default for ConfigCellMain {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            113, 2, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 125, 1, 0, 0, 0, 108, 1, 0, 0, 44, 0, 0, 0, 76, 0, 0, 0, 108, 0, 0,
-            0, 140, 0, 0, 0, 172, 0, 0, 0, 204, 0, 0, 0, 236, 0, 0, 0, 12, 1, 0, 0, 44, 1, 0, 0, 76, 1, 0, 0, 0, 0, 0,
+            149, 2, 0, 0, 16, 0, 0, 0, 17, 0, 0, 0, 161, 1, 0, 0, 0, 144, 1, 0, 0, 48, 0, 0, 0, 80, 0, 0, 0, 112, 0, 0,
+            0, 144, 0, 0, 0, 176, 0, 0, 0, 208, 0, 0, 0, 240, 0, 0, 0, 16, 1, 0, 0, 48, 1, 0, 0, 80, 1, 0, 0, 112, 1,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -307,14 +307,15 @@ impl ::core::default::Default for ConfigCellMain {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 244, 0, 0, 0, 28, 0,
-            0, 0, 64, 0, 0, 0, 100, 0, 0, 0, 136, 0, 0, 0, 172, 0, 0, 0, 208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 244, 0, 0, 0, 28,
+            0, 0, 0, 64, 0, 0, 0, 100, 0, 0, 0, 136, 0, 0, 0, 172, 0, 0, 0, 208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         ConfigCellMain::new_unchecked(v.into())
     }
@@ -605,6 +606,7 @@ impl ::core::fmt::Display for TypeIdTable {
         write!(f, ", {}: {}", "account_auction_cell", self.account_auction_cell())?;
         write!(f, ", {}: {}", "offer_cell", self.offer_cell())?;
         write!(f, ", {}: {}", "reverse_record_cell", self.reverse_record_cell())?;
+        write!(f, ", {}: {}", "sub_account_cell", self.sub_account_cell())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -615,8 +617,8 @@ impl ::core::fmt::Display for TypeIdTable {
 impl ::core::default::Default for TypeIdTable {
     fn default() -> Self {
         let v: Vec<u8> = vec![
-            108, 1, 0, 0, 44, 0, 0, 0, 76, 0, 0, 0, 108, 0, 0, 0, 140, 0, 0, 0, 172, 0, 0, 0, 204, 0, 0, 0, 236, 0, 0,
-            0, 12, 1, 0, 0, 44, 1, 0, 0, 76, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            144, 1, 0, 0, 48, 0, 0, 0, 80, 0, 0, 0, 112, 0, 0, 0, 144, 0, 0, 0, 176, 0, 0, 0, 208, 0, 0, 0, 240, 0, 0,
+            0, 16, 1, 0, 0, 48, 1, 0, 0, 80, 1, 0, 0, 112, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -625,13 +627,14 @@ impl ::core::default::Default for TypeIdTable {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
         TypeIdTable::new_unchecked(v.into())
     }
 }
 impl TypeIdTable {
-    pub const FIELD_COUNT: usize = 10;
+    pub const FIELD_COUNT: usize = 11;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -705,8 +708,14 @@ impl TypeIdTable {
     pub fn reverse_record_cell(&self) -> Hash {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
+        let end = molecule::unpack_number(&slice[44..]) as usize;
+        Hash::new_unchecked(self.0.slice(start..end))
+    }
+    pub fn sub_account_cell(&self) -> Hash {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[44..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[44..]) as usize;
+            let end = molecule::unpack_number(&slice[48..]) as usize;
             Hash::new_unchecked(self.0.slice(start..end))
         } else {
             Hash::new_unchecked(self.0.slice(start..))
@@ -749,6 +758,7 @@ impl molecule::prelude::Entity for TypeIdTable {
             .account_auction_cell(self.account_auction_cell())
             .offer_cell(self.offer_cell())
             .reverse_record_cell(self.reverse_record_cell())
+            .sub_account_cell(self.sub_account_cell())
     }
 }
 #[derive(Clone, Copy)]
@@ -780,6 +790,7 @@ impl<'r> ::core::fmt::Display for TypeIdTableReader<'r> {
         write!(f, ", {}: {}", "account_auction_cell", self.account_auction_cell())?;
         write!(f, ", {}: {}", "offer_cell", self.offer_cell())?;
         write!(f, ", {}: {}", "reverse_record_cell", self.reverse_record_cell())?;
+        write!(f, ", {}: {}", "sub_account_cell", self.sub_account_cell())?;
         let extra_count = self.count_extra_fields();
         if extra_count != 0 {
             write!(f, ", .. ({} fields)", extra_count)?;
@@ -788,7 +799,7 @@ impl<'r> ::core::fmt::Display for TypeIdTableReader<'r> {
     }
 }
 impl<'r> TypeIdTableReader<'r> {
-    pub const FIELD_COUNT: usize = 10;
+    pub const FIELD_COUNT: usize = 11;
     pub fn total_size(&self) -> usize {
         molecule::unpack_number(self.as_slice()) as usize
     }
@@ -862,8 +873,14 @@ impl<'r> TypeIdTableReader<'r> {
     pub fn reverse_record_cell(&self) -> HashReader<'r> {
         let slice = self.as_slice();
         let start = molecule::unpack_number(&slice[40..]) as usize;
+        let end = molecule::unpack_number(&slice[44..]) as usize;
+        HashReader::new_unchecked(&self.as_slice()[start..end])
+    }
+    pub fn sub_account_cell(&self) -> HashReader<'r> {
+        let slice = self.as_slice();
+        let start = molecule::unpack_number(&slice[44..]) as usize;
         if self.has_extra_fields() {
-            let end = molecule::unpack_number(&slice[44..]) as usize;
+            let end = molecule::unpack_number(&slice[48..]) as usize;
             HashReader::new_unchecked(&self.as_slice()[start..end])
         } else {
             HashReader::new_unchecked(&self.as_slice()[start..])
@@ -929,6 +946,7 @@ impl<'r> molecule::prelude::Reader<'r> for TypeIdTableReader<'r> {
         HashReader::verify(&slice[offsets[7]..offsets[8]], compatible)?;
         HashReader::verify(&slice[offsets[8]..offsets[9]], compatible)?;
         HashReader::verify(&slice[offsets[9]..offsets[10]], compatible)?;
+        HashReader::verify(&slice[offsets[10]..offsets[11]], compatible)?;
         Ok(())
     }
 }
@@ -944,9 +962,10 @@ pub struct TypeIdTableBuilder {
     pub(crate) account_auction_cell: Hash,
     pub(crate) offer_cell: Hash,
     pub(crate) reverse_record_cell: Hash,
+    pub(crate) sub_account_cell: Hash,
 }
 impl TypeIdTableBuilder {
-    pub const FIELD_COUNT: usize = 10;
+    pub const FIELD_COUNT: usize = 11;
     pub fn account_cell(mut self, v: Hash) -> Self {
         self.account_cell = v;
         self
@@ -987,6 +1006,10 @@ impl TypeIdTableBuilder {
         self.reverse_record_cell = v;
         self
     }
+    pub fn sub_account_cell(mut self, v: Hash) -> Self {
+        self.sub_account_cell = v;
+        self
+    }
 }
 impl molecule::prelude::Builder for TypeIdTableBuilder {
     type Entity = TypeIdTable;
@@ -1003,6 +1026,7 @@ impl molecule::prelude::Builder for TypeIdTableBuilder {
             + self.account_auction_cell.as_slice().len()
             + self.offer_cell.as_slice().len()
             + self.reverse_record_cell.as_slice().len()
+            + self.sub_account_cell.as_slice().len()
     }
     fn write<W: molecule::io::Write>(&self, writer: &mut W) -> molecule::io::Result<()> {
         let mut total_size = molecule::NUMBER_SIZE * (Self::FIELD_COUNT + 1);
@@ -1027,6 +1051,8 @@ impl molecule::prelude::Builder for TypeIdTableBuilder {
         total_size += self.offer_cell.as_slice().len();
         offsets.push(total_size);
         total_size += self.reverse_record_cell.as_slice().len();
+        offsets.push(total_size);
+        total_size += self.sub_account_cell.as_slice().len();
         writer.write_all(&molecule::pack_number(total_size as molecule::Number))?;
         for offset in offsets.into_iter() {
             writer.write_all(&molecule::pack_number(offset as molecule::Number))?;
@@ -1041,6 +1067,7 @@ impl molecule::prelude::Builder for TypeIdTableBuilder {
         writer.write_all(self.account_auction_cell.as_slice())?;
         writer.write_all(self.offer_cell.as_slice())?;
         writer.write_all(self.reverse_record_cell.as_slice())?;
+        writer.write_all(self.sub_account_cell.as_slice())?;
         Ok(())
     }
     fn build(&self) -> Self::Entity {
