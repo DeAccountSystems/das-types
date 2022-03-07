@@ -75,6 +75,7 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::PreAccountCellData as u32 => Ok(DataType::PreAccountCellData),
             x if x == DataType::IncomeCellData as u32 => Ok(DataType::IncomeCellData),
             x if x == DataType::OfferCellData as u32 => Ok(DataType::OfferCellData),
+            x if x == DataType::SubAccount as u32 => Ok(DataType::SubAccount),
             x if x == DataType::ConfigCellAccount as u32 => Ok(DataType::ConfigCellAccount),
             x if x == DataType::ConfigCellApply as u32 => Ok(DataType::ConfigCellApply),
             x if x == DataType::ConfigCellIncome as u32 => Ok(DataType::ConfigCellIncome),
@@ -209,5 +210,8 @@ pub enum LockRole {
     Manager,
 }
 
-// [100, 97, 115] equals "das".as_bytes()
+// [100, 97, 115] equals b"das"
 pub const WITNESS_HEADER: [u8; 3] = [100, 97, 115];
+pub const WITNESS_HEADER_BYTES: usize = WITNESS_HEADER.len();
+pub const WITNESS_TYPE_BYTES: usize = 4;
+pub const WITNESS_LENGTH_BYTES: usize = 4;
