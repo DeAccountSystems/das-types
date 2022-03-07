@@ -210,8 +210,11 @@ pub enum LockRole {
     Manager,
 }
 
-// [100, 97, 115] equals "das".as_bytes()
+// [100, 97, 115] equals b"das"
 pub const WITNESS_HEADER: [u8; 3] = [100, 97, 115];
+pub const WITNESS_HEADER_BYTES: usize = WITNESS_HEADER.len();
+pub const WITNESS_TYPE_BYTES: usize = 4;
+pub const WITNESS_LENGTH_BYTES: usize = 4;
 
 #[derive(Eq, PartialEq, Debug, Clone, Copy)]
 #[repr(u64)]
