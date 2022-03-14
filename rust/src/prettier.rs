@@ -778,6 +778,20 @@ impl<'a> Prettier for ConfigCellReverseResolutionReader<'a> {
     }
 }
 
+impl Prettier for ConfigCellRelease {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for ConfigCellReleaseReader<'a> {
+    fn as_prettier(&self) -> String {
+        print_fields!(self, "ConfigCellRelease", {
+            lucky_number
+        })
+    }
+}
+
 impl Prettier for SubAccount {
     fn as_prettier(&self) -> String {
         self.as_reader().as_prettier()
