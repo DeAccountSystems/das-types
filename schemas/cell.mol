@@ -150,16 +150,8 @@ table ConfigCellIncome {
 }
 
 table ConfigCellRelease {
-    // Release datetime for accounts of different length.
-    release_rules: ReleaseRules,
-}
-
-vector ReleaseRules <ReleaseRule>;
-
-table ReleaseRule {
-    length: Uint32,
-    release_start: Uint64,
-    release_end: Uint64,
+    // Current lucky number for estimate if an account is released.
+    lucky_number: Uint32,
 }
 
 table ConfigCellSecondaryMarket {

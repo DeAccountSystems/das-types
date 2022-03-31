@@ -548,7 +548,8 @@ impl<'a> Prettier for TypeIdTableReader<'a> {
             account_sale_cell,
             account_auction_cell,
             offer_cell,
-            reverse_record_cell
+            reverse_record_cell,
+            sub_account_cell
         })
     }
 }
@@ -776,6 +777,40 @@ impl<'a> Prettier for ConfigCellReverseResolutionReader<'a> {
             record_prepared_fee_capacity,
             common_fee
         })
+    }
+}
+
+impl Prettier for ConfigCellSubAccount {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for ConfigCellSubAccountReader<'a> {
+    fn as_prettier(&self) -> String {
+        print_fields!(self, "ConfigCellSubAccount", {
+            basic_capacity,
+            prepared_fee_capacity,
+            new_sub_account_price,
+            renew_sub_account_price,
+            common_fee,
+            create_fee,
+            edit_fee,
+            renew_fee,
+            recycle_fee
+        })
+    }
+}
+
+impl Prettier for ConfigCellRelease {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for ConfigCellReleaseReader<'a> {
+    fn as_prettier(&self) -> String {
+        print_fields!(self, "ConfigCellRelease", { lucky_number })
     }
 }
 
