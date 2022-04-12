@@ -35,6 +35,7 @@ pub enum DataType {
     ConfigCellSecondaryMarket,            // args: 0x6f000000
     ConfigCellReverseResolution,          // args: 0x70000000
     ConfigCellSubAccount,                 // args: 0x71000000
+    ConfigCellSubAccountBetaList,         // args: 0x72000000
     ConfigCellPreservedAccount00 = 10000, // args: 0x10270000
     ConfigCellPreservedAccount01,
     ConfigCellPreservedAccount02,
@@ -87,6 +88,7 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::ConfigCellSecondaryMarket as u32 => Ok(DataType::ConfigCellSecondaryMarket),
             x if x == DataType::ConfigCellReverseResolution as u32 => Ok(DataType::ConfigCellReverseResolution),
             x if x == DataType::ConfigCellSubAccount as u32 => Ok(DataType::ConfigCellSubAccount),
+            x if x == DataType::ConfigCellSubAccountBetaList as u32 => Ok(DataType::ConfigCellSubAccountBetaList),
             x if x == DataType::ConfigCellRecordKeyNamespace as u32 => Ok(DataType::ConfigCellRecordKeyNamespace),
             x if x == DataType::ConfigCellUnAvailableAccount as u32 => Ok(DataType::ConfigCellUnAvailableAccount),
             x if x == DataType::ConfigCellPreservedAccount00 as u32 => Ok(DataType::ConfigCellPreservedAccount00),
