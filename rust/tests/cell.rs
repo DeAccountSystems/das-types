@@ -1,5 +1,4 @@
-use das_types::packed::AccountChar;
-use das_types::{constants::*, packed::*};
+use das_types_std::{constants::*, packed::*};
 use molecule::prelude::*;
 
 fn gen_account_char(char: &str, char_set_type: CharSetType) -> AccountChar {

@@ -1,9 +1,9 @@
 use super::schemas::packed::*;
 use molecule::error::{VerificationError, VerificationResult};
 
-macro_rules! gen_trait_try_into_fns {
+macro_rules! gen_trait_common_fns {
     ({$( $fn_name:ident -> $fn_return:ty ),+}) => {
-        $(fn $fn_name(&self) -> VerificationResult<$fn_return>;)+
+        $(fn $fn_name(&self) -> $fn_return;)+
     };
 }
 
@@ -24,13 +24,15 @@ macro_rules! gen_impl_field_fns {
 }
 
 pub trait AccountCellDataMixer {
-    fn version(&self) -> u32;
-    fn as_reader(&self) -> Box<dyn AccountCellDataReaderMixer + '_>;
+    gen_trait_common_fns!({
+        version -> u32,
+        as_reader -> Box<dyn AccountCellDataReaderMixer + '_>
+    });
 }
 
-impl AccountCellDataMixer for AccountCellDataV1 {
+impl AccountCellDataMixer for AccountCellDataV2 {
     fn version(&self) -> u32 {
-        1
+        2
     }
 
     fn as_reader(&self) -> Box<dyn AccountCellDataReaderMixer + '_> {
@@ -40,7 +42,7 @@ impl AccountCellDataMixer for AccountCellDataV1 {
 
 impl AccountCellDataMixer for AccountCellData {
     fn version(&self) -> u32 {
-        2
+        3
     }
 
     fn as_reader(&self) -> Box<dyn AccountCellDataReaderMixer + '_> {
@@ -49,44 +51,81 @@ impl AccountCellDataMixer for AccountCellData {
 }
 
 pub trait AccountCellDataReaderMixer<'r> {
-    fn version(&self) -> u32;
-    fn try_into_v1(&self) -> VerificationResult<AccountCellDataV1Reader<'r>>;
-    fn try_into_latest(&self) -> VerificationResult<AccountCellDataReader<'r>>;
+    gen_trait_common_fns!({
+        version -> u32,
+        try_into_v2 -> VerificationResult<AccountCellDataV2Reader<'r>>,
+        try_into_latest -> VerificationResult<AccountCellDataReader<'r>>
+    });
+
+    gen_trait_field_fns!({
+        id -> AccountIdReader<'r>,
+        account -> AccountCharsReader<'r>,
+        registered_at -> Uint64Reader<'r>,
+        last_transfer_account_at -> Uint64Reader<'r>,
+        last_edit_manager_at -> Uint64Reader<'r>,
+        last_edit_records_at -> Uint64Reader<'r>,
+        status -> Uint8Reader<'r>,
+        records -> RecordsReader<'r>
+    });
 }
 
-impl<'r> AccountCellDataReaderMixer<'r> for AccountCellDataV1Reader<'r> {
+impl<'r> AccountCellDataReaderMixer<'r> for AccountCellDataV2Reader<'r> {
     fn version(&self) -> u32 {
-        1
+        2
     }
 
-    fn try_into_v1(&self) -> VerificationResult<AccountCellDataV1Reader<'r>> {
-        AccountCellDataV1Reader::from_slice(self.as_slice())
+    fn try_into_v2(&self) -> VerificationResult<AccountCellDataV2Reader<'r>> {
+        AccountCellDataV2Reader::from_slice(self.as_slice())
     }
 
     fn try_into_latest(&self) -> VerificationResult<AccountCellDataReader<'r>> {
         Err(VerificationError::OffsetsNotMatch("AccountCellDataReader".to_string()))
     }
+
+    gen_impl_field_fns!({
+        id -> AccountIdReader<'r>,
+        account -> AccountCharsReader<'r>,
+        registered_at -> Uint64Reader<'r>,
+        last_transfer_account_at -> Uint64Reader<'r>,
+        last_edit_manager_at -> Uint64Reader<'r>,
+        last_edit_records_at -> Uint64Reader<'r>,
+        status -> Uint8Reader<'r>,
+        records -> RecordsReader<'r>
+    });
 }
 
 impl<'r> AccountCellDataReaderMixer<'r> for AccountCellDataReader<'r> {
     fn version(&self) -> u32 {
-        2
+        3
     }
 
-    fn try_into_v1(&self) -> VerificationResult<AccountCellDataV1Reader<'r>> {
+    fn try_into_v2(&self) -> VerificationResult<AccountCellDataV2Reader<'r>> {
         Err(VerificationError::OffsetsNotMatch(
-            "AccountCellDataV1Reader".to_string(),
+            "AccountCellDataV2Reader".to_string(),
         ))
     }
 
     fn try_into_latest(&self) -> VerificationResult<AccountCellDataReader<'r>> {
         AccountCellDataReader::from_slice(self.as_slice())
     }
+
+    gen_impl_field_fns!({
+        id -> AccountIdReader<'r>,
+        account -> AccountCharsReader<'r>,
+        registered_at -> Uint64Reader<'r>,
+        last_transfer_account_at -> Uint64Reader<'r>,
+        last_edit_manager_at -> Uint64Reader<'r>,
+        last_edit_records_at -> Uint64Reader<'r>,
+        status -> Uint8Reader<'r>,
+        records -> RecordsReader<'r>
+    });
 }
 
 pub trait AccountSaleCellDataMixer {
-    fn version(&self) -> u32;
-    fn as_reader(&self) -> Box<dyn AccountSaleCellDataReaderMixer + '_>;
+    gen_trait_common_fns!({
+        version -> u32,
+        as_reader -> Box<dyn AccountSaleCellDataReaderMixer + '_>
+    });
 }
 
 impl AccountSaleCellDataMixer for AccountSaleCellDataV1 {
@@ -110,11 +149,10 @@ impl AccountSaleCellDataMixer for AccountSaleCellData {
 }
 
 pub trait AccountSaleCellDataReaderMixer<'r> {
-    fn version(&self) -> u32;
-
-    gen_trait_try_into_fns!({
-        try_into_v1 -> AccountSaleCellDataV1Reader<'r>,
-        try_into_latest -> AccountSaleCellDataReader<'r>
+    gen_trait_common_fns!({
+        version -> u32,
+        try_into_v1 -> VerificationResult<AccountSaleCellDataV1Reader<'r>>,
+        try_into_latest -> VerificationResult<AccountSaleCellDataReader<'r>>
     });
 
     gen_trait_field_fns!({
@@ -155,7 +193,7 @@ impl<'r> AccountSaleCellDataReaderMixer<'r> for AccountSaleCellDataReader<'r> {
 
     fn try_into_v1(&self) -> VerificationResult<AccountSaleCellDataV1Reader<'r>> {
         Err(VerificationError::OffsetsNotMatch(
-            "AccountCellDataV1Reader".to_string(),
+            "AccountCellDataV2Reader".to_string(),
         ))
     }
 

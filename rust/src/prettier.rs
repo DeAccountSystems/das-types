@@ -9,7 +9,7 @@ macro_rules! print_fields {
     (@field $self:expr, $field:ident) => {
         String::from(stringify!($field)) + ": " + &$self.$field().as_prettier()
     };
-    (@field $self:expr, $field:ident -> $value:expr) => {
+    (@field $self:expr, ($field:ident -> $value:expr)) => {
         String::from(stringify!($field)) + ": " + $value
     }
 }
@@ -283,6 +283,27 @@ impl<'a> Prettier for RecordReader<'a> {
     }
 }
 
+impl Prettier for AccountCellDataV2 {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for AccountCellDataV2Reader<'a> {
+    fn as_prettier(&self) -> String {
+        print_fields!(self, "AccountCellDataV2", {
+            id,
+            account,
+            registered_at,
+            last_transfer_account_at,
+            last_edit_manager_at,
+            last_edit_records_at,
+            status,
+            records
+        })
+    }
+}
+
 impl Prettier for AccountCellData {
     fn as_prettier(&self) -> String {
         self.as_reader().as_prettier()
@@ -299,7 +320,9 @@ impl<'a> Prettier for AccountCellDataReader<'a> {
             last_edit_manager_at,
             last_edit_records_at,
             status,
-            records
+            records,
+            enable_sub_account,
+            renew_sub_account_price
         })
     }
 }
@@ -524,7 +547,8 @@ impl<'a> Prettier for TypeIdTableReader<'a> {
             account_sale_cell,
             account_auction_cell,
             offer_cell,
-            reverse_record_cell
+            reverse_record_cell,
+            sub_account_cell
         })
     }
 }
@@ -751,6 +775,67 @@ impl<'a> Prettier for ConfigCellReverseResolutionReader<'a> {
             record_basic_capacity,
             record_prepared_fee_capacity,
             common_fee
+        })
+    }
+}
+
+impl Prettier for ConfigCellSubAccount {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for ConfigCellSubAccountReader<'a> {
+    fn as_prettier(&self) -> String {
+        print_fields!(self, "ConfigCellSubAccount", {
+            basic_capacity,
+            prepared_fee_capacity,
+            new_sub_account_price,
+            renew_sub_account_price,
+            common_fee,
+            create_fee,
+            edit_fee,
+            renew_fee,
+            recycle_fee
+        })
+    }
+}
+
+impl Prettier for ConfigCellRelease {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for ConfigCellReleaseReader<'a> {
+    fn as_prettier(&self) -> String {
+        print_fields!(self, "ConfigCellRelease", {
+            lucky_number
+        })
+    }
+}
+
+impl Prettier for SubAccount {
+    fn as_prettier(&self) -> String {
+        self.as_reader().as_prettier()
+    }
+}
+
+impl<'a> Prettier for SubAccountReader<'a> {
+    fn as_prettier(&self) -> String {
+        let fmt_suffix = String::from_utf8(self.suffix().raw_data().to_vec()).expect("Encoding utf-8 failed.");
+        print_fields!(self, "SubAccount", {
+            lock,
+            id,
+            account,
+            (suffix -> &fmt_suffix),
+            registered_at,
+            expired_at,
+            status,
+            records,
+            nonce,
+            enable_sub_account,
+            renew_sub_account_price
         })
     }
 }
