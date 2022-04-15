@@ -21,19 +21,22 @@ pub enum DataType {
     PreAccountCellData,
     IncomeCellData,
     OfferCellData,
-    ConfigCellAccount = 100,
-    ConfigCellApply = 101,
-    ConfigCellIncome = 103,
-    ConfigCellMain,
-    ConfigCellPrice,
-    ConfigCellProposal,
-    ConfigCellProfitRate,
-    ConfigCellRecordKeyNamespace,
-    ConfigCellRelease,
-    ConfigCellUnAvailableAccount,
-    ConfigCellSecondaryMarket,
-    ConfigCellReverseResolution,
-    ConfigCellPreservedAccount00 = 10000,
+    SubAccount,
+    ConfigCellAccount = 100,              // args: 0x64000000
+    ConfigCellApply = 101,                // args: 0x65000000
+    ConfigCellIncome = 103,               // args: 0x67000000
+    ConfigCellMain,                       // args: 0x68000000
+    ConfigCellPrice,                      // args: 0x69000000
+    ConfigCellProposal,                   // args: 0x6a000000
+    ConfigCellProfitRate,                 // args: 0x6b000000
+    ConfigCellRecordKeyNamespace,         // args: 0x6c000000
+    ConfigCellRelease,                    // args: 0x6d000000
+    ConfigCellUnAvailableAccount,         // args: 0x6e000000
+    ConfigCellSecondaryMarket,            // args: 0x6f000000
+    ConfigCellReverseResolution,          // args: 0x70000000
+    ConfigCellSubAccount,                 // args: 0x71000000
+    ConfigCellSubAccountBetaList,         // args: 0x72000000
+    ConfigCellPreservedAccount00 = 10000, // args: 0x10270000
     ConfigCellPreservedAccount01,
     ConfigCellPreservedAccount02,
     ConfigCellPreservedAccount03,
@@ -52,12 +55,12 @@ pub enum DataType {
     ConfigCellPreservedAccount16,
     ConfigCellPreservedAccount17,
     ConfigCellPreservedAccount18,
-    ConfigCellPreservedAccount19,
-    ConfigCellCharSetEmoji = 100000,
-    ConfigCellCharSetDigit = 100001,
-    ConfigCellCharSetEn = 100002,
-    ConfigCellCharSetZhHans = 100003,
-    ConfigCellCharSetZhHant = 100004,
+    ConfigCellPreservedAccount19,     // args: 0x23270000
+    ConfigCellCharSetEmoji = 100000,  // args: 0xa0860100
+    ConfigCellCharSetDigit = 100001,  // args: 0xa1860100
+    ConfigCellCharSetEn = 100002,     // args: 0xa2860100
+    ConfigCellCharSetZhHans = 100003, // args: 0xa3860100, not available yet
+    ConfigCellCharSetZhHant = 100004, // args: 0xa4860100, not available yet
 }
 
 impl TryFrom<u32> for DataType {
@@ -73,6 +76,7 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::PreAccountCellData as u32 => Ok(DataType::PreAccountCellData),
             x if x == DataType::IncomeCellData as u32 => Ok(DataType::IncomeCellData),
             x if x == DataType::OfferCellData as u32 => Ok(DataType::OfferCellData),
+            x if x == DataType::SubAccount as u32 => Ok(DataType::SubAccount),
             x if x == DataType::ConfigCellAccount as u32 => Ok(DataType::ConfigCellAccount),
             x if x == DataType::ConfigCellApply as u32 => Ok(DataType::ConfigCellApply),
             x if x == DataType::ConfigCellIncome as u32 => Ok(DataType::ConfigCellIncome),
@@ -83,6 +87,8 @@ impl TryFrom<u32> for DataType {
             x if x == DataType::ConfigCellRelease as u32 => Ok(DataType::ConfigCellRelease),
             x if x == DataType::ConfigCellSecondaryMarket as u32 => Ok(DataType::ConfigCellSecondaryMarket),
             x if x == DataType::ConfigCellReverseResolution as u32 => Ok(DataType::ConfigCellReverseResolution),
+            x if x == DataType::ConfigCellSubAccount as u32 => Ok(DataType::ConfigCellSubAccount),
+            x if x == DataType::ConfigCellSubAccountBetaList as u32 => Ok(DataType::ConfigCellSubAccountBetaList),
             x if x == DataType::ConfigCellRecordKeyNamespace as u32 => Ok(DataType::ConfigCellRecordKeyNamespace),
             x if x == DataType::ConfigCellUnAvailableAccount as u32 => Ok(DataType::ConfigCellUnAvailableAccount),
             x if x == DataType::ConfigCellPreservedAccount00 as u32 => Ok(DataType::ConfigCellPreservedAccount00),
@@ -134,7 +140,7 @@ impl<'r> TryFrom<Uint32Reader<'r>> for DataType {
 // The length of CharSetType
 pub const CHAR_SET_LENGTH: usize = 5;
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u32)]
 pub enum CharSetType {
     Emoji,
@@ -194,10 +200,20 @@ pub enum AccountStatus {
 
 #[derive(Debug, PartialEq, Copy, Clone)]
 #[repr(u8)]
+pub enum SubAccountEnableStatus {
+    Off,
+    On,
+}
+
+#[derive(Debug, PartialEq, Copy, Clone)]
+#[repr(u8)]
 pub enum LockRole {
     Owner,
     Manager,
 }
 
-// [100, 97, 115] equals "das".as_bytes()
+// [100, 97, 115] equals b"das"
 pub const WITNESS_HEADER: [u8; 3] = [100, 97, 115];
+pub const WITNESS_HEADER_BYTES: usize = WITNESS_HEADER.len();
+pub const WITNESS_TYPE_BYTES: usize = 4;
+pub const WITNESS_LENGTH_BYTES: usize = 4;
